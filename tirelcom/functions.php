@@ -113,3 +113,12 @@ add_action('woocommerce_checkout_create_order', function ($order) {
 add_action('woocommerce_admin_order_data_after_billing_address', function ($order) {
     echo '<p><strong>Получение:</strong> ' . esc_html($order->get_meta('tek_delivery')) . '<br><strong>Адрес:</strong> ' . esc_html($order->get_meta('tek_address')) . '</p>';
 });
+
+/* Корзина и оформление: классические шорткоды вместо блоков, чтобы работали наши шаблоны */
+add_filter('the_content', function ($c) {
+    if (!in_the_loop() || !is_main_query()) return $c;
+    if (function_exists('is_cart') && is_cart()) return do_shortcode('[woocommerce_cart]');
+    if (function_exists('is_checkout') && is_checkout() && !is_wc_endpoint_url('order-received')) return do_shortcode('[woocommerce_checkout]');
+    if (function_exists('is_checkout') && is_wc_endpoint_url('order-received')) return do_shortcode('[woocommerce_checkout]');
+    return $c;
+}, 5);
