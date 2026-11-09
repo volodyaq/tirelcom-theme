@@ -1,4 +1,8 @@
-<?php if (!defined('ABSPATH')) exit; get_header(); ?>
+<?php if (!defined('ABSPATH')) exit; get_header();
+$bare = function_exists('is_cart') && (is_cart() || is_checkout()); ?>
+<?php if ($bare) : while (have_posts()) : the_post(); ?>
+<main><?php the_content(); ?></main>
+<?php endwhile; else : ?>
 <main style="max-width:1200px;margin:0 auto;padding:40px 24px 72px">
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 <article>
@@ -9,4 +13,5 @@
 <h1 style="font-size:38px;font-weight:800">Ничего не найдено</h1>
 <?php endif; ?>
 </main>
+<?php endif; ?>
 <?php get_footer();
