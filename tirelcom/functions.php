@@ -124,3 +124,16 @@ add_filter('the_content', function ($c) {
 }, 5);
 
 add_filter('woocommerce_coupons_enabled', '__return_false');
+
+/* ---- Письмо о новом заказе ---- */
+add_filter('woocommerce_email_subject_new_order', function ($s, $order) {
+    return 'ТирЭлКом. Радиодетали - Заказ ' . $order->get_order_number();
+}, 10, 2);
+add_filter('woocommerce_email_heading_new_order', '__return_empty_string');
+add_filter('woocommerce_email_enabled_customer_processing_order', '__return_false');
+add_filter('woocommerce_email_enabled_customer_on_hold_order', '__return_false');
+add_filter('woocommerce_email_enabled_customer_completed_order', '__return_false');
+add_filter('woocommerce_email_recipient_new_order', function ($r) {
+    $to = get_option('tirelcom_order_email');
+    return $to ? $to : $r;
+});
