@@ -86,3 +86,30 @@ add_filter('woocommerce_enqueue_styles', '__return_empty_array');
 
 /* После добавления в корзину сразу открываем корзину */
 add_filter('option_woocommerce_cart_redirect_after_add', function () { return 'yes'; });
+
+/* ---- Оформление заказа: гостевой, имя + телефон ---- */
+add_filter('pre_option_woocommerce_enable_guest_checkout', function () { return 'yes'; });
+add_filter('pre_option_woocommerce_enable_checkout_login_reminder', function () { return 'no'; });
+add_filter('woocommerce_checkout_fields', function ($f) {
+    $b = $f['billing'];
+    $f['billing'] = [
+        'billing_first_name' => array_merge($b['billing_first_name'], ['required' => false]),
+        'billing_phone' => array_merge($b['billing_phone'], ['required' => true]),
+    ];
+    $f['shipping'] = [];
+    return $f;
+});
+add_filter('woocommerce_cart_needs_shipping', '__return_false');
+add_filter('woocommerce_cart_needs_shipping_address', '__return_false');
+add_filter('woocommerce_enable_order_notes_field', '__return_true');
+add_filter('woocommerce_available_payment_gateways', function ($g) { return isset($g['cod']) ? ['cod' => $g['cod']] : $g; });
+add_action('woocommerce_checkout_create_order', function ($order) {
+    $labels = ['pickup' => 'Самовывоз', 'courier' => 'Курьер по Тирасполю', 'other' => 'Другой город или страна'];
+    $k = isset($_POST['tek_delivery']) ? sanitize_text_field(wp_unslash($_POST['tek_delivery'])) : 'pickup';
+    $order->update_meta_data('tek_delivery', $labels[$k] ?? $labels['pickup']);
+    if (!empty($_POST['tek_address'])) $order->update_meta_data('tek_address', sanitize_text_field(wp_unslash($_POST['tek_address'])));
+    if (!$order->get_billing_first_name()) $order->set_billing_first_name('Клиент');
+});
+add_action('woocommerce_admin_order_data_after_billing_address', function ($order) {
+    echo '<p><strong>Получение:</strong> ' . esc_html($order->get_meta('tek_delivery')) . '<br><strong>Адрес:</strong> ' . esc_html($order->get_meta('tek_address')) . '</p>';
+});

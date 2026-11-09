@@ -37,3 +37,32 @@
     });
   });
 })();
+
+/* Корзина: количество с автообновлением; чекаут: способ получения */
+(function () {
+  var form = document.querySelector('.woocommerce-cart-form');
+  if (form) {
+    var t;
+    form.querySelectorAll('article').forEach(function (a) {
+      var inp = a.querySelector('.tek-cq');
+      function send() { clearTimeout(t); t = setTimeout(function () { var b = form.querySelector('[name=update_cart]'); if (b) b.click(); }, 500); }
+      a.querySelector('.tek-cq-minus').addEventListener('click', function () { inp.value = Math.max(0, (parseInt(inp.value, 10) || 1) - 1); send(); });
+      a.querySelector('.tek-cq-plus').addEventListener('click', function () { inp.value = (parseInt(inp.value, 10) || 0) + 1; send(); });
+      inp.addEventListener('change', send);
+    });
+  }
+  var radios = document.querySelectorAll('input[name=tek_delivery]');
+  if (radios.length) {
+    var addr = document.getElementById('tek-addr');
+    function upd() {
+      radios.forEach(function (r) {
+        var l = r.closest('label');
+        l.style.borderColor = r.checked ? '#1D4ED8' : '#D5DEEE';
+        l.style.background = r.checked ? '#EEF3FE' : '#FFFFFF';
+        if (r.checked && addr) addr.style.display = r.value === 'pickup' ? 'none' : 'flex';
+      });
+    }
+    radios.forEach(function (r) { r.addEventListener('change', upd); });
+    upd();
+  }
+})();
