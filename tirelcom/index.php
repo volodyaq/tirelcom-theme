@@ -1,5 +1,5 @@
 <?php if (!defined('ABSPATH')) exit; get_header();
-$bare = function_exists('is_cart') && (is_cart() || is_checkout()); ?>
+$bare = is_singular('page') && (has_shortcode(get_post_field('post_content', get_queried_object_id()), 'woocommerce_cart') || has_shortcode(get_post_field('post_content', get_queried_object_id()), 'woocommerce_checkout')); ?>
 <?php if ($bare) : while (have_posts()) : the_post(); ?>
 <main><?php the_content(); ?></main>
 <?php endwhile; else : ?>
