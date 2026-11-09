@@ -1,0 +1,61 @@
+/*
+Theme Name: ТирЭлКом
+Theme URI: https://tirelcom.com
+Author: ТирЭлКом
+Description: Тема магазина радиодеталей ТирЭлКом (Тирасполь) для WooCommerce
+Version: 1.0.0
+Text Domain: tirelcom
+*/
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#1D4ED8;text-decoration:none}
+a{transition:background-color .15s,color .15s,border-color .15s,box-shadow .15s,transform .15s}
+button{transition:background-color .15s,color .15s,border-color .15s,box-shadow .15s,transform .15s}
+a:hover{text-decoration:none}
+a.hv-link:hover{color:#C2410C}
+.hv-blue:hover{background:#FF8A1F !important;color:#0F1B33 !important;transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,42,92,.28)}
+.hv-orange:hover{background:#0F2A5C !important;color:#FFFFFF !important;transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,42,92,.28)}
+.hv-outline:hover{background:#1D4ED8 !important;color:#FFFFFF !important;transform:translateY(-2px);box-shadow:0 8px 18px rgba(29,78,216,.35)}
+.hv-white:hover{background:#FF8A1F !important;border-color:#FF8A1F !important;color:#0F1B33 !important;transform:translateY(-2px)}
+.hv-foot:hover,.hv-light:hover{color:#FF8A1F !important}
+.hv-card:hover{border-color:#FF8A1F !important;background:#FFF6EA !important;transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,42,92,.2)}
+.hv-chip:hover{background:#1D4ED8 !important;border-color:#1D4ED8 !important;color:#FFFFFF !important}
+.navrow a:hover{background:#1D4ED8;color:#FFFFFF !important}
+.msgr-btn:hover{filter:brightness(1.1);transform:translateY(-3px) scale(1.06);box-shadow:0 8px 18px rgba(0,0,0,.35)}
+button{font-family:inherit;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #FF8A1F;outline-offset:2px}
+@media (max-width:700px){
+.navrow{flex-wrap:nowrap !important;overflow-x:auto;white-space:nowrap}
+.navrow a{flex:none}
+.pgrid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:12px !important}
+.pgrid article>div:first-child{height:120px !important}
+.cat-aside{order:2;flex:1 1 100% !important;max-width:none !important}
+.cat-main{order:1;flex:1 1 100% !important}
+.hero-h1{font-size:32px !important}
+.hero-pad{padding:36px 24px !important}
+.pad-card{padding:28px 22px !important}
+.ph-big{height:320px !important}
+}
+
+.msgr{display:flex;flex-wrap:wrap;gap:10px}
+.msgr-btn{position:relative;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 12px;border-radius:999px;background:var(--c);color:#FFFFFF !important;font-weight:700;font-size:14px;text-decoration:none !important;transition:transform .15s}
+.msgr-btn::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--c);animation:msgr-ping 2.4s ease-out infinite;pointer-events:none}
+.msgr-btn:nth-child(2)::after{animation-delay:.8s}
+.msgr-btn:nth-child(3)::after{animation-delay:1.6s}
+@keyframes msgr-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.22,1.55);opacity:0}}
+@media (prefers-reduced-motion:reduce){.msgr-btn::after{animation:none}}
+
+.ribbon-track{animation:ribbon-up 42s linear infinite}
+.ribbon:hover .ribbon-track{animation-play-state:paused}
+@keyframes ribbon-up{to{transform:translateY(-50%)}}
+@media (prefers-reduced-motion:reduce){.ribbon{overflow-y:auto !important}.ribbon-track{animation:none}}
+@media (max-width:700px){.ribbon{height:360px !important}}
+
+/* --- базовые правила темы --- */
+body{font-family:'Manrope',system-ui,sans-serif;color:#0F1B33;background:#F4F7FB}
+img{max-width:100%;height:auto}
+.screen-reader-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tek-pimg{width:100%;height:100%;object-fit:contain;display:block;background:#fff}
+.tek-cur-btn[aria-pressed="true"]{background:#FF8A1F !important;color:#0F1B33 !important;border:0 !important;font-weight:600}
+.tek-cur-btn[aria-pressed="false"]{background:transparent;color:#DCE6FA;border:1px solid #5E78B5}
+#wpadminbar{position:fixed}
