@@ -19,6 +19,9 @@
 <div style="display:flex;flex-direction:column;gap:8px;font-size:15px">
 <span style="color:#FFFFFF;font-weight:600;margin-bottom:4px">Контакты</span>
 <a class="hv-foot" href="tel:+37353351338" style="color:#C9D6F2">+373 533 51338</a>
+<span style="color:#9FB2D9;font-size:13px;margin-top:-6px">звонки</span>
+<a class="hv-foot" href="https://wa.me/37377785699" style="color:#C9D6F2">+373 777 85699</a>
+<span style="color:#9FB2D9;font-size:13px;margin-top:-6px">Viber, Telegram, WhatsApp</span>
 <?php get_template_part('messengers'); ?>
 </div>
 </div>
