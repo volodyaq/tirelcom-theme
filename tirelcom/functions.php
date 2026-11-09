@@ -122,3 +122,5 @@ add_filter('the_content', function ($c) {
     if (function_exists('is_checkout') && is_wc_endpoint_url('order-received')) return do_shortcode('[woocommerce_checkout]');
     return $c;
 }, 5);
+
+add_filter('woocommerce_coupons_enabled', '__return_false');
