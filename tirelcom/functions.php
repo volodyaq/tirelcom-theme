@@ -76,3 +76,13 @@ function tek_cat_text($name) {
     ];
     return $map[$name] ?? '';
 }
+
+/* Каталог: количество на странице и стили WooCommerce */
+add_filter('loop_shop_per_page', function ($n) {
+    $v = isset($_GET['per_page']) ? (int) $_GET['per_page'] : 0;
+    return in_array($v, [24, 48, 96], true) ? $v : 24;
+}, 20);
+add_filter('woocommerce_enqueue_styles', '__return_empty_array');
+
+/* После добавления в корзину сразу открываем корзину */
+add_filter('option_woocommerce_cart_redirect_after_add', function () { return 'yes'; });

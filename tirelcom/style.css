@@ -59,3 +59,9 @@ img{max-width:100%;height:auto}
 .tek-cur-btn[aria-pressed="true"]{background:#FF8A1F !important;color:#0F1B33 !important;border:0 !important;font-weight:600}
 .tek-cur-btn[aria-pressed="false"]{background:transparent;color:#DCE6FA;border:1px solid #5E78B5}
 #wpadminbar{position:fixed}
+
+/* --- пагинация каталога --- */
+.tek-pager .page-numbers{min-width:44px;height:44px;padding:0 14px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:#FFFFFF;border:1px solid #C5D1E6;color:#0F1B33;font-weight:600;text-decoration:none}
+.tek-pager a.page-numbers:hover{background:#1D4ED8;border-color:#1D4ED8;color:#FFFFFF}
+.tek-pager .page-numbers.current{background:#1D4ED8;border-color:#1D4ED8;color:#FFFFFF;font-weight:700}
+.tek-pager .page-numbers.dots{border:0;background:transparent}

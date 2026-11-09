@@ -18,3 +18,22 @@
   var saved = null; try { saved = localStorage.getItem('tek_cur'); } catch (e) {}
   if (saved === 'MDL') setCur('MDL');
 })();
+
+/* Количество и миниатюры на карточке товара */
+(function () {
+  var q = document.getElementById('qty');
+  if (q) {
+    var minus = document.querySelector('.tek-qty-minus'), plus = document.querySelector('.tek-qty-plus');
+    function val() { var v = parseInt(q.value, 10); return isNaN(v) || v < 1 ? 1 : v; }
+    minus && minus.addEventListener('click', function () { q.value = Math.max(1, val() - 1); });
+    plus && plus.addEventListener('click', function () { q.value = val() + 1; });
+  }
+  var main = document.getElementById('tek-main-img');
+  document.querySelectorAll('.tek-thumb').forEach(function (b) {
+    b.addEventListener('click', function () {
+      if (main) main.src = b.getAttribute('data-full');
+      document.querySelectorAll('.tek-thumb').forEach(function (x) { x.style.border = '1px solid #D5DEEE'; });
+      b.style.border = '2px solid #1D4ED8';
+    });
+  });
+})();
