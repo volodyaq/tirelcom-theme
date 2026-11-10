@@ -29,6 +29,8 @@ function tek_search_parse($raw) {
             $tok['alts'] = [];
             foreach ($fam as $u) { $tok['alts'][] = $m[1] . $u; $tok['alts'][] = $m[1] . ' ' . $u; }
             $tok['mode'] = 'start'; $tok['unit'] = true;
+            $tok['loose'] = in_array($fam[0], ['v', 'w', 'a', 'ma'], true);
+            if (in_array($fam[0], ['mhz', 'khz'], true)) foreach ($fam as $u) $tok['alts'][] = $m[1] . '.*' . $u;
         } elseif (preg_match('/^\d+(?:\.\d+)?$/', $t)) {
             $tok['mode'] = (strlen($t) >= 3 && strpos($t, '.') === false) ? 'infix' : 'start';
         }
@@ -39,10 +41,10 @@ function tek_search_parse($raw) {
 }
 
 /* Возвращает ['where' => ' AND (...)', 'rank' => 'SQL-выражение', 'ok' => bool] */
-function tek_search_sql($raw, $drop_units = false) {
+function tek_search_sql($raw, $level = 0) {
     global $wpdb;
     list($q, $toks) = tek_search_parse($raw);
-    if ($drop_units) { $toks = array_values(array_filter($toks, function ($x) { return !$x['unit']; })); }
+    if ($level >= 1) { $toks = array_values(array_filter($toks, function ($x) use ($level) { return !$x['unit'] || ($level === 1 && empty($x['loose']) ); })); }
     if (!$toks) return ['where' => ' AND 1=0', 'rank' => '0', 'ok' => false];
     $N = "CONCAT(' ', REPLACE(LOWER({$wpdb->posts}.post_title), ',', '.'))";
     $C = "REPLACE(REPLACE(REPLACE(LOWER({$wpdb->posts}.post_title), ' ', ''), '-', ''), ',', '.')";
@@ -52,7 +54,7 @@ function tek_search_sql($raw, $drop_units = false) {
     foreach ($toks as $tk) {
         $or = [];
         foreach ($tk['alts'] as $a) {
-            $l = $wpdb->esc_like($a);
+            $l = str_replace('*', '%', $wpdb->esc_like($a));
             $or[] = $wpdb->prepare($tk['mode'] === 'start' ? "$N LIKE %s" : "$N LIKE %s", ($tk['mode'] === 'start' ? '% ' : '%') . $l . '%');
         }
         if (preg_match('/^\d+$/', $tk['t'])) $or[] = $wpdb->prepare("{$wpdb->posts}.ID IN (SELECT product_id FROM $lk WHERE sku = %s)", $tk['t']);
@@ -88,17 +90,26 @@ function tek_search_sql($raw, $drop_units = false) {
     return ['where' => ' AND ' . $cond, 'rank' => $rank, 'ok' => true];
 }
 
+/* Запуск с запасными вариантами: [sql, уровень]. Уровень 1: без В/Вт/А, уровень 2: без всех единиц */
+function tek_search_run($raw) {
+    global $wpdb;
+    $lvl = 0;
+    while ($lvl <= 2) {
+        $s = tek_search_sql($raw, $lvl);
+        if ($s['ok']) {
+            $has = $wpdb->get_var("SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish' " . $s['where'] . " LIMIT 1");
+            if ($has) return [$s, $lvl];
+        }
+        $lvl++;
+    }
+    return [tek_search_sql($raw, 0), 0];
+}
+
 /* Основной запрос: подмена поиска WordPress */
 add_filter('posts_search', function ($search, $q) {
     if (is_admin() || !$q->is_main_query() || !$q->is_search()) return $search;
-    global $wpdb;
-    $raw = $q->get('s');
-    $s = tek_search_sql($raw);
-    $has = $wpdb->get_var("SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish' " . $s['where'] . " LIMIT 1");
-    if (!$has) {
-        $r = tek_search_sql($raw, true);
-        if ($r['ok']) { $s = $r; $q->set('tek_relaxed', 1); }
-    }
+    list($s, $lvl) = tek_search_run($q->get('s'));
+    if ($lvl) $q->set('tek_relaxed', $lvl);
     $q->set('tek_rank', $s['rank']);
     return $s['where'];
 }, 20, 2);
@@ -129,7 +140,7 @@ add_action('rest_api_init', function () {
             global $wpdb;
             $raw = trim((string) $req->get_param('q'));
             if (mb_strlen($raw) < 2) return ['products' => [], 'cats' => [], 'total' => 0];
-            $s = tek_search_sql($raw);
+            list($s, $lvl) = tek_search_run($raw);
             $lk = $wpdb->prefix . 'wc_product_meta_lookup';
             $base = "FROM {$wpdb->posts} LEFT JOIN $lk tek_l ON tek_l.product_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish' " . $s['where'];
             $ids = $wpdb->get_col("SELECT {$wpdb->posts}.ID $base ORDER BY " . $s['rank'] . ", (tek_l.stock_status = 'instock') DESC, CHAR_LENGTH({$wpdb->posts}.post_title) ASC LIMIT 7");
@@ -149,7 +160,7 @@ add_action('rest_api_init', function () {
                 $rows = $wpdb->get_results("SELECT t.term_id, t.name, tt.count FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id WHERE tt.taxonomy = 'product_cat' AND tt.count > 0 AND " . implode(' AND ', $cw) . " ORDER BY tt.count DESC LIMIT 3");
                 foreach ($rows as $r) { $l = get_term_link((int) $r->term_id, 'product_cat'); if (!is_wp_error($l)) $cats[] = ['n' => $r->name, 'u' => $l, 'c' => (int) $r->count]; }
             }
-            return ['products' => $prods, 'cats' => $cats, 'total' => $total, 'q' => $raw];
+            return ['products' => $prods, 'cats' => $cats, 'total' => $total, 'q' => $raw, 'relaxed' => $lvl];
         },
     ]);
 });
