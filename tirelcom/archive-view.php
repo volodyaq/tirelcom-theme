@@ -23,7 +23,7 @@ $paged = max(1, (int) get_query_var('paged'));
 $per = (int) $wp_query->get('posts_per_page'); if ($per < 1) $per = 24;
 $from = $total ? ($paged - 1) * $per + 1 : 0; $to = min($total, $paged * $per);
 $orderby = isset($_GET['orderby']) ? sanitize_text_field($_GET['orderby']) : 'menu_order';
-$sorts = ['menu_order' => 'По умолчанию', 'title' => 'По названию (А–Я)', 'price' => 'Сначала дешевле', 'price-desc' => 'Сначала дороже'];
+$sorts = ['menu_order' => $is_search ? 'По релевантности' : 'Сначала в наличии', 'title' => 'По названию (А–Я)', 'price' => 'Сначала дешевле', 'price-desc' => 'Сначала дороже'];
 $pers = [24, 48, 96];
 $minp = isset($_GET['min_price']) ? esc_attr($_GET['min_price']) : '';
 $maxp = isset($_GET['max_price']) ? esc_attr($_GET['max_price']) : '';

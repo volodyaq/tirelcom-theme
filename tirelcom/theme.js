@@ -129,3 +129,54 @@
   if (diff) diff.addEventListener('change', function () { document.querySelector('.tek-cmp-wrap').classList.toggle('tek-cmp-only-diff', diff.checked); });
   render();
 })();
+
+/* Подсказки в поиске */
+(function () {
+  var input = document.getElementById('q');
+  if (!input || !window.TEK || !TEK.suggest) return;
+  var form = input.form;
+  form.style.position = 'relative';
+  input.setAttribute('autocomplete', 'off');
+  var box = document.createElement('div');
+  box.className = 'tek-sg'; box.hidden = true; box.setAttribute('role', 'listbox');
+  form.appendChild(box);
+  var cache = {}, timer, ctl, items = [], cur = -1, lastQ = '';
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function hide() { box.hidden = true; cur = -1; }
+  function render(d, q) {
+    var h = '';
+    (d.cats || []).forEach(function (c) { h += '<a class="tek-sg-cat" role="option" href="' + esc(c.u) + '"><span>Раздел: <b>' + esc(c.n) + '</b></span><em>' + c.c + '</em></a>'; });
+    (d.products || []).forEach(function (p) {
+      h += '<a class="tek-sg-p" role="option" href="' + esc(p.u) + '"><span class="tek-sg-i">' + (p.i ? '<img src="' + esc(p.i) + '" alt="" loading="lazy">' : '') + '</span><span class="tek-sg-t"><span class="tek-sg-n">' + esc(p.n) + '</span><span class="tek-sg-m">' + (p.c ? 'код ' + esc(p.c) + ' · ' : '') + (p.s ? '<b class="ok">в наличии</b>' : '<b class="pre">предзаказ</b>') + '</span></span><span class="tek-sg-pr">' + esc(p.p) + '</span></a>';
+    });
+    if (!h) h = '<div class="tek-sg-none">Ничего не нашли по «' + esc(q) + '». Попробуйте часть названия или позвоните: <b>+373 533 51338</b></div>';
+    else h += '<a class="tek-sg-all" href="' + esc(TEK.searchUrl) + '?post_type=product&s=' + encodeURIComponent(q) + '">Показать все результаты (' + d.total + ')</a>';
+    box.innerHTML = h; box.hidden = false; items = [].slice.call(box.querySelectorAll('a')); cur = -1;
+  }
+  function fetchQ(q) {
+    if (cache[q]) { render(cache[q], q); return; }
+    if (ctl && ctl.abort) ctl.abort();
+    ctl = window.AbortController ? new AbortController() : null;
+    fetch(TEK.suggest + (TEK.suggest.indexOf('?') > -1 ? '&' : '?') + 'q=' + encodeURIComponent(q), ctl ? { signal: ctl.signal } : {})
+      .then(function (r) { return r.json(); })
+      .then(function (d) { cache[q] = d; if (input.value.trim() === q) render(d, q); })
+      .catch(function () {});
+  }
+  input.addEventListener('input', function () {
+    var q = input.value.trim(); lastQ = q; clearTimeout(timer);
+    if (q.length < 2) { hide(); return; }
+    timer = setTimeout(function () { fetchQ(q); }, 220);
+  });
+  input.addEventListener('focus', function () { if (items.length && input.value.trim().length >= 2) box.hidden = false; });
+  input.addEventListener('keydown', function (e) {
+    if (box.hidden || !items.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      cur = (cur + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+      items.forEach(function (a, i) { a.classList.toggle('on', i === cur); });
+      items[cur].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter' && cur > -1) { e.preventDefault(); location.href = items[cur].href; }
+    else if (e.key === 'Escape') hide();
+  });
+  document.addEventListener('click', function (e) { if (!form.contains(e.target)) hide(); });
+})();

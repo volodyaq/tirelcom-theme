@@ -15,6 +15,8 @@ add_action('wp_enqueue_scripts', function () {
     wp_localize_script('tirelcom-js', 'TEK', [
         'mdlRate' => (float) get_option('tirelcom_mdl_rate', 0),
         'cmpUrl' => home_url('/sravnenie/'),
+        'suggest' => esc_url_raw(rest_url('tek/v1/suggest')),
+        'searchUrl' => home_url('/'),
     ]);
 });
 
@@ -267,3 +269,5 @@ function tek_compare_rows($products) {
     }
     return $rows;
 }
+
+require_once __DIR__ . '/inc/search.php';
