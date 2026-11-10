@@ -29,13 +29,13 @@ if ($deep) {
 </nav>
 </section>
 
-<section style="max-width:1200px;margin:0 auto;padding:20px 24px 24px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
-<div style="flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:12px">
+<section class="tek-psec" style="max-width:1200px;margin:0 auto;padding:20px 24px 24px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+<div class="tek-pl" style="flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:12px">
 <div class="ph-big" style="height:460px;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:center">
 <?php if ($main) : ?><img id="tek-main-img" class="tek-pimg" src="<?php echo esc_url($main); ?>" alt="<?php echo esc_attr($p->get_name()); ?>"><?php else : ?><span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.08em;color:#8091B5">ФОТО СКОРО ПОЯВИТСЯ</span><?php endif; ?>
 </div>
 <?php if (count($img_ids) > 1) : ?>
-<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+<div class="tek-gthumbs" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
 <?php foreach (array_slice($img_ids, 0, 4) as $i => $iid) : ?>
 <button type="button" class="tek-thumb" data-full="<?php echo esc_url(wp_get_attachment_image_url($iid, 'full')); ?>" style="height:96px;background:#FFFFFF;border:<?php echo $i === 0 ? '2px solid #1D4ED8' : '1px solid #D5DEEE'; ?>;border-radius:12px;padding:6px"><img class="tek-pimg" src="<?php echo esc_url(wp_get_attachment_image_url($iid, 'woocommerce_thumbnail')); ?>" alt=""></button>
 <?php endforeach; ?>
@@ -74,7 +74,7 @@ foreach ($rows as $r) : ?>
 </div>
 </div>
 
-<div style="flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:20px">
+<div class="tek-pr" style="flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:20px">
 <div style="display:flex;flex-direction:column;gap:10px">
 <?php if ($deep) : ?><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:5px 9px"><?php echo esc_html(mb_strtoupper($deep->name)); ?></span><?php endif; ?>
 <h1 style="margin:0;font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-0.02em"><?php echo esc_html($p->get_name()); ?></h1>

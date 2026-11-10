@@ -81,3 +81,12 @@ img{max-width:100%;height:auto}
 .tek-tab:hover{color:#1D4ED8}
 .tek-tab.is-active{color:#0F1B33;border-bottom-color:#1D4ED8}
 .tek-panel[hidden]{display:none}
+
+@media (max-width:700px){
+.tek-psec{flex-direction:column !important;flex-wrap:nowrap !important;gap:16px !important;padding:12px 16px 16px !important}
+.tek-pl{display:contents !important}
+.tek-pl .ph-big{order:1;height:300px !important}
+.tek-gthumbs{order:2}
+.tek-pr{order:3;flex:none !important;width:100%}
+.tek-tabs-card{order:4;padding:8px 18px 22px !important}
+}
