@@ -132,7 +132,7 @@ img{max-width:100%;height:auto}
 }
 
 /* Подсказки поиска */
-.tek-sg{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:70;background:#fff;border:1px solid #C5D1E6;border-radius:14px;box-shadow:0 16px 40px rgba(15,42,92,.22);overflow:hidden;max-height:70vh;overflow-y:auto}
+.tek-sg{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:95;background:#fff;border:1px solid #C5D1E6;border-radius:14px;box-shadow:0 16px 40px rgba(15,42,92,.22);overflow:hidden;max-height:70vh;overflow-y:auto}
 .tek-sg[hidden]{display:none}
 .tek-sg a{display:flex;align-items:center;gap:12px;padding:10px 14px;color:#0F1B33;text-decoration:none;border-bottom:1px solid #EEF2F9}
 .tek-sg a:hover,.tek-sg a.on{background:#EEF4FF}
