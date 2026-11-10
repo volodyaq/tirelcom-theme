@@ -227,3 +227,7 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .pgrid article>div:last-child{padding:12px !important}
 .pgrid .hv-orange{white-space:nowrap;font-size:14px !important}
 }
+
+/* Сброс фильтров вверху блока */
+.tek-freset{display:flex;align-items:center;justify-content:center;height:40px;border:1px solid #F3C9A0;border-radius:10px;background:#FFF4E6;color:#B45309;font-size:14px;font-weight:700;text-decoration:none}
+.tek-freset:hover{background:#FFE8CC}

@@ -74,6 +74,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 <summary class="tek-fsum">Фильтры<?php if ($nsel) : ?> <span class="tek-fbadge"><?php echo (int) $nsel; ?></span><?php endif; ?></summary>
 <form id="tek-ff" method="get" action="<?php echo esc_url($base_url); ?>" style="display:flex;flex-direction:column;gap:18px;padding:0 20px 20px">
 <?php foreach (['s', 'post_type', 'orderby', 'per_page'] as $hk) if (isset($_GET[$hk]) && $_GET[$hk] !== '') echo '<input type="hidden" name="' . esc_attr($hk) . '" value="' . esc_attr(wp_unslash($_GET[$hk])) . '">'; ?>
+<?php if ($nsel) : ?><a class="tek-freset" href="<?php echo esc_url($reset_url); ?>">✕ Сбросить все фильтры (<?php echo (int) $nsel; ?>)</a><?php endif; ?>
 <label class="tek-fi tek-fstock"><input type="checkbox" name="stock" value="1" <?php checked(tek_only_stock()); ?>> <span>Только в наличии</span></label>
 <?php $fi = 0; foreach ($facets as $tax => $f) : $fi++; $chosen = isset($sel[$tax]) ? $sel[$tax] : []; $cnt = count($f['terms']); ?>
 <details class="tek-fct"<?php echo ($chosen || $fi <= 2) ? ' open' : ''; ?>>
