@@ -101,7 +101,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 <?php $desc = trim(wp_strip_all_tags($p->get_description())); if ($desc !== '') : ?>
 <div style="flex:1 1 480px;min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
 <h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Описание</h2>
-<div style="font-size:16px;line-height:1.65;color:#33405A"><?php echo wp_kses_post(wpautop($p->get_description())); ?></div>
+<div class="tek-desc" style="font-size:16px;line-height:1.65;color:#33405A"><?php echo tek_desc_html($p->get_description()); ?></div>
 </div>
 <?php endif; ?>
 <div style="flex:1 1 380px;min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">

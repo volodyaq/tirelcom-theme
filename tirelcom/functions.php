@@ -138,3 +138,21 @@ add_filter('woocommerce_email_recipient_new_order', function ($r) {
     return $to ? $to : $r;
 });
 require_once __DIR__ . '/inc/updater.php';
+
+/* Описание: важное открыто, «Полезно знать» и «Частые вопросы» раскрываются по нажатию */
+function tek_desc_html($html) {
+    $html = wp_kses_post(wpautop($html));
+    $parts = preg_split('/(<h3[^>]*>.*?<\/h3>)/isu', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
+    if (count($parts) < 3) return $html;
+    $out = $parts[0];
+    for ($i = 1; $i < count($parts); $i += 2) {
+        $title = trim(wp_strip_all_tags($parts[$i]));
+        $body = $parts[$i + 1] ?? '';
+        if (preg_match('/^(Полезно знать|Частые вопросы)/u', $title)) {
+            $out .= '<details class="tek-acc"><summary>' . esc_html($title) . '</summary><div class="tek-acc-body">' . $body . '</div></details>';
+        } else {
+            $out .= $parts[$i] . $body;
+        }
+    }
+    return $out;
+}
