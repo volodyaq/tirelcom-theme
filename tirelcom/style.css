@@ -90,3 +90,42 @@ img{max-width:100%;height:auto}
 .tek-pr{order:3;flex:none !important;width:100%}
 .tek-tabs-card{order:4;padding:8px 18px 22px !important}
 }
+
+/* Сравнение товаров */
+.tek-cmp-btn{flex:none;width:44px;height:44px;border:1px solid #C5D1E6;border-radius:12px;background:#fff;color:#1D4ED8;font-size:20px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;font-family:inherit;transition:background .15s,color .15s}
+.tek-cmp-btn:hover{background:#E6EEFC}
+.tek-cmp-btn[aria-pressed="true"]{background:#1D4ED8;color:#fff;border-color:#1D4ED8}
+.tek-cmp-wide{width:auto;height:48px;padding:0 18px;gap:8px;font-size:15px;font-weight:700;align-self:flex-start}
+.tek-cmp-wide .tek-cmp-ic{font-size:18px}
+.tek-cmp-bar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;background:#0F2A5C;color:#fff;border-radius:14px;padding:10px 12px 10px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 10px 30px rgba(15,42,92,.35);max-width:calc(100vw - 24px);font-size:15px}
+.tek-cmp-bar[hidden]{display:none}
+.tek-cmp-go{background:#FF8A1F;color:#0F1B33;font-weight:700;border-radius:10px;padding:9px 16px;text-decoration:none;white-space:nowrap}
+.tek-cmp-clear{background:transparent;border:0;color:#C9D6F2;font-size:14px;cursor:pointer;padding:6px;font-family:inherit}
+.tek-cmp-msg{color:#FFD9A8;font-size:13px}
+.tek-cmp-wrap{overflow-x:auto;background:#fff;border:1px solid #D5DEEE;border-radius:16px}
+.tek-cmp{border-collapse:separate;border-spacing:0;width:100%;min-width:max-content}
+.tek-cmp th,.tek-cmp td{padding:12px 16px;text-align:left;vertical-align:top;border-bottom:1px solid #E6ECF6;font-size:15px;line-height:1.45;min-width:180px;max-width:260px}
+.tek-cmp thead th{border-bottom:2px solid #D5DEEE;font-weight:600}
+.tek-cmp .tek-cmp-lab{position:sticky;left:0;background:#F4F7FB;min-width:130px;max-width:150px;font-size:14px;font-weight:700;color:#44506A;z-index:1}
+.tek-cmp thead .tek-cmp-lab{background:#fff}
+.tek-cmp tr.tek-diff td{background:#FFF8EC}
+.tek-cmp tr.tek-diff .tek-cmp-lab{background:#FDEBD0}
+.tek-cmp-only-diff tr.tek-cmp-row:not(.tek-diff){display:none}
+.tek-cmp-img{display:flex;height:110px;align-items:center;justify-content:center;margin-bottom:10px}
+.tek-cmp-img img{max-height:110px;max-width:100%;object-fit:contain}
+.tek-cmp-name{display:block;color:#0F1B33;font-weight:700;text-decoration:none;margin-bottom:6px}
+.tek-cmp-price{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;margin-bottom:6px}
+.tek-cmp-price [data-unit]{font-family:Manrope,sans-serif;font-size:12px;font-weight:400;color:#44506A}
+.tek-cmp-st{display:inline-block;font-size:13px;font-weight:700;border-radius:6px;padding:3px 8px;margin-bottom:10px}
+.tek-cmp-in{background:#E3F6E8;color:#1B6B34}
+.tek-cmp-pre{background:#FFF1DE;color:#8A4B00}
+.tek-cmp-buy{display:flex;align-items:center;justify-content:center;height:42px;border-radius:10px;background:#FF8A1F;color:#0F1B33;font-weight:700;text-decoration:none;margin-bottom:8px}
+.tek-cmp-rm{font-size:13px;color:#44506A}
+.tek-cmp-none{color:#9AA7C0}
+.tek-match{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2px;font-size:13px;color:#2E6B3C}
+.tek-match li::before{content:"✓ ";font-weight:700}
+@media (max-width:700px){
+.tek-cmp-bar{left:12px;right:12px;transform:none;bottom:12px;justify-content:space-between;gap:8px;padding:10px 10px 10px 14px}
+.tek-cmp-msg{display:none}
+.tek-cmp th,.tek-cmp td{min-width:150px;padding:10px 12px;font-size:14px}
+}

@@ -14,6 +14,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('tirelcom-js', get_template_directory_uri() . '/theme.js', [], filemtime(get_stylesheet_directory() . '/theme.js'), true);
     wp_localize_script('tirelcom-js', 'TEK', [
         'mdlRate' => (float) get_option('tirelcom_mdl_rate', 0),
+        'cmpUrl' => home_url('/sravnenie/'),
     ]);
 });
 
@@ -154,4 +155,115 @@ function tek_desc_html($html) {
         }
     }
     return $out;
+}
+
+/* ===== Сравнение и похожие товары ===== */
+
+/* Кнопка «Сравнить» (иконка) для карточек */
+function tek_cmp_btn($id, $wide = false) {
+    $id = (int) $id;
+    if ($wide) {
+        return '<button type="button" class="tek-cmp-btn tek-cmp-wide" data-cmp="' . $id . '" aria-pressed="false"><span class="tek-cmp-ic" aria-hidden="true">⇄</span> <span class="tek-cmp-tx">Добавить к сравнению</span></button>';
+    }
+    return '<button type="button" class="tek-cmp-btn" data-cmp="' . $id . '" aria-pressed="false" title="Добавить к сравнению" aria-label="Добавить к сравнению"><span class="tek-cmp-ic" aria-hidden="true">⇄</span></button>';
+}
+
+/* Атрибуты, которые не считаются «параметрами» при подборе похожих */
+function tek_nonparam_attr($tax) {
+    static $skip = ['pa_brend','pa_proizvoditel','pa_cvet-korpusa','pa_cvet-svecheniya','pa_naznachenie','pa_funkciya',
+        'pa_drugie-oboznacheniya','pa_katalozhnyy-nomer','pa_markirovka','pa_markirovka-drugoe-ob','pa_analog','pa_model-pulta',
+        'pa_marka-avto','pa_osobennost','pa_ispolnenie','pa_komplementarnaya-par','pa_cokolevka-to-220-vid','pa_klass',
+        'pa_emkost-drugie-edinic','pa_golosovoe-upravlenie'];
+    return in_array($tax, $skip, true);
+}
+
+/* Параметры товара для подбора: [taxonomy => [term_taxonomy_id => имя]] */
+function tek_param_terms($p) {
+    $out = [];
+    foreach ($p->get_attributes() as $a) {
+        if (!is_object($a) || !$a->is_taxonomy() || !$a->get_visible()) continue;
+        $tax = $a->get_name();
+        if (tek_nonparam_attr($tax)) continue;
+        $terms = wp_get_object_terms($p->get_id(), $tax);
+        if (is_wp_error($terms) || !$terms) continue;
+        foreach ($terms as $t) $out[$tax][(int) $t->term_taxonomy_id] = $t->name;
+    }
+    return $out;
+}
+
+/* Похожие в наличии: та же категория, совпадение ≥ 2 параметров (или 1, если у товара один параметр).
+   Возвращает [[product, [совпавшие параметры: «Название: значение»]], ...] */
+function tek_similar($p, $n = 4) {
+    global $wpdb;
+    $terms = get_the_terms($p->get_id(), 'product_cat');
+    if (!$terms || is_wp_error($terms)) return [];
+    $deep = null;
+    foreach ($terms as $t) { if ($deep === null || $t->parent) $deep = $t; }
+    $params = tek_param_terms($p);
+    $tt = [];
+    foreach ($params as $arr) foreach ($arr as $id => $nm) $tt[] = $id;
+    $nparams = count($params);
+    $ids = [];
+    if ($tt) {
+        $in = implode(',', array_map('intval', $tt));
+        $sql = "SELECT r.object_id AS id, COUNT(DISTINCT tt.taxonomy) AS s
+            FROM {$wpdb->term_relationships} r
+            JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = r.term_taxonomy_id
+            JOIN {$wpdb->term_relationships} c ON c.object_id = r.object_id AND c.term_taxonomy_id = %d
+            JOIN {$wpdb->posts} po ON po.ID = r.object_id AND po.post_status = 'publish' AND po.post_type = 'product'
+            JOIN {$wpdb->prefix}wc_product_meta_lookup l ON l.product_id = r.object_id AND l.stock_status = 'instock'
+            WHERE r.term_taxonomy_id IN ($in) AND r.object_id <> %d
+            GROUP BY r.object_id
+            HAVING s >= %d
+            ORDER BY s DESC, l.min_price ASC
+            LIMIT %d";
+        $need = $nparams >= 2 ? 2 : 1;
+        $rows = $wpdb->get_results($wpdb->prepare($sql, (int) $deep->term_taxonomy_id, $p->get_id(), $need, $n));
+        foreach ($rows as $r) $ids[] = (int) $r->id;
+    }
+    $res = [];
+    foreach ($ids as $id) {
+        $x = wc_get_product($id);
+        if (!$x) continue;
+        $match = [];
+        foreach ($params as $tax => $arr) {
+            $vals = wp_get_object_terms($id, $tax, ['fields' => 'tt_ids']);
+            if (is_wp_error($vals)) continue;
+            $same = array_intersect(array_keys($arr), array_map('intval', $vals));
+            if ($same) $match[] = wc_attribute_label($tax) . ': ' . implode(', ', array_map(function ($i) use ($arr) { return $arr[$i]; }, $same));
+        }
+        $res[] = [$x, $match];
+    }
+    return $res;
+}
+
+/* Данные для таблицы сравнения: [[label, [значение по товарам]], ...] */
+function tek_compare_rows($products) {
+    $rows = [];
+    $order = [];
+    $vals = [];
+    foreach ($products as $i => $p) {
+        foreach ($p->get_attributes() as $a) {
+            if (!is_object($a) || !$a->get_visible()) continue;
+            if ($a->is_taxonomy()) {
+                $key = $a->get_name();
+                $label = wc_attribute_label($key);
+                $v = implode(', ', wc_get_product_terms($p->get_id(), $key, ['fields' => 'names']));
+            } else {
+                $key = 'c_' . sanitize_title($a->get_name());
+                $label = $a->get_name();
+                $v = implode(', ', $a->get_options());
+            }
+            if ($v === '') continue;
+            if (!isset($vals[$key])) { $vals[$key] = ['label' => $label, 'v' => array_fill(0, count($products), '')]; $order[$key] = 0; }
+            $vals[$key]['v'][$i] = $v;
+            $order[$key]++;
+        }
+    }
+    arsort($order);
+    foreach (array_keys($order) as $key) {
+        $v = $vals[$key]['v'];
+        $rows[] = ['label' => $vals[$key]['label'], 'v' => $v, 'diff' => count(array_unique($v)) > 1];
+    }
+    return $rows;
 }

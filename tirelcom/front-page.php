@@ -94,7 +94,7 @@ $ribbon_item = function ($p, $hidden = false) {
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>
 <span data-unit style="font-size:14px;color:#44506A">руб. ПМР</span>
 </div>
-<a class="hv-orange" href="<?php echo esc_url($p->add_to_cart_url()); ?>" data-product_id="<?php echo (int) $p->get_id(); ?>" rel="nofollow" style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:600;text-decoration:none">В корзину</a>
+<div style="display:flex;gap:8px"><a class="hv-orange" href="<?php echo esc_url($p->add_to_cart_url()); ?>" data-product_id="<?php echo (int) $p->get_id(); ?>" rel="nofollow" style="flex:1;display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:600;text-decoration:none">В корзину</a><?php echo tek_cmp_btn($p->get_id()); ?></div>
 </div>
 </article>
 <?php endforeach; ?>

@@ -83,3 +83,49 @@
   }
   tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.getAttribute('data-tab')); }); });
 })();
+
+/* Сравнение товаров */
+(function () {
+  var KEY = 'tek_cmp', MAX = 4;
+  function load() { try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(a) ? a.map(String).slice(0, MAX) : []; } catch (e) { return []; } }
+  function save(a) { try { localStorage.setItem(KEY, JSON.stringify(a)); } catch (e) {} }
+  var base = (window.TEK && TEK.cmpUrl) || '/sravnenie/';
+  var bar = document.getElementById('tek-cmp-bar');
+  var table = document.querySelector('table.tek-cmp');
+  var onCmpPage = /\/sravnenie\/?$/.test(location.pathname);
+  if (onCmpPage) {
+    if (table) save(table.getAttribute('data-ids').split(',').filter(Boolean));
+    else if (/ids=/.test(location.search)) save([]);
+    else { var s = load(); if (s.length) { location.replace(base + '?ids=' + s.join(',')); return; } }
+  }
+  var msgT;
+  function msg(t) { var m = document.getElementById('tek-cmp-msg'); if (!m) return; m.textContent = t; clearTimeout(msgT); msgT = setTimeout(function () { m.textContent = ''; }, 3000); }
+  function render() {
+    var a = load();
+    document.querySelectorAll('.tek-cmp-btn').forEach(function (b) {
+      var on = a.indexOf(b.getAttribute('data-cmp')) > -1;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      var tx = b.querySelector('.tek-cmp-tx'); if (tx) tx.textContent = on ? 'В сравнении' : 'Добавить к сравнению';
+      b.title = on ? 'Убрать из сравнения' : 'Добавить к сравнению';
+    });
+    if (!bar) return;
+    bar.hidden = !a.length || onCmpPage;
+    document.getElementById('tek-cmp-n').textContent = a.length;
+    document.getElementById('tek-cmp-go').href = a.length ? base + '?ids=' + a.join(',') : base;
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.tek-cmp-btn');
+    if (!b) return;
+    e.preventDefault();
+    var id = b.getAttribute('data-cmp'), a = load(), i = a.indexOf(id);
+    if (i > -1) a.splice(i, 1);
+    else if (a.length >= MAX) { msg('Можно сравнить до ' + MAX + ' товаров'); return; }
+    else a.push(id);
+    save(a); render();
+  });
+  var clr = document.getElementById('tek-cmp-clear');
+  if (clr) clr.addEventListener('click', function () { save([]); render(); });
+  var diff = document.getElementById('tek-cmp-diff');
+  if (diff) diff.addEventListener('change', function () { document.querySelector('.tek-cmp-wrap').classList.toggle('tek-cmp-only-diff', diff.checked); });
+  render();
+})();

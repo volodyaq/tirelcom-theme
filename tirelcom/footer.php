@@ -32,6 +32,7 @@
 </div>
 </footer>
 </div>
+<div id="tek-cmp-bar" class="tek-cmp-bar" hidden><span class="tek-cmp-bar-tx"><span class="tek-cmp-ic" aria-hidden="true">⇄</span> Сравнение: <b id="tek-cmp-n">0</b></span><span id="tek-cmp-msg" class="tek-cmp-msg"></span><a id="tek-cmp-go" class="tek-cmp-go" href="<?php echo esc_url(home_url('/sravnenie/')); ?>">Сравнить</a><button type="button" id="tek-cmp-clear" class="tek-cmp-clear">Очистить</button></div>
 <?php wp_footer(); ?>
 </body>
 </html>

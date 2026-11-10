@@ -14,11 +14,14 @@ if ($deep) {
 $img_ids = array_filter(array_merge([$p->get_image_id()], $p->get_gallery_image_ids()));
 $main = $img_ids ? wp_get_attachment_image_url(reset($img_ids), 'full') : '';
 $code = preg_replace('/^TEK-/', '', (string) $p->get_sku());
-$similar = [];
-if ($deep) {
-    $q = new WP_Query(['post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 4, 'post__not_in' => [$p->get_id()], 'orderby' => 'rand', 'no_found_rows' => true, 'tax_query' => [['taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => [$deep->term_id]]], 'meta_query' => [['key' => '_thumbnail_id', 'compare' => 'EXISTS']]]);
-    foreach ($q->posts as $sp) { $x = wc_get_product($sp->ID); if ($x) $similar[] = $x; }
+$onorder = $p->get_stock_status() !== 'instock';
+$similar = tek_similar($p, 4);
+$similar_fallback = false;
+if (!$similar && $deep) {
+    $q = new WP_Query(['post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 4, 'post__not_in' => [$p->get_id()], 'orderby' => 'rand', 'no_found_rows' => true, 'tax_query' => [['taxonomy' => 'product_cat', 'field' => 'term_id', 'terms' => [$deep->term_id]]], 'meta_query' => [['key' => '_stock_status', 'value' => 'instock']]]);
+    foreach ($q->posts as $sp) { $x = wc_get_product($sp->ID); if ($x) $similar[] = [$x, []]; }
     wp_reset_postdata();
+    $similar_fallback = true;
 }
 ?>
 <main>
@@ -88,7 +91,7 @@ foreach ($p->get_attributes() as $a) {
     if ($v !== '') $key[] = [$a->is_taxonomy() ? wc_attribute_label($a->get_name()) : $a->get_name(), $v];
 }
 if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:#33405A"><?php foreach ($key as $k) : ?><li><span style="color:#44506A"><?php echo esc_html($k[0]); ?>:</span> <strong style="font-weight:600"><?php echo esc_html($k[1]); ?></strong></li><?php endforeach; ?></ul><?php endif; ?>
-<?php if ($p->get_stock_status() === 'onbackorder') : ?><span style="align-self:flex-start;margin-top:6px;font-size:13px;font-weight:700;color:#8A4B00;background:#FFF1DE;border-radius:6px;padding:5px 10px">Предзаказ: срок поставки уточним по телефону</span><?php endif; ?>
+<?php if ($p->get_stock_status() === 'onbackorder') : ?><span style="align-self:flex-start;margin-top:6px;font-size:13px;font-weight:700;color:#8A4B00;background:#FFF1DE;border-radius:6px;padding:5px 10px">Предзаказ: срок поставки уточним по телефону</span><?php if ($similar && !$similar_fallback) : ?><a class="hv-link" href="#tek-similar" style="align-self:flex-start;margin-top:6px;font-size:14px;font-weight:700">Нужно сейчас? Посмотреть похожие в наличии ↓</a><?php endif; ?><?php endif; ?>
 </div>
 
 <form method="post" action="<?php echo esc_url(get_permalink()); ?>" style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:18px">
@@ -108,6 +111,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 </div>
 <a class="hv-outline" href="<?php echo esc_url(add_query_arg('add-to-cart', $p->get_id(), wc_get_checkout_url())); ?>" rel="nofollow" style="display:flex;align-items:center;justify-content:center;height:52px;border:2px solid #1D4ED8;border-radius:12px;background:#FFFFFF;color:#1D4ED8;font-size:16px;font-weight:700">Купить в 1 клик</a>
 <div style="font-size:14px;line-height:1.5;color:#44506A">В 1 клик: сразу к оформлению, нужны только имя и телефон.</div>
+<?php echo tek_cmp_btn($p->get_id(), true); ?>
 </form>
 
 <div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px">
@@ -129,20 +133,23 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 </section>
 
 <?php if ($similar) : ?>
-<section style="max-width:1200px;margin:0 auto;padding:48px 24px 72px">
-<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:24px">
-<h2 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.02em">Похожие товары</h2>
+<section id="tek-similar" style="max-width:1200px;margin:0 auto;padding:48px 24px 72px">
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+<h2 style="margin:0;font-size:30px;font-weight:800;letter-spacing:-0.02em"><?php echo $similar_fallback ? 'Другие товары раздела в наличии' : ($onorder ? 'Похожие в наличии, можно взять сейчас' : 'Похожие по параметрам в наличии'); ?></h2>
 <?php if ($deep) : ?><a class="hv-link" href="<?php echo esc_url(get_term_link($deep)); ?>" style="font-weight:700;font-size:16px">Весь раздел →</a><?php endif; ?>
 </div>
+<?php if (!$similar_fallback) : ?><p style="margin:0 0 20px;font-size:15px;line-height:1.5;color:#44506A;max-width:760px">Подобрано автоматически по совпадающим параметрам. Перед покупкой сверьте с вашей схемой: добавьте нужные товары к сравнению или позвоните нам, подскажем.</p><?php else : ?><div style="height:16px"></div><?php endif; ?>
 <div class="pgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
-<?php foreach ($similar as $s) : $img = get_the_post_thumbnail_url($s->get_id(), 'woocommerce_single'); ?>
+<?php foreach ($similar as $pair) : $s = $pair[0]; $match = $pair[1]; $img = get_the_post_thumbnail_url($s->get_id(), 'woocommerce_single'); ?>
 <article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
 <a href="<?php echo esc_url(get_permalink($s->get_id())); ?>" style="display:block;height:150px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($s->get_name()); ?>" loading="lazy"><?php endif; ?></a>
 <div style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1">
 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($s)); ?></span>
-<h3 style="margin:0;font-size:15px;font-weight:600;line-height:1.4;flex:1"><a href="<?php echo esc_url(get_permalink($s->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($s->get_name()); ?></a></h3>
+<h3 style="margin:0;font-size:15px;font-weight:600;line-height:1.4"><a href="<?php echo esc_url(get_permalink($s->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($s->get_name()); ?></a></h3>
+<?php if ($match) : ?><ul class="tek-match"><?php foreach ($match as $m) : ?><li><?php echo esc_html($m); ?></li><?php endforeach; ?></ul><?php endif; ?>
+<div style="flex:1"></div>
 <div style="display:flex;align-items:baseline;gap:6px"><span data-prc="<?php echo esc_attr($s->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:600"><?php echo esc_html(tek_price($s)); ?></span><span data-unit style="font-size:13px;color:#44506A">руб. ПМР</span></div>
-<a class="hv-orange" href="<?php echo esc_url($s->add_to_cart_url()); ?>" rel="nofollow" style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:700;text-decoration:none">В корзину</a>
+<div style="display:flex;gap:8px"><a class="hv-orange" href="<?php echo esc_url($s->add_to_cart_url()); ?>" rel="nofollow" style="flex:1;display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:700;text-decoration:none">В корзину</a><?php echo tek_cmp_btn($s->get_id()); ?></div>
 </div>
 </article>
 <?php endforeach; ?>

@@ -110,7 +110,7 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>
 <span data-unit style="font-size:13px;color:#44506A">руб. ПМР</span>
 </div>
-<a class="hv-orange" href="<?php echo esc_url($p->add_to_cart_url()); ?>" rel="nofollow" style="display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:700;text-decoration:none">В корзину</a>
+<div style="display:flex;gap:8px"><a class="hv-orange" href="<?php echo esc_url($p->add_to_cart_url()); ?>" rel="nofollow" style="flex:1;display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:700;text-decoration:none">В корзину</a><?php echo tek_cmp_btn($p->get_id()); ?></div>
 </div>
 </article>
 <?php endwhile; ?>
