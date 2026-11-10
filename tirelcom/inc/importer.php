@@ -6,7 +6,7 @@ add_action('init', function () {
     $tok = get_option('tek_imp_tok');
     $ok = current_user_can('manage_options') || ($tok && isset($_GET['tok']) && hash_equals($tok, (string) $_GET['tok']));
     if (!$ok) return;
-    @set_time_limit(120);
+    @set_time_limit(120); ignore_user_abort(true);
     $act = sanitize_key($_GET['tek_imp']);
     $up = wp_upload_dir();
     $file = $up['basedir'] . '/tek-catalog.csv';
@@ -83,8 +83,8 @@ add_action('init', function () {
     }
     $new = $off + $done;
     update_option('tek_imp_offset', $new, false);
-    if (!empty($_GET['auto']) && get_option('tek_imp_auto') && ($created + $skipped) > 0) {
-        wp_remote_get(add_query_arg(['tek_imp' => 'run', 'n' => $n, 'auto' => 1, 'tok' => $tok], home_url('/')), ['timeout' => 0.01, 'blocking' => false, 'sslverify' => false]);
+    if (!empty($_GET['auto']) && get_option('tek_imp_auto') && $new < 34310) {
+        wp_remote_get(add_query_arg(['tek_imp' => 'run', 'n' => $n, 'auto' => 1, 'tok' => $tok], home_url('/')), ['timeout' => 1, 'blocking' => false, 'sslverify' => false]);
     }
     $out(['offset' => $new, 'created' => $created, 'skipped' => $skipped, 'errors' => array_slice($errs, 0, 5), 'nerr' => count($errs), 'sec' => round(microtime(true) - $t0, 1)]);
 });
