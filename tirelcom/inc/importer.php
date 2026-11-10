@@ -32,6 +32,13 @@ add_action('init', function () {
         $r['nosku_titles'] = $wpdb->get_col("SELECT p.post_title FROM $wpdb->posts p WHERE p.post_type='product' AND NOT EXISTS (SELECT 1 FROM $wpdb->postmeta m WHERE m.post_id=p.ID AND m.meta_key='_sku' AND m.meta_value<>'') LIMIT 15");
         $out($r);
     }
+    if ($act === 'dedupe') {
+        global $wpdb;
+        $rows = $wpdb->get_results("SELECT m.meta_value sku, GROUP_CONCAT(p.ID ORDER BY p.ID) ids FROM $wpdb->postmeta m JOIN $wpdb->posts p ON p.ID=m.post_id WHERE m.meta_key='_sku' AND p.post_type='product' AND m.meta_value<>'' GROUP BY m.meta_value HAVING COUNT(*)>1");
+        $del = 0; $sample = [];
+        foreach ($rows as $r) { $ids = explode(',', $r->ids); array_shift($ids); foreach ($ids as $id) { if (!empty($_GET['do'])) { wp_delete_post((int) $id, true); } $del++; } if (count($sample) < 5) $sample[] = $r->sku . ':' . $r->ids; }
+        $out(['dup_groups' => count($rows), 'extra' => $del, 'sample' => $sample, 'applied' => !empty($_GET['do'])]);
+    }
     if ($act === 'status') $out(['offset' => (int) get_option('tek_imp_offset', 0), 'products' => (int) wp_count_posts('product')->publish]);
     if ($act === 'reset') { update_option('tek_imp_offset', 0, false); $out(['ok' => true]); }
     if ($act === 'wipe') {
