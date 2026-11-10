@@ -39,6 +39,7 @@ add_action('init', function () {
         foreach ($rows as $r) { $ids = explode(',', $r->ids); array_shift($ids); foreach ($ids as $id) { if (!empty($_GET['do'])) { wp_delete_post((int) $id, true); } $del++; } if (count($sample) < 5) $sample[] = $r->sku . ':' . $r->ids; }
         $out(['dup_groups' => count($rows), 'extra' => $del, 'sample' => $sample, 'applied' => !empty($_GET['do'])]);
     }
+    if ($act === 'cleanup') { @unlink($file); foreach (['tek_imp_offset','tek_imp_tok','tek_imp_auto'] as $o) delete_option($o); $out(['cleaned' => !file_exists($file)]); }
     if ($act === 'status') $out(['offset' => (int) get_option('tek_imp_offset', 0), 'products' => (int) wp_count_posts('product')->publish]);
     if ($act === 'reset') { update_option('tek_imp_offset', 0, false); $out(['ok' => true]); }
     if ($act === 'wipe') {
