@@ -48,6 +48,16 @@ if ($deep) {
 <?php if ($deep) : ?><span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:5px 9px"><?php echo esc_html(mb_strtoupper($deep->name)); ?></span><?php endif; ?>
 <h1 style="margin:0;font-size:34px;line-height:1.15;font-weight:800;letter-spacing:-0.02em"><?php echo esc_html($p->get_name()); ?></h1>
 <?php if ($code) : ?><span style="font-size:14px;color:#44506A">Код товара: <?php echo esc_html($code); ?></span><?php endif; ?>
+<?php
+$key = [];
+foreach ($p->get_attributes() as $a) {
+    if (count($key) >= 4) break;
+    if (!is_object($a) || !$a->get_visible()) continue;
+    $v = $a->is_taxonomy() ? implode(', ', wc_get_product_terms($p->get_id(), $a->get_name(), ['fields' => 'names'])) : implode(', ', $a->get_options());
+    if ($v !== '') $key[] = [$a->is_taxonomy() ? wc_attribute_label($a->get_name()) : $a->get_name(), $v];
+}
+if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:#33405A"><?php foreach ($key as $k) : ?><li><span style="color:#44506A"><?php echo esc_html($k[0]); ?>:</span> <strong style="font-weight:600"><?php echo esc_html($k[1]); ?></strong></li><?php endforeach; ?></ul><?php endif; ?>
+<?php if ($p->get_stock_status() === 'onbackorder') : ?><span style="align-self:flex-start;margin-top:6px;font-size:13px;font-weight:700;color:#8A4B00;background:#FFF1DE;border-radius:6px;padding:5px 10px">Предзаказ: срок поставки уточним по телефону</span><?php endif; ?>
 </div>
 
 <form method="post" action="<?php echo esc_url(get_permalink()); ?>" style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:18px">
@@ -101,8 +111,15 @@ if ($deep) {
 $rows = [];
 if ($deep) $rows[] = ['Раздел', $deep->name];
 if ($code) $rows[] = ['Код товара', $code];
-foreach ($p->get_attributes() as $a) { if (is_object($a) && !$a->is_taxonomy()) $rows[] = [$a->get_name(), implode(', ', $a->get_options())]; }
-$rows[] = ['Наличие', 'уточняйте по телефону'];
+$specs = [];
+foreach ($p->get_attributes() as $a) {
+    if (!is_object($a) || !$a->get_visible()) continue;
+    if ($a->is_taxonomy()) { $v = implode(', ', wc_get_product_terms($p->get_id(), $a->get_name(), ['fields' => 'names'])); $l = wc_attribute_label($a->get_name()); }
+    else { $v = implode(', ', $a->get_options()); $l = $a->get_name(); }
+    if ($v !== '') $specs[] = [$l, $v];
+}
+$rows = array_merge($specs, $rows);
+$rows[] = ['Наличие', $p->get_stock_status() === 'onbackorder' ? 'предзаказ, срок уточним по телефону' : 'уточняйте по телефону'];
 foreach ($rows as $r) : ?>
 <div style="display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:space-between;padding:12px 0;border-bottom:1px solid #E6ECF6">
 <dt style="font-size:15px;color:#44506A"><?php echo esc_html($r[0]); ?></dt>
