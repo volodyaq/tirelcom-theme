@@ -39,9 +39,10 @@ function tek_search_parse($raw) {
 }
 
 /* Возвращает ['where' => ' AND (...)', 'rank' => 'SQL-выражение', 'ok' => bool] */
-function tek_search_sql($raw) {
+function tek_search_sql($raw, $drop_units = false) {
     global $wpdb;
     list($q, $toks) = tek_search_parse($raw);
+    if ($drop_units) { $toks = array_values(array_filter($toks, function ($x) { return !$x['unit']; })); }
     if (!$toks) return ['where' => ' AND 1=0', 'rank' => '0', 'ok' => false];
     $N = "CONCAT(' ', REPLACE(LOWER({$wpdb->posts}.post_title), ',', '.'))";
     $C = "REPLACE(REPLACE(REPLACE(LOWER({$wpdb->posts}.post_title), ' ', ''), '-', ''), ',', '.')";
@@ -59,6 +60,17 @@ function tek_search_sql($raw) {
             $in = "'" . implode("','", array_map('esc_sql', $mark_tax)) . "'";
             $tt = $wpdb->get_col($wpdb->prepare("SELECT tt.term_taxonomy_id FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id WHERE tt.taxonomy IN ($in) AND LOWER(t.name) LIKE %s LIMIT 300", '%' . $wpdb->esc_like($tk['t']) . '%'));
             if ($tt) $or[] = "{$wpdb->posts}.ID IN (SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN (" . implode(',', array_map('intval', $tt)) . "))";
+            if (!preg_match('/\d/', $tk['t'])) {
+                $stem = mb_strlen($tk['t']) > 6 ? mb_substr($tk['t'], 0, mb_strlen($tk['t']) - 1) : $tk['t'];
+                $cids = $wpdb->get_col($wpdb->prepare("SELECT t.term_id FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id WHERE tt.taxonomy = 'product_cat' AND LOWER(t.name) LIKE %s LIMIT 30", '%' . $wpdb->esc_like($stem) . '%'));
+                $all = [];
+                foreach ($cids as $cid) { $all[] = (int) $cid; $ch = get_term_children((int) $cid, 'product_cat'); if (is_array($ch)) foreach ($ch as $x) $all[] = (int) $x; }
+                if ($all) {
+                    $all = array_slice(array_unique($all), 0, 400);
+                    $ctt = $wpdb->get_col("SELECT term_taxonomy_id FROM {$wpdb->term_taxonomy} WHERE taxonomy = 'product_cat' AND term_id IN (" . implode(',', $all) . ")");
+                    if ($ctt) $or[] = "{$wpdb->posts}.ID IN (SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN (" . implode(',', array_map('intval', $ctt)) . "))";
+                }
+            }
         }
         $parts[] = '(' . implode(' OR ', $or) . ')';
     }
@@ -79,7 +91,14 @@ function tek_search_sql($raw) {
 /* Основной запрос: подмена поиска WordPress */
 add_filter('posts_search', function ($search, $q) {
     if (is_admin() || !$q->is_main_query() || !$q->is_search()) return $search;
-    $s = tek_search_sql($q->get('s'));
+    global $wpdb;
+    $raw = $q->get('s');
+    $s = tek_search_sql($raw);
+    $has = $wpdb->get_var("SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish' " . $s['where'] . " LIMIT 1");
+    if (!$has) {
+        $r = tek_search_sql($raw, true);
+        if ($r['ok']) { $s = $r; $q->set('tek_relaxed', 1); }
+    }
     $q->set('tek_rank', $s['rank']);
     return $s['where'];
 }, 20, 2);

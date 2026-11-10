@@ -79,6 +79,7 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 </aside>
 
 <div class="cat-main" style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px">
+<?php if ($is_search && $wp_query->get('tek_relaxed')) : ?><div style="background:#FFF1DE;border:1px solid #F3D3A5;border-radius:12px;padding:12px 16px;font-size:15px;line-height:1.5;color:#5B3300">Точного совпадения по всем параметрам нет. Показаны товары по названию без размеров и единиц. Проверьте номинал в карточке или позвоните: <a href="tel:+37353351338" style="font-weight:700;color:#1D4ED8">+373 533 51338</a>.</div><?php endif; ?>
 <div style="display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:space-between;align-items:center;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:12px 16px">
 <span style="font-size:15px;color:#33405A"><?php if ($total) : ?>Показано <strong style="font-weight:700;color:#0F1B33"><?php echo (int) $from; ?>–<?php echo (int) $to; ?> из <?php echo (int) $total; ?></strong><?php else : ?>Ничего не найдено<?php endif; ?></span>
 <form method="get" action="<?php echo esc_url($base_url); ?>" style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center">
