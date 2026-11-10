@@ -20,6 +20,18 @@ add_action('init', function () {
     }
     if ($act === 'start') { $t = wp_generate_password(24, false); update_option('tek_imp_tok', $t, false); update_option('tek_imp_auto', 1, false); wp_remote_get(add_query_arg(['tek_imp' => 'run', 'n' => 100, 'auto' => 1, 'tok' => $t], home_url('/')), ['timeout' => 0.01, 'blocking' => false, 'sslverify' => false]); $out(['started' => true]); }
     if ($act === 'halt') { update_option('tek_imp_auto', 0, false); $out(['halted' => true]); }
+    if ($act === 'verify') {
+        global $wpdb;
+        $r = [];
+        $r['by_status'] = $wpdb->get_results("SELECT post_status s, COUNT(*) c FROM $wpdb->posts WHERE post_type='product' GROUP BY post_status", OBJECT_K);
+        $r['distinct_sku'] = (int) $wpdb->get_var("SELECT COUNT(DISTINCT meta_value) FROM $wpdb->postmeta m JOIN $wpdb->posts p ON p.ID=m.post_id WHERE m.meta_key='_sku' AND p.post_type='product'");
+        $r['with_thumb'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->postmeta m JOIN $wpdb->posts p ON p.ID=m.post_id WHERE m.meta_key='_thumbnail_id' AND p.post_type='product'");
+        $r['no_sku'] = (int) $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts p WHERE p.post_type='product' AND NOT EXISTS (SELECT 1 FROM $wpdb->postmeta m WHERE m.post_id=p.ID AND m.meta_key='_sku' AND m.meta_value<>'')");
+        $r['cats'] = (int) wp_count_terms(['taxonomy' => 'product_cat', 'hide_empty' => false]);
+        $r['drafts'] = $wpdb->get_col("SELECT p.post_title FROM $wpdb->posts p WHERE p.post_type='product' AND p.post_status='draft' LIMIT 10");
+        $r['nosku_titles'] = $wpdb->get_col("SELECT p.post_title FROM $wpdb->posts p WHERE p.post_type='product' AND NOT EXISTS (SELECT 1 FROM $wpdb->postmeta m WHERE m.post_id=p.ID AND m.meta_key='_sku' AND m.meta_value<>'') LIMIT 15");
+        $out($r);
+    }
     if ($act === 'status') $out(['offset' => (int) get_option('tek_imp_offset', 0), 'products' => (int) wp_count_posts('product')->publish]);
     if ($act === 'reset') { update_option('tek_imp_offset', 0, false); $out(['ok' => true]); }
     if ($act === 'wipe') {
