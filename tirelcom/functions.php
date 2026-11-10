@@ -137,7 +137,6 @@ add_filter('woocommerce_email_recipient_new_order', function ($r) {
     $to = get_option('tirelcom_order_email');
     return $to ? $to : $r;
 });
-require_once __DIR__ . '/inc/updater.php';
 
 /* Описание: важное открыто, «Полезно знать» и «Частые вопросы» раскрываются по нажатию */
 function tek_desc_html($html) {
