@@ -183,9 +183,13 @@
 
 /* Фильтры: автоприменение, «показать ещё», на телефоне свёрнуты */
 (function () {
-  var box = document.querySelector('.tek-fbox');
+  var box = document.querySelector('.tek-fbox:not(.tek-catbox)');
+  var cb = document.querySelector('.tek-catbox');
+  if (window.innerWidth <= 700) {
+    if (cb) cb.removeAttribute('open');
+    if (box && !/(\?|&)(f%5B|f\[|stock=|min_price=|max_price=)/.test(location.search)) box.removeAttribute('open');
+  }
   if (!box) return;
-  if (window.innerWidth <= 700 && !/(\?|&)(f%5B|f\[|stock=|min_price=|max_price=)/.test(location.search)) box.removeAttribute('open');
   var form = document.getElementById('tek-ff'), t;
   if (form) form.addEventListener('change', function (e) {
     if (e.target.type !== 'checkbox') return;
@@ -197,4 +201,11 @@
       b.textContent = l.classList.contains('tek-open') ? b.getAttribute('data-less') : b.getAttribute('data-more');
     });
   });
+})();
+
+/* Кнопка «Каталог» на телефоне */
+(function () {
+  var b = document.getElementById('tek-catbtn'), d = document.getElementById('tek-drawer');
+  if (!b || !d) return;
+  b.addEventListener('click', function () { var open = d.hidden; d.hidden = !open; b.setAttribute('aria-expanded', open ? 'true' : 'false'); });
 })();

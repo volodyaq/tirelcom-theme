@@ -20,7 +20,7 @@ a.hv-link:hover{color:#C2410C}
 .hv-foot:hover,.hv-light:hover{color:#FF8A1F !important}
 .hv-card:hover{border-color:#FF8A1F !important;background:#FFF6EA !important;transform:translateY(-3px);box-shadow:0 10px 24px rgba(15,42,92,.2)}
 .hv-chip:hover{background:#1D4ED8 !important;border-color:#1D4ED8 !important;color:#FFFFFF !important}
-.navrow a:hover{background:#1D4ED8;color:#FFFFFF !important}
+.tek-ni-a:hover,.tek-ni:hover>.tek-ni-a{background:#1D4ED8;color:#FFFFFF !important}
 .msgr-btn:hover{filter:brightness(1.1);transform:translateY(-3px) scale(1.06);box-shadow:0 8px 18px rgba(0,0,0,.35)}
 button{font-family:inherit;cursor:pointer}
 a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #FF8A1F;outline-offset:2px}
@@ -173,3 +173,47 @@ img{max-width:100%;height:auto}
 .tek-chip{display:inline-flex;align-items:center;gap:6px;background:#E6EEFC;color:#1D4ED8;border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600;text-decoration:none}
 .tek-chip:hover{background:#D5E3FB}
 .tek-chip-x{background:#fff;border:1px solid #C5D1E6;color:#0F1B33}
+
+/* Меню каталога */
+.tek-catbtn{display:none}
+.tek-drawer[hidden]{display:none}
+.tek-ni{position:relative}
+.tek-mega{display:none;position:absolute;left:0;top:100%;z-index:80;background:#fff;border:1px solid #D5DEEE;border-top:2px solid #1D4ED8;border-radius:0 0 14px 14px;box-shadow:0 18px 40px rgba(15,42,92,.2);padding:18px 22px;width:max-content;max-width:min(880px,94vw);grid-template-columns:repeat(auto-fit,minmax(190px,230px));gap:16px 24px}
+.tek-ni:hover>.tek-mega,.tek-ni:focus-within>.tek-mega{display:grid}
+.tek-ni-r .tek-mega{left:auto;right:0}
+.tek-mc{display:flex;flex-direction:column;gap:5px;min-width:0}
+.tek-mh{font-weight:800;font-size:14px;color:#0F2A5C;text-decoration:none}
+.tek-mh:hover,.tek-ml:hover{color:#C2410C}
+.tek-ml{font-size:13px;color:#33405A;text-decoration:none;line-height:1.35}
+.tek-mall{grid-column:1/-1;font-weight:700;font-size:14px;color:#1D4ED8;text-decoration:none;padding-top:10px;border-top:1px solid #E6ECF6}
+/* Плитки подразделов */
+.tek-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.tek-tile{display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid #D5DEEE;border-radius:14px;padding:14px 16px;text-decoration:none;color:#0F1B33;transition:border-color .15s,box-shadow .15s}
+.tek-tile:hover{border-color:#1D4ED8;box-shadow:0 6px 18px rgba(29,78,216,.14)}
+.tek-tile-n{font-weight:700;font-size:15px;line-height:1.3}
+.tek-tile-c{font-size:12px;color:#6A7894;font-family:'JetBrains Mono',monospace}
+@media (max-width:700px){
+.tek-navrow{display:none !important}
+.tek-catbtn{display:flex;align-items:center;gap:10px;width:100%;height:50px;padding:0 20px;border:0;background:#fff;color:#0F2A5C;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer}
+.tek-drawer{background:#fff;border-top:1px solid #E6ECF6;max-height:75vh;overflow-y:auto;padding:4px 0 12px}
+.tek-dr{border-bottom:1px solid #EEF2F9}
+.tek-dr>summary{list-style:none;padding:14px 20px;font-weight:700;font-size:15px;display:flex;justify-content:space-between;cursor:pointer}
+.tek-dr>summary::-webkit-details-marker{display:none}
+.tek-dr>summary::after{content:"+";color:#1D4ED8;font-size:20px;line-height:1}
+.tek-dr[open]>summary::after{content:"–"}
+.tek-dr a{display:flex;justify-content:space-between;padding:10px 20px 10px 32px;font-size:14px;color:#0F1B33;text-decoration:none}
+.tek-dr a em{font-style:normal;color:#6A7894;font-size:12px}
+.tek-dr .tek-dr-all{color:#1D4ED8;font-weight:700}
+.tek-promo-sub{display:none}
+header>div:first-child{padding:12px 16px !important;gap:10px 8px !important}
+.tek-h-logo{order:1;flex:1;margin-right:0 !important;min-width:0}
+.tek-h-cart{order:2}
+.tek-h-search{order:3;flex:1 1 100% !important}
+.tek-h-logo>span:first-child{width:40px !important;height:40px !important;border-radius:11px !important}
+.tek-h-logo>span:first-child svg{width:24px;height:24px}
+.tek-h-logo span[style*="font-size:32px"]{font-size:24px !important}
+.tek-h-logo span[style*="font-size:13px"]{display:none}
+.tek-h-cart a{min-width:0 !important;padding:0 14px !important;font-size:15px !important}
+.tek-tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.tek-tile{padding:12px}
+}

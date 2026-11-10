@@ -39,17 +39,29 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 <?php if ($term && $term->description) : ?><p style="margin:10px 0 0;font-size:16px;line-height:1.55;color:#33405A;max-width:760px"><?php echo esc_html($term->description); ?></p><?php endif; ?>
 </section>
 
-<section style="max-width:1200px;margin:0 auto;padding:24px 24px 16px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+<?php $nsel_early = tek_only_stock() || tek_selected_filters() || !empty($_GET['min_price']) || !empty($_GET['max_price']); ?>
+<section style="max-width:1200px;margin:0 auto;padding:20px 24px 0">
+<?php
+$tiles = [];
+if ($term) { foreach (get_terms(['taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => true, 'orderby' => 'name']) as $tc) $tiles[] = $tc; }
+elseif (!$is_search) { $tiles = array_filter(tek_top_cats(), function ($x) { return $x->count > 0 || get_terms(['taxonomy' => 'product_cat', 'parent' => $x->term_id, 'hide_empty' => true, 'fields' => 'ids']); }); }
+if ($tiles && !$nsel_early) : ?>
+<section class="tek-tiles" aria-label="Подразделы">
+<?php foreach ($tiles as $tc) : ?><a class="tek-tile" href="<?php echo esc_url(get_term_link($tc)); ?>"><span class="tek-tile-n"><?php echo esc_html($tc->name); ?></span><span class="tek-tile-c"><?php echo (int) $tc->count; ?> шт.</span></a><?php endforeach; ?>
+</section>
+<?php endif; ?>
+</section>
+<section style="max-width:1200px;margin:0 auto;padding:16px 24px 16px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
 <aside class="cat-aside" style="flex:0 0 260px;max-width:100%;display:flex;flex-direction:column;gap:20px">
-<div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:20px">
-<h2 style="margin:0 0 12px;font-size:16px;font-weight:800"><?php echo $root ? esc_html($root->name) : 'Разделы каталога'; ?></h2>
-<ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:2px">
+<details class="tek-fbox tek-catbox" open>
+<summary class="tek-fsum"><?php echo $root ? esc_html($root->name) : 'Разделы каталога'; ?></summary>
+<ul style="margin:0;padding:0 20px 20px;list-style:none;display:flex;flex-direction:column;gap:2px">
 <?php if (!is_wp_error($side_cats)) foreach ($side_cats as $s) :
     $cur = $term && ($s->term_id === $term->term_id || term_is_ancestor_of($s->term_id, $term->term_id, 'product_cat')); ?>
 <li><a href="<?php echo esc_url(get_term_link($s)); ?>" style="display:block;padding:8px 10px;border-radius:8px;background:<?php echo $cur ? '#E6EEFC' : 'transparent'; ?>;color:<?php echo $cur ? '#1D4ED8' : '#0F1B33'; ?>;font-weight:<?php echo $cur ? '700' : '500'; ?>;font-size:14px;line-height:1.35"><?php echo esc_html($s->name); ?></a></li>
 <?php endforeach; ?>
 </ul>
-</div>
+</details>
 
 <?php
 $facets = tek_facets($term, $is_search ? get_search_query() : '');
