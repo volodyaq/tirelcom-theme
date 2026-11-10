@@ -66,3 +66,20 @@
     upd();
   }
 })();
+
+
+/* Вкладки карточки товара */
+(function () {
+  var tabs = document.querySelectorAll('.tek-tab');
+  if (!tabs.length) return;
+  function show(name) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-tab') === name;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      var p = document.getElementById('tek-p-' + t.getAttribute('data-tab'));
+      if (p) p.hidden = !on;
+    });
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.getAttribute('data-tab')); }); });
+})();

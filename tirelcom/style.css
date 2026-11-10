@@ -75,3 +75,9 @@ img{max-width:100%;height:auto}
 .tek-acc[open]>summary::after{content:"\2212"}
 .tek-acc-body{padding:0 0 12px}
 .tek-acc-body p{margin:0 0 12px}
+
+.tek-tabs{display:flex;gap:6px;border-bottom:1px solid #E6ECF6;margin-bottom:18px}
+.tek-tab{border:0;background:none;padding:18px 16px 14px;font:inherit;font-size:17px;font-weight:700;color:#44506A;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tek-tab:hover{color:#1D4ED8}
+.tek-tab.is-active{color:#0F1B33;border-bottom-color:#1D4ED8}
+.tek-panel[hidden]{display:none}

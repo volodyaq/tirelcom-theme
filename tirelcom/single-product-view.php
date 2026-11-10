@@ -41,12 +41,37 @@ if ($deep) {
 <?php endforeach; ?>
 </div>
 <?php endif; ?>
-<?php $desc = trim(wp_strip_all_tags($p->get_description())); if ($desc !== '') : ?>
-<div style="min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
-<h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Описание</h2>
-<div class="tek-desc" style="font-size:16px;line-height:1.65;color:#33405A"><?php echo tek_desc_html($p->get_description()); ?></div>
+<?php $has_desc = trim(wp_strip_all_tags($p->get_description())) !== ''; ?>
+<div class="tek-tabs-card" style="min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:8px 32px 28px">
+<div class="tek-tabs" role="tablist" aria-label="Информация о товаре">
+<?php if ($has_desc) : ?><button type="button" role="tab" id="tek-t-desc" class="tek-tab is-active" aria-selected="true" aria-controls="tek-p-desc" data-tab="desc">Описание</button><?php endif; ?>
+<button type="button" role="tab" id="tek-t-spec" class="tek-tab<?php echo $has_desc ? '' : ' is-active'; ?>" aria-selected="<?php echo $has_desc ? 'false' : 'true'; ?>" aria-controls="tek-p-spec" data-tab="spec">Характеристики</button>
 </div>
-<?php endif; ?>
+<?php if ($has_desc) : ?><div id="tek-p-desc" role="tabpanel" aria-labelledby="tek-t-desc" class="tek-panel tek-desc" style="font-size:16px;line-height:1.65;color:#33405A"><?php echo tek_desc_html($p->get_description()); ?></div><?php endif; ?>
+<div id="tek-p-spec" role="tabpanel" aria-labelledby="tek-t-spec" class="tek-panel"<?php echo $has_desc ? ' hidden' : ''; ?>>
+<dl style="margin:0;display:flex;flex-direction:column">
+<?php
+$rows = [];
+if ($deep) $rows[] = ['Раздел', $deep->name];
+if ($code) $rows[] = ['Код товара', $code];
+$specs = [];
+foreach ($p->get_attributes() as $a) {
+    if (!is_object($a) || !$a->get_visible()) continue;
+    if ($a->is_taxonomy()) { $v = implode(', ', wc_get_product_terms($p->get_id(), $a->get_name(), ['fields' => 'names'])); $l = wc_attribute_label($a->get_name()); }
+    else { $v = implode(', ', $a->get_options()); $l = $a->get_name(); }
+    if ($v !== '') $specs[] = [$l, $v];
+}
+$rows = array_merge($specs, $rows);
+$rows[] = ['Наличие', $p->get_stock_status() === 'onbackorder' ? 'предзаказ, срок уточним по телефону' : 'уточняйте по телефону'];
+foreach ($rows as $r) : ?>
+<div style="display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:space-between;padding:12px 0;border-bottom:1px solid #E6ECF6">
+<dt style="font-size:15px;color:#44506A"><?php echo esc_html($r[0]); ?></dt>
+<dd style="margin:0;font-size:15px;font-weight:600;text-align:right"><?php echo esc_html($r[1]); ?></dd>
+</div>
+<?php endforeach; ?>
+</dl>
+</div>
+</div>
 </div>
 
 <div style="flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:20px">
@@ -99,30 +124,6 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 <div style="background:#0F2A5C;color:#FFFFFF;border-radius:16px;padding:18px 20px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between">
 <span style="font-size:15px;font-weight:600">Вопрос по товару? Спросите у нас.</span>
 <a href="tel:+37353351338" style="color:#FF8A1F;font-weight:800;font-size:17px">+373 533 51338</a>
-</div>
-<div style="min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
-<h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Характеристики</h2>
-<dl style="margin:0;display:flex;flex-direction:column">
-<?php
-$rows = [];
-if ($deep) $rows[] = ['Раздел', $deep->name];
-if ($code) $rows[] = ['Код товара', $code];
-$specs = [];
-foreach ($p->get_attributes() as $a) {
-    if (!is_object($a) || !$a->get_visible()) continue;
-    if ($a->is_taxonomy()) { $v = implode(', ', wc_get_product_terms($p->get_id(), $a->get_name(), ['fields' => 'names'])); $l = wc_attribute_label($a->get_name()); }
-    else { $v = implode(', ', $a->get_options()); $l = $a->get_name(); }
-    if ($v !== '') $specs[] = [$l, $v];
-}
-$rows = array_merge($specs, $rows);
-$rows[] = ['Наличие', $p->get_stock_status() === 'onbackorder' ? 'предзаказ, срок уточним по телефону' : 'уточняйте по телефону'];
-foreach ($rows as $r) : ?>
-<div style="display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:space-between;padding:12px 0;border-bottom:1px solid #E6ECF6">
-<dt style="font-size:15px;color:#44506A"><?php echo esc_html($r[0]); ?></dt>
-<dd style="margin:0;font-size:15px;font-weight:600;text-align:right"><?php echo esc_html($r[1]); ?></dd>
-</div>
-<?php endforeach; ?>
-</dl>
 </div>
 </div>
 </section>
