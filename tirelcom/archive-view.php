@@ -51,10 +51,29 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 </ul>
 </div>
 
-<form method="get" action="<?php echo esc_url($base_url); ?>" style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:20px">
-<h2 style="margin:0;font-size:16px;font-weight:800">Фильтры</h2>
-<?php if ($is_search) : ?><input type="hidden" name="s" value="<?php echo esc_attr(get_search_query()); ?>"><input type="hidden" name="post_type" value="product"><?php endif; ?>
-<?php if (isset($_GET['orderby'])) : ?><input type="hidden" name="orderby" value="<?php echo esc_attr($orderby); ?>"><?php endif; ?>
+<?php
+$facets = tek_facets($term, $is_search ? get_search_query() : '');
+$sel = tek_selected_filters();
+$nsel = (tek_only_stock() ? 1 : 0) + ($minp !== '' || $maxp !== '' ? 1 : 0);
+foreach ($sel as $vv) $nsel += count($vv);
+$reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' => 'product'], home_url('/')) : $base_url;
+?>
+<details class="tek-fbox" open>
+<summary class="tek-fsum">Фильтры<?php if ($nsel) : ?> <span class="tek-fbadge"><?php echo (int) $nsel; ?></span><?php endif; ?></summary>
+<form id="tek-ff" method="get" action="<?php echo esc_url($base_url); ?>" style="display:flex;flex-direction:column;gap:18px;padding:0 20px 20px">
+<?php foreach (['s', 'post_type', 'orderby', 'per_page'] as $hk) if (isset($_GET[$hk]) && $_GET[$hk] !== '') echo '<input type="hidden" name="' . esc_attr($hk) . '" value="' . esc_attr(wp_unslash($_GET[$hk])) . '">'; ?>
+<label class="tek-fi tek-fstock"><input type="checkbox" name="stock" value="1" <?php checked(tek_only_stock()); ?>> <span>Только в наличии</span></label>
+<?php $fi = 0; foreach ($facets as $tax => $f) : $fi++; $chosen = isset($sel[$tax]) ? $sel[$tax] : []; $cnt = count($f['terms']); ?>
+<details class="tek-fct"<?php echo ($chosen || $fi <= 2) ? ' open' : ''; ?>>
+<summary><?php echo esc_html($f['label']); ?><?php if ($chosen) : ?> <span class="tek-fbadge"><?php echo count($chosen); ?></span><?php endif; ?></summary>
+<div class="tek-fl">
+<?php foreach ($f['terms'] as $k => $tm) : $on = in_array($tm[0], $chosen, true); ?>
+<label class="tek-fi<?php echo ($k >= 8 && !$on) ? ' tek-more' : ''; ?>"><input type="checkbox" name="f[<?php echo esc_attr($tax); ?>][]" value="<?php echo esc_attr($tm[0]); ?>" <?php checked($on); ?>> <span><?php echo esc_html($tm[1]); ?></span><em><?php echo (int) $tm[2]; ?></em></label>
+<?php endforeach; ?>
+<?php if ($cnt > 8) : ?><button type="button" class="tek-fmore" data-more="Показать ещё <?php echo (int) ($cnt - 8); ?>" data-less="Свернуть">Показать ещё <?php echo (int) ($cnt - 8); ?></button><?php endif; ?>
+</div>
+</details>
+<?php endforeach; ?>
 <fieldset style="margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:10px">
 <legend style="padding:0;margin-bottom:10px;font-size:14px;font-weight:700">Цена, руб. ПМР</legend>
 <div style="display:flex;gap:8px;align-items:center">
@@ -67,9 +86,10 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 </fieldset>
 <div style="display:flex;flex-direction:column;gap:8px">
 <button class="hv-blue" type="submit" style="height:46px;border:0;border-radius:12px;background:#1D4ED8;color:#FFFFFF;font-size:15px;font-weight:700">Показать</button>
-<a href="<?php echo esc_url($is_search ? add_query_arg(['s' => get_search_query(), 'post_type' => 'product'], home_url('/')) : $base_url); ?>" style="display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #C5D1E6;border-radius:12px;background:#FFFFFF;color:#0F1B33;font-size:15px;font-weight:600">Сбросить</a>
+<?php if ($nsel) : ?><a href="<?php echo esc_url($reset_url); ?>" style="display:flex;align-items:center;justify-content:center;height:44px;border:1px solid #C5D1E6;border-radius:12px;background:#FFFFFF;color:#0F1B33;font-size:15px;font-weight:600">Сбросить фильтры</a><?php endif; ?>
 </div>
 </form>
+</details>
 
 <div style="background:#0F2A5C;color:#FFFFFF;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px">
 <span style="font-size:16px;font-weight:700;line-height:1.35">Не нашли нужную деталь?</span>
@@ -79,11 +99,24 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 </aside>
 
 <div class="cat-main" style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px">
+<?php if ($nsel) : ?>
+<div class="tek-chips"><?php
+$chip = function ($label, $url) { echo '<a class="tek-chip" href="' . esc_url($url) . '">' . esc_html($label) . ' <span aria-hidden="true">×</span></a>'; };
+if (tek_only_stock()) $chip('Только в наличии', remove_query_arg(['stock', 'paged']));
+if ($minp !== '' || $maxp !== '') $chip('Цена: ' . ($minp !== '' ? 'от ' . $minp . ' ' : '') . ($maxp !== '' ? 'до ' . $maxp : ''), remove_query_arg(['min_price', 'max_price', 'paged']));
+foreach ($sel as $tax => $vals) foreach ($vals as $v) {
+    $t = get_term_by('slug', $v, $tax);
+    $rest = array_values(array_diff($vals, [$v]));
+    $url = $rest ? add_query_arg(['f' => array_merge($sel, [$tax => $rest])], remove_query_arg('paged')) : add_query_arg(['f' => array_diff_key($sel, [$tax => 1])], remove_query_arg('paged'));
+    $chip(wc_attribute_label($tax) . ': ' . ($t ? $t->name : $v), $url);
+}
+?><a class="tek-chip tek-chip-x" href="<?php echo esc_url($reset_url); ?>">Сбросить всё</a></div>
+<?php endif; ?>
 <?php if ($is_search && $wp_query->get('tek_relaxed')) : ?><div style="background:#FFF1DE;border:1px solid #F3D3A5;border-radius:12px;padding:12px 16px;font-size:15px;line-height:1.5;color:#5B3300">Точного совпадения по всем параметрам нет. Показаны товары по названию без размеров и единиц. Проверьте номинал в карточке или позвоните: <a href="tel:+37353351338" style="font-weight:700;color:#1D4ED8">+373 533 51338</a>.</div><?php endif; ?>
 <div style="display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:space-between;align-items:center;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:12px 16px">
 <span style="font-size:15px;color:#33405A"><?php if ($total) : ?>Показано <strong style="font-weight:700;color:#0F1B33"><?php echo (int) $from; ?>–<?php echo (int) $to; ?> из <?php echo (int) $total; ?></strong><?php else : ?>Ничего не найдено<?php endif; ?></span>
 <form method="get" action="<?php echo esc_url($base_url); ?>" style="display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center">
-<?php foreach (['s', 'post_type', 'min_price', 'max_price'] as $k) if (!empty($_GET[$k])) echo '<input type="hidden" name="' . esc_attr($k) . '" value="' . esc_attr($_GET[$k]) . '">'; ?>
+<?php echo tek_hidden_inputs(['orderby', 'per_page']); ?>
 <div style="display:flex;align-items:center;gap:8px">
 <label for="sort" style="font-size:14px;color:#44506A">Сортировка</label>
 <select id="sort" name="orderby" onchange="this.form.submit()" style="height:40px;border:1px solid #C5D1E6;border-radius:10px;padding:0 10px;font-family:inherit;font-size:14px;background:#FFFFFF;color:#0F1B33">

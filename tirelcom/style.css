@@ -147,3 +147,29 @@ img{max-width:100%;height:auto}
 .tek-sg-pr{flex:none;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600}
 .tek-sg-all{justify-content:center;font-weight:700;color:#1D4ED8 !important;border-bottom:0 !important}
 .tek-sg-none{padding:16px;font-size:14px;line-height:1.5;color:#33405A}
+
+/* Фильтры */
+.tek-fbox{background:#fff;border:1px solid #D5DEEE;border-radius:16px}
+.tek-fsum{list-style:none;cursor:pointer;padding:20px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
+.tek-fsum::-webkit-details-marker{display:none}
+@media (min-width:701px){.tek-fsum{pointer-events:none;padding-bottom:14px}}
+.tek-fbadge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#1D4ED8;color:#fff;font-size:12px;font-weight:700}
+.tek-fct{border-top:1px solid #E6ECF6;padding-top:14px}
+.tek-fct>summary{cursor:pointer;font-size:14px;font-weight:700;list-style:none;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.tek-fct>summary::-webkit-details-marker{display:none}
+.tek-fct>summary::after{content:"+";color:#1D4ED8;font-size:18px;line-height:1}
+.tek-fct[open]>summary::after{content:"–"}
+.tek-fl{display:flex;flex-direction:column;gap:2px;margin-top:10px}
+.tek-fi{display:flex;align-items:center;gap:10px;padding:7px 4px;font-size:14px;cursor:pointer;border-radius:8px}
+.tek-fi:hover{background:#F1F5FC}
+.tek-fi input{width:18px;height:18px;flex:none;accent-color:#1D4ED8}
+.tek-fi span{flex:1;min-width:0;overflow-wrap:anywhere}
+.tek-fi em{font-style:normal;font-size:12px;color:#6A7894}
+.tek-fstock{font-weight:700;background:#F1F5FC;padding:10px 12px}
+.tek-more{display:none}
+.tek-fl.tek-open .tek-more{display:flex}
+.tek-fmore{align-self:flex-start;margin-top:4px;border:0;background:transparent;color:#1D4ED8;font-weight:700;font-size:14px;cursor:pointer;padding:6px 4px;font-family:inherit}
+.tek-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tek-chip{display:inline-flex;align-items:center;gap:6px;background:#E6EEFC;color:#1D4ED8;border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600;text-decoration:none}
+.tek-chip:hover{background:#D5E3FB}
+.tek-chip-x{background:#fff;border:1px solid #C5D1E6;color:#0F1B33}

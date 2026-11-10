@@ -180,3 +180,21 @@
   });
   document.addEventListener('click', function (e) { if (!form.contains(e.target)) hide(); });
 })();
+
+/* Фильтры: автоприменение, «показать ещё», на телефоне свёрнуты */
+(function () {
+  var box = document.querySelector('.tek-fbox');
+  if (!box) return;
+  if (window.innerWidth <= 700 && !/(\?|&)(f%5B|f\[|stock=|min_price=|max_price=)/.test(location.search)) box.removeAttribute('open');
+  var form = document.getElementById('tek-ff'), t;
+  if (form) form.addEventListener('change', function (e) {
+    if (e.target.type !== 'checkbox') return;
+    clearTimeout(t); t = setTimeout(function () { form.submit(); }, 450);
+  });
+  document.querySelectorAll('.tek-fmore').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var l = b.parentNode; l.classList.toggle('tek-open');
+      b.textContent = l.classList.contains('tek-open') ? b.getAttribute('data-less') : b.getAttribute('data-more');
+    });
+  });
+})();
