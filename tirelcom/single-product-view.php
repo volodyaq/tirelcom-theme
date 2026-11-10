@@ -41,6 +41,12 @@ if ($deep) {
 <?php endforeach; ?>
 </div>
 <?php endif; ?>
+<?php $desc = trim(wp_strip_all_tags($p->get_description())); if ($desc !== '') : ?>
+<div style="min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
+<h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Описание</h2>
+<div class="tek-desc" style="font-size:16px;line-height:1.65;color:#33405A"><?php echo tek_desc_html($p->get_description()); ?></div>
+</div>
+<?php endif; ?>
 </div>
 
 <div style="flex:1 1 400px;min-width:0;display:flex;flex-direction:column;gap:20px">
@@ -94,17 +100,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 <span style="font-size:15px;font-weight:600">Вопрос по товару? Спросите у нас.</span>
 <a href="tel:+37353351338" style="color:#FF8A1F;font-weight:800;font-size:17px">+373 533 51338</a>
 </div>
-</div>
-</section>
-
-<section style="max-width:1200px;margin:0 auto;padding:16px 24px 8px;display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
-<?php $desc = trim(wp_strip_all_tags($p->get_description())); if ($desc !== '') : ?>
-<div style="flex:1 1 480px;min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
-<h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Описание</h2>
-<div class="tek-desc" style="font-size:16px;line-height:1.65;color:#33405A"><?php echo tek_desc_html($p->get_description()); ?></div>
-</div>
-<?php endif; ?>
-<div style="flex:1 1 380px;min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
+<div style="min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:28px 32px;display:flex;flex-direction:column;gap:14px">
 <h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.01em">Характеристики</h2>
 <dl style="margin:0;display:flex;flex-direction:column">
 <?php
@@ -127,6 +123,7 @@ foreach ($rows as $r) : ?>
 </div>
 <?php endforeach; ?>
 </dl>
+</div>
 </div>
 </section>
 
