@@ -66,7 +66,7 @@ function tek_top_cats() {
 
 /* Дерево разделов для меню: [[term, link, [[term, link, [[term, link], ...]], ...]], ...] (кэш на час) */
 function tek_nav_tree() {
-    $c = get_transient('tek_nav_tree_v1');
+    $c = get_transient('tek_nav_tree_v2');
     if (is_array($c)) return $c;
     $all = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => true, 'orderby' => 'name']);
     if (is_wp_error($all)) return [];
@@ -74,12 +74,12 @@ function tek_nav_tree() {
     foreach ($all as $t) $kids[$t->parent][] = $t;
     $node = function ($t) use (&$node, &$kids) {
         $o = ['n' => $t->name, 'u' => get_term_link($t), 'c' => (int) $t->count, 'k' => []];
-        foreach ($kids[$t->term_id] ?? [] as $k) $o['k'][] = ['n' => $k->name, 'u' => get_term_link($k), 'c' => (int) $k->count, 'k' => array_map(function ($x) { return ['n' => $x->name, 'u' => get_term_link($x), 'c' => (int) $x->count]; }, array_slice($kids[$k->term_id] ?? [], 0, 6))];
+        foreach ($kids[$t->term_id] ?? [] as $k) $o['k'][] = ['n' => $k->name, 'u' => get_term_link($k), 'c' => (int) $k->count, 'k' => array_map(function ($x) { return ['n' => $x->name, 'u' => get_term_link($x), 'c' => (int) $x->count]; }, array_slice((function ($arr) { usort($arr, function ($a, $b) { return $b->count <=> $a->count; }); return $arr; })($kids[$k->term_id] ?? []), 0, 6))];
         return $o;
     };
     $tree = [];
     foreach (tek_top_cats() as $t) { if (empty($t->count) && empty($kids[$t->term_id])) continue; $tree[] = $node($t); }
-    set_transient('tek_nav_tree_v1', $tree, HOUR_IN_SECONDS);
+    set_transient('tek_nav_tree_v2', $tree, HOUR_IN_SECONDS);
     return $tree;
 }
 
