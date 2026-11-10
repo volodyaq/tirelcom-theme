@@ -53,7 +53,7 @@ add_action('init', function () {
         $fh = fopen("$dir/$name.csv", 'r');
         $head = fgetcsv($fh); $head[0] = preg_replace('/^\xEF\xBB\xBF/', '', $head[0]);
         if ($pos > 0) fseek($fh, $pos);
-        $res = ['rows' => 0, 'affected' => 0, 'fixed' => 0, 'created' => 0, 'noprod' => 0, 'ex' => []];
+        $res = ['rows' => 0, 'affected' => 0, 'fixed' => 0, 'created' => 0, 'noprod' => 0, 'err' => 0, 'ex' => []];
         $cnt = 0;
         while ($cnt < $lines && ($row = fgetcsv($fh)) !== false) {
             $cnt++;
@@ -86,8 +86,10 @@ add_action('init', function () {
                     $k = $norm($v);
                     if (isset($maps[$tax]['name'][$k])) { $ids[] = $maps[$tax]['name'][$k]; continue; }
                     if ($dry) { $res['created']++; continue; }
-                    $t = wp_insert_term($v, $tax);
-                    if (is_wp_error($t)) continue;
+                    $args = strlen(sanitize_title($v)) >= 150 ? ['slug' => 'h' . md5($v)] : [];
+                    $t = wp_insert_term($v, $tax, $args);
+                    if (is_wp_error($t)) $t = wp_insert_term($v, $tax, ['slug' => 'h' . md5($v)]);
+                    if (is_wp_error($t)) { $res['err'] = ($res['err'] ?? 0) + 1; continue; }
                     $tid = (int) $t['term_id']; $maps[$tax]['name'][$k] = $tid; $maps[$tax]['slug'][get_term($tid)->slug] = ['id' => $tid, 'n' => $k];
                     $ids[] = $tid; $res['created']++;
                 }
@@ -106,7 +108,7 @@ add_action('init', function () {
 
     if ($act === 'run') {
         $st = get_option($skey);
-        if (!$st) $st = ['i' => 0, 'pos' => 0, 'done' => false, 'tot' => ['rows' => 0, 'affected' => 0, 'fixed' => 0, 'created' => 0, 'noprod' => 0], 'ex' => []];
+        if (!$st) $st = ['i' => 0, 'pos' => 0, 'done' => false, 'tot' => ['rows' => 0, 'affected' => 0, 'fixed' => 0, 'created' => 0, 'noprod' => 0, 'err' => 0], 'ex' => []];
         if (!empty($st['done'])) $out($st);
         $t0 = microtime(true);
         do {
