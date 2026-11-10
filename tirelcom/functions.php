@@ -191,7 +191,7 @@ function tek_param_terms($p) {
     return $out;
 }
 
-/* Похожие в наличии: та же категория, совпадение ≥ 2 параметров (или 1, если у товара один параметр).
+/* Похожие в наличии: та же категория, совпадение ≥ 2 параметров .
    Возвращает [[product, [совпавшие параметры: «Название: значение»]], ...] */
 function tek_similar($p, $n = 4) {
     global $wpdb;
@@ -217,7 +217,7 @@ function tek_similar($p, $n = 4) {
             HAVING s >= %d
             ORDER BY s DESC, l.min_price ASC
             LIMIT %d";
-        $need = $nparams >= 2 ? 2 : 1;
+        $need = 2;
         $rows = $wpdb->get_results($wpdb->prepare($sql, (int) $deep->term_taxonomy_id, $p->get_id(), $need, $n));
         foreach ($rows as $r) $ids[] = (int) $r->id;
     }
