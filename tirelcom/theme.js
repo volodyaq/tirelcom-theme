@@ -209,3 +209,9 @@
   if (!b || !d) return;
   b.addEventListener('click', function () { var open = d.hidden; d.hidden = !open; b.setAttribute('aria-expanded', open ? 'true' : 'false'); });
 })();
+
+/* Короткая подсказка в поиске на телефоне */
+(function () {
+  var q = document.getElementById('q');
+  if (q && window.innerWidth <= 700) q.placeholder = 'Название, маркировка или код';
+})();
