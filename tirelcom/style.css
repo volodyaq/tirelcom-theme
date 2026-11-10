@@ -127,5 +127,6 @@ img{max-width:100%;height:auto}
 @media (max-width:700px){
 .tek-cmp-bar{left:12px;right:12px;transform:none;bottom:12px;justify-content:space-between;gap:8px;padding:10px 10px 10px 14px}
 .tek-cmp-msg{display:none}
-.tek-cmp th,.tek-cmp td{min-width:150px;padding:10px 12px;font-size:14px}
+.tek-cmp th,.tek-cmp td{min-width:140px;padding:10px 10px;font-size:14px}
+.tek-cmp .tek-cmp-lab{min-width:88px;max-width:96px;font-size:13px}
 }
