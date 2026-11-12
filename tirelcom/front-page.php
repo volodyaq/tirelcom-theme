@@ -44,16 +44,16 @@ $instock = tek_home_instock(8);
 <main id="top">
 
 <section style="background:#FFFFFF;border-bottom:1px solid #D5DEEE;background-image:radial-gradient(#DCE4F2 1px, transparent 1px);background-size:20px 20px">
-<div class="hero-pad" style="max-width:1200px;margin:0 auto;padding:64px 24px;display:flex;flex-wrap:wrap;gap:40px;align-items:center">
-<div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px">
-<span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.08em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:6px 10px">МАГАЗИН + ИНТЕРНЕТ-ЗАКАЗ</span>
-<h1 class="hero-h1" style="max-width:860px;margin:0;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент: заказывайте онлайн, забирайте в магазине</h1>
-<p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:560px">Более 25 лет работаем в Тирасполе. Микросхемы, транзисторы, Arduino, паяльное оборудование и всё для ремонта электроники. Не нашли нужную деталь — пришлите маркировку, подберём аналог.</p>
-<div style="display:flex;flex-wrap:wrap;gap:12px">
+<div class="hero-pad" style="max-width:1200px;margin:0 auto;padding:56px 24px 40px;display:flex;flex-wrap:wrap;gap:40px;align-items:center">
+<div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px">
+<span style="align-self:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.08em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:6px 10px">МАГАЗИН + ИНТЕРНЕТ-ЗАКАЗ</span>
+<h1 class="hero-h1" style="max-width:900px;margin:0 auto;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент: заказывайте онлайн, забирайте в магазине</h1>
+<p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:640px;margin:0 auto">Более 25 лет работаем в Тирасполе. Микросхемы, транзисторы, Arduino, паяльное оборудование и всё для ремонта электроники. Не нашли нужную деталь — пришлите маркировку, подберём аналог.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
 <a class="hv-blue" href="<?php echo esc_url($shop); ?>" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;background:#1D4ED8;color:#FFFFFF;font-weight:600;font-size:17px">Открыть каталог</a>
 <a class="hv-outline" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;border:2px solid #1D4ED8;color:#1D4ED8;font-weight:600;font-size:17px">Позвонить: +373 533 51338</a>
 </div>
-<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center">
 <span style="font-size:14px;color:#44506A">Часто ищут:</span>
 <?php echo $chip('Arduino', 'Arduino') . $chip('ATmega', 'ATmega') . $chip('DC/DC модули', 'DC-DC') . $chip('Припой и флюс', 'припой') . $chip('Паяльники', 'паяльник'); ?>
 </div>
