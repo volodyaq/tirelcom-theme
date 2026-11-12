@@ -53,7 +53,7 @@
 <button type="button" class="tek-catbtn" id="tek-catbtn" aria-expanded="false" aria-controls="tek-drawer"><span aria-hidden="true">☰</span> Каталог товаров</button>
 <div class="navrow tek-navrow" style="max-width:1200px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:0 6px">
 <?php foreach ($tree as $i => $top) : ?>
-<div class="tek-ni<?php echo $i >= $ntop - 2 ? ' tek-ni-r' : ''; ?>">
+<div class="tek-ni<?php echo $i >= $ntop - 3 ? ' tek-ni-r' : ''; ?>">
 <a class="tek-ni-a" href="<?php echo esc_url($top['u']); ?>" style="display:block;padding:14px 12px;color:#0F1B33;font-weight:500;font-size:15px"><?php echo esc_html($top['n']); ?></a>
 <?php if ($top['k']) : ?>
 <div class="tek-mega" role="group" aria-label="<?php echo esc_attr($top['n']); ?>">
