@@ -104,7 +104,7 @@ $instock = tek_home_instock(8);
 <h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">Каталог по разделам</h2>
 <a class="hv-link" href="<?php echo esc_url($shop); ?>" style="font-weight:600;font-size:16px">Весь каталог →</a>
 </div>
-<div class="tek-tabs" id="tek-tabs">
+<div class="tek-hsec" id="tek-tabs">
 <div class="tek-tabbar" role="tablist">
 <?php foreach ($tree as $i => $top) : ?><button type="button" role="tab" class="tek-tabbtn<?php echo $i === 0 ? ' on' : ''; ?>" data-tab="<?php echo (int) $i; ?>" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>"><?php echo esc_html($top['n']); ?></button><?php endforeach; ?>
 </div>
