@@ -295,3 +295,4 @@ require_once __DIR__ . '/inc/telegram.php';
 require_once __DIR__ . '/inc/redirects.php';
 require_once __DIR__ . '/inc/seo.php';
 require_once get_template_directory() . '/inc/dbtool.php';
+require_once get_template_directory() . '/inc/as-guard.php';

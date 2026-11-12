@@ -19,11 +19,12 @@ add_action('init', function () {
     }
     if ($act === 'purge') {
         $a = $wpdb->prefix . 'actionscheduler_actions'; $l = $wpdb->prefix . 'actionscheduler_logs';
-        $keep = $wpdb->get_var("SELECT COUNT(*) FROM $a WHERE status IN ('pending','in-progress')");
+        $keepw = "status IN ('pending','in-progress') AND hook NOT LIKE 'hostinger_tools/jobs/generate_llmstxt%'";
+        $keep = $wpdb->get_var("SELECT COUNT(*) FROM $a WHERE $keepw");
         echo "pending/in-progress: $keep\n";
         if ($keep > 5000) { echo "too many pending, abort\n"; exit; }
         $wpdb->query("DROP TABLE IF EXISTS {$a}_keep");
-        echo 'create keep: ' . var_export($wpdb->query("CREATE TABLE {$a}_keep AS SELECT * FROM $a WHERE status IN ('pending','in-progress')"), true) . ' ' . $wpdb->last_error . "\n";
+        echo 'create keep: ' . var_export($wpdb->query("CREATE TABLE {$a}_keep AS SELECT * FROM $a WHERE $keepw"), true) . ' ' . $wpdb->last_error . "\n";
         echo 'truncate logs: ' . var_export($wpdb->query("TRUNCATE TABLE $l"), true) . ' ' . $wpdb->last_error . "\n";
         echo 'truncate actions: ' . var_export($wpdb->query("TRUNCATE TABLE $a"), true) . ' ' . $wpdb->last_error . "\n";
         echo 'restore: ' . var_export($wpdb->query("INSERT INTO $a SELECT * FROM {$a}_keep"), true) . ' ' . $wpdb->last_error . "\n";
