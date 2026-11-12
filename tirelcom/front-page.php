@@ -23,7 +23,7 @@ $ribbon_item = function ($p, $hidden = false) {
 <div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px">
 <span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.08em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:6px 10px">МАГАЗИН + ИНТЕРНЕТ-ЗАКАЗ</span>
 <h1 class="hero-h1" style="margin:0;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент: заказывайте онлайн, забирайте в магазине</h1>
-<p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:560px">Микросхемы, транзисторы, Arduino, паяльное оборудование и всё для ремонта электроники. Не нашли нужную деталь — пришлите маркировку, подберём аналог.</p>
+<p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:560px">Более 25 лет работаем в Тирасполе. Микросхемы, транзисторы, Arduino, паяльное оборудование и всё для ремонта электроники. Не нашли нужную деталь — пришлите маркировку, подберём аналог.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px">
 <a class="hv-blue" href="<?php echo esc_url($shop); ?>" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;background:#1D4ED8;color:#FFFFFF;font-weight:600;font-size:17px">Открыть каталог</a>
 <a class="hv-outline" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;border:2px solid #1D4ED8;color:#1D4ED8;font-weight:600;font-size:17px">Позвонить: +373 533 51338</a>
