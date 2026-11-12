@@ -9,7 +9,7 @@ $ribbon_item = function ($p, $hidden = false) {
 <a class="hv-card" href="<?php echo esc_url(get_permalink($p->get_id())); ?>"<?php echo $hidden ? ' tabindex="-1" aria-hidden="true"' : ''; ?> style="display:flex;gap:14px;align-items:center;margin-bottom:12px;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:12px;color:#0F1B33;text-decoration:none">
 <span style="flex:none;width:72px;height:72px;border-radius:10px;background:#E9EFF8;overflow:hidden;display:block"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="" loading="lazy"><?php endif; ?></span>
 <span style="min-width:0;display:flex;flex-direction:column;gap:4px">
-<span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($p)); ?></span>
+<span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <span style="font-size:14px;font-weight:600;line-height:1.35"><?php echo esc_html($p->get_name()); ?></span>
 <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:600"><span data-prc="<?php echo esc_attr($p->get_price()); ?>"><?php echo esc_html(tek_price($p)); ?></span> <span data-unit style="font-size:12px;font-weight:400;color:#44506A">руб. ПМР</span></span>
 </span>
@@ -21,7 +21,7 @@ $card = function ($p) { $img = get_the_post_thumbnail_url($p->get_id(), 'woocomm
 <article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
 <a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="display:block;height:170px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php endif; ?></a>
 <div style="padding:18px;display:flex;flex-direction:column;gap:10px;flex:1">
-<span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($p)); ?></span>
+<span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h3 style="margin:0;font-size:16px;font-weight:600;line-height:1.4;flex:1"><a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>
 <div style="display:flex;align-items:baseline;gap:6px">
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>

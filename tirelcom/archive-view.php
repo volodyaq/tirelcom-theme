@@ -156,7 +156,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 <article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
 <a href="<?php the_permalink(); ?>" style="display:block;height:160px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php else : ?><span style="display:flex;height:100%;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#8091B5">НЕТ ФОТО</span><?php endif; ?></a>
 <div style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1">
-<span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($p)); ?></span>
+<span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h3 style="margin:0;font-size:15px;font-weight:600;line-height:1.4;flex:1"><a href="<?php the_permalink(); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>
 <div style="display:flex;align-items:baseline;gap:6px">
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>

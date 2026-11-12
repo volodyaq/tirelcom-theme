@@ -297,3 +297,5 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-step-n{width:36px;height:36px;border-radius:50%;background:#FF8A1F;color:#0F1B33;font:700 18px/36px 'JetBrains Mono',monospace;text-align:center}
 .tek-step-t{font-size:19px;font-weight:700}
 .tek-step-d{font-size:15px;line-height:1.5;color:#44506A}
+
+.tek-ptag{font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;line-height:1.3;color:#1D4ED8;letter-spacing:0}

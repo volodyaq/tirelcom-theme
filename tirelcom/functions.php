@@ -32,7 +32,7 @@ function tek_product_tag($product) {
     if (!$terms || is_wp_error($terms)) return '';
     $deep = null;
     foreach ($terms as $t) { if ($deep === null || $t->parent) $deep = $t; }
-    return mb_strtoupper($deep->name);
+    return $deep->name;
 }
 
 /* Товары для главной: с фото, случайные, кэш на 6 часов */

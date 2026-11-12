@@ -25,7 +25,7 @@ $count = WC()->cart->get_cart_contents_count();
 <article style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:16px;display:flex;flex-wrap:wrap;gap:16px 20px;align-items:center">
 <a href="<?php echo esc_url($permalink); ?>" style="flex:none;width:88px;height:88px;border-radius:12px;background:#FFFFFF;border:1px solid #E6ECF6;padding:4px;display:block"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt=""><?php endif; ?></a>
 <div style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column;gap:6px">
-<span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($p)); ?></span>
+<span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h2 style="margin:0;font-size:16px;font-weight:600;line-height:1.4"><a href="<?php echo esc_url($permalink); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h2>
 <span style="font-size:14px;color:#44506A"><span data-prc="<?php echo esc_attr($p->get_price()); ?>"><?php echo esc_html(tek_price($p)); ?></span> <span data-unit>руб. ПМР</span> за шт.</span>
 </div>
