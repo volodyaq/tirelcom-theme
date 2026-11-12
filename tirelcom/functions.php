@@ -292,3 +292,5 @@ function tek_compare_rows($products) {
 require_once __DIR__ . '/inc/search.php';
 require_once __DIR__ . '/inc/filters.php';
 require_once __DIR__ . '/inc/telegram.php';
+require_once __DIR__ . '/inc/redirects.php';
+require_once __DIR__ . '/inc/seo.php';
