@@ -263,3 +263,15 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-fgrid .tek-fct{background:#F7F9FD;border:1px solid #E6ECF6;border-radius:12px;padding:12px 14px}
 .tek-fgrid .tek-fct[open]{background:#fff}
 .tek-fgrid .tek-fl{max-height:300px;overflow-y:auto}
+
+/* Меню разделов: колонки без пустых мест + «Ещё в разделе» плашками */
+.tek-ni:hover>.tek-mega,.tek-ni:focus-within>.tek-mega{display:block}
+.tek-mega{width:min(900px,94vw);max-width:none;padding:20px 24px 14px}
+.tek-mcols{column-count:3;column-gap:28px}
+.tek-mcols .tek-mc{break-inside:avoid;margin:0 0 18px}
+.tek-mleaf{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:14px;border-top:1px solid #E6ECF6}
+.tek-mleaf-t{font-size:12px;font-weight:700;color:#6A7894;text-transform:uppercase;letter-spacing:.04em;margin-right:4px}
+.tek-mchip{font-size:13px;font-weight:600;color:#0F2A5C;background:#EEF3FC;border-radius:999px;padding:6px 12px;text-decoration:none;line-height:1.2}
+.tek-mchip:hover{background:#1D4ED8;color:#fff}
+.tek-mega>.tek-mall{display:block;margin-top:14px}
+@media (max-width:1100px){.tek-mcols{column-count:2}}

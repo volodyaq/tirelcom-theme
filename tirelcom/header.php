@@ -57,11 +57,14 @@
 <a class="tek-ni-a" href="<?php echo esc_url($top['u']); ?>" style="display:block;padding:14px 12px;color:#0F1B33;font-weight:500;font-size:15px"><?php echo esc_html($top['n']); ?></a>
 <?php if ($top['k']) : ?>
 <div class="tek-mega" role="group" aria-label="<?php echo esc_attr($top['n']); ?>">
-<?php foreach (array_slice($top['k'], 0, 24) as $k) : ?>
-<div class="tek-mc"><a class="tek-mh" href="<?php echo esc_url($k['u']); ?>"><?php echo esc_html($k['n']); ?></a>
+<?php $mk = array_slice($top['k'], 0, 40); $with = array_values(array_filter($mk, function ($x) { return !empty($x['k']); })); $leaf = array_values(array_filter($mk, function ($x) { return empty($x['k']); })); ?>
+<?php if ($with) : ?><div class="tek-mcols">
+<?php foreach ($with as $k) : ?><div class="tek-mc"><a class="tek-mh" href="<?php echo esc_url($k['u']); ?>"><?php echo esc_html($k['n']); ?></a>
 <?php foreach ($k['k'] as $kk) : ?><a class="tek-ml" href="<?php echo esc_url($kk['u']); ?>"><?php echo esc_html($kk['n']); ?></a><?php endforeach; ?>
 </div>
-<?php endforeach; ?>
+<?php endforeach; ?></div><?php endif; ?>
+<?php if ($leaf) : ?><div class="tek-mleaf"><?php if ($with) : ?><span class="tek-mleaf-t">Ещё в разделе</span><?php endif; ?>
+<?php foreach ($leaf as $k) : ?><a class="tek-mchip" href="<?php echo esc_url($k['u']); ?>"><?php echo esc_html($k['n']); ?></a><?php endforeach; ?></div><?php endif; ?>
 <a class="tek-mall" href="<?php echo esc_url($top['u']); ?>">Все товары раздела «<?php echo esc_html($top['n']); ?>» →</a>
 </div>
 <?php endif; ?>
