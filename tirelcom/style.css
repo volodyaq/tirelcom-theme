@@ -275,3 +275,6 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-mchip:hover{background:#1D4ED8;color:#fff}
 .tek-mega>.tek-mall{display:block;margin-top:14px}
 @media (max-width:1100px){.tek-mcols{column-count:2}}
+
+.tek-sg-cat small{color:#6A7894;font-size:12px}
+.tek-sg-alt{padding:8px 14px;background:#FFF4E6;color:#B45309;font-size:13px;font-weight:600}

@@ -295,3 +295,21 @@ require_once __DIR__ . '/inc/telegram.php';
 require_once __DIR__ . '/inc/redirects.php';
 require_once __DIR__ . '/inc/seo.php';
 require_once get_template_directory() . '/inc/as-guard.php';
+
+/* Популярные подразделы для главной: где больше всего товаров в наличии (прямое назначение товара разделу) */
+function tek_popular_cats($n = 12) {
+    $c = get_transient('tek_popular_cats_v1');
+    if (is_array($c)) return array_slice($c, 0, $n);
+    global $wpdb;
+    $rows = $wpdb->get_results("SELECT tt.term_id id, COUNT(*) c FROM {$wpdb->term_relationships} r JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = r.term_taxonomy_id AND tt.taxonomy = 'product_cat' JOIN {$wpdb->prefix}wc_product_meta_lookup l ON l.product_id = r.object_id AND l.stock_status = 'instock' JOIN {$wpdb->posts} p ON p.ID = r.object_id AND p.post_status = 'publish' GROUP BY tt.term_id ORDER BY c DESC LIMIT 40");
+    $out = []; $seen = [];
+    foreach ($rows as $r) {
+        $t = get_term((int) $r->id, 'product_cat');
+        if (!$t || is_wp_error($t) || isset($seen[mb_strtolower($t->name)])) continue;
+        if (preg_match('/^(прочее|прочие|другое|разное)/ui', $t->name)) continue;
+        $seen[mb_strtolower($t->name)] = 1;
+        $out[] = ['n' => $t->name, 'u' => get_term_link($t), 'c' => (int) $r->c];
+    }
+    set_transient('tek_popular_cats_v1', $out, 6 * HOUR_IN_SECONDS);
+    return array_slice($out, 0, $n);
+}

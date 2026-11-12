@@ -145,7 +145,8 @@
   function hide() { box.hidden = true; cur = -1; }
   function render(d, q) {
     var h = '';
-    (d.cats || []).forEach(function (c) { h += '<a class="tek-sg-cat" role="option" href="' + esc(c.u) + '"><span>Раздел: <b>' + esc(c.n) + '</b></span><em>' + c.c + '</em></a>'; });
+    (d.cats || []).forEach(function (c) { h += '<a class="tek-sg-cat" role="option" href="' + esc(c.u) + '"><span>Раздел: <b>' + esc(c.n) + '</b>' + (c.p ? ' <small>в ' + esc(c.p) + '</small>' : '') + '</span><em>' + c.c + '</em></a>'; });
+    if (d.alt) h = '<div class="tek-sg-alt">Показаны результаты для «' + esc(d.alt) + '» (исправили раскладку)</div>' + h;
     (d.products || []).forEach(function (p) {
       h += '<a class="tek-sg-p" role="option" href="' + esc(p.u) + '"><span class="tek-sg-i">' + (p.i ? '<img src="' + esc(p.i) + '" alt="" loading="lazy">' : '') + '</span><span class="tek-sg-t"><span class="tek-sg-n">' + esc(p.n) + '</span><span class="tek-sg-m">' + (p.c ? 'код ' + esc(p.c) + ' · ' : '') + (p.s ? '<b class="ok">в наличии</b>' : '<b class="pre">предзаказ</b>') + '</span></span><span class="tek-sg-pr">' + esc(p.p) + '</span></a>';
     });

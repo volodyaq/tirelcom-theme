@@ -91,6 +91,19 @@ function tek_search_sql($raw, $level = 0) {
 }
 
 /* Запуск с запасными вариантами: [sql, уровень]. Уровень 1: без В/Вт/А, уровень 2: без всех единиц */
+/* Исправление раскладки: «htkt» -> «реле», «дь317» -> «lm317» */
+function tek_layout_swap($s) {
+    $en = preg_split('//u', "qwertyuiop[]asdfghjkl;'zxcvbnm,.`QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>~", -1, PREG_SPLIT_NO_EMPTY);
+    $ru = ['й','ц','у','к','е','н','г','ш','щ','з','х','ъ','ф','ы','в','а','п','р','о','л','д','ж','э','я','ч','с','м','и','т','ь','б','ю','ё','Й','Ц','У','К','Е','Н','Г','Ш','Щ','З','Х','Ъ','Ф','Ы','В','А','П','Р','О','Л','Д','Ж','Э','Я','Ч','С','М','И','Т','Ь','Б','Ю','Ё'];
+    if (count($en) !== count($ru)) return '';
+    $map = array_combine($en, $ru); $rev = array_flip($map);
+    $has_cy = preg_match('/[А-Яа-яЁё]/u', $s);
+    $has_la = preg_match('/[A-Za-z]/', $s);
+    if ($has_cy && !$has_la) $m = $rev; elseif ($has_la && !$has_cy) $m = $map; else return '';
+    $out = ''; foreach (preg_split('//u', $s, -1, PREG_SPLIT_NO_EMPTY) as $ch) $out .= isset($m[$ch]) ? $m[$ch] : $ch;
+    return $out === $s ? '' : $out;
+}
+
 function tek_search_run($raw) {
     global $wpdb;
     $lvl = 0;
@@ -102,6 +115,18 @@ function tek_search_run($raw) {
         }
         $lvl++;
     }
+    $alt = tek_layout_swap($raw);
+    if ($alt !== '' && $alt !== $raw) {
+        $lvl = 0;
+        while ($lvl <= 1) {
+            $s = tek_search_sql($alt, $lvl);
+            if ($s['ok']) {
+                $has = $wpdb->get_var("SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish' " . $s['where'] . " LIMIT 1");
+                if ($has) { $s['alt'] = $alt; return [$s, $lvl]; }
+            }
+            $lvl++;
+        }
+    }
     return [tek_search_sql($raw, 0), 0];
 }
 
@@ -110,6 +135,7 @@ add_filter('posts_search', function ($search, $q) {
     if (is_admin() || !$q->is_main_query() || !$q->is_search()) return $search;
     list($s, $lvl) = tek_search_run($q->get('s'));
     if ($lvl) $q->set('tek_relaxed', $lvl);
+    if (!empty($s['alt'])) $q->set('tek_alt', $s['alt']);
     $q->set('tek_rank', $s['rank']);
     return $s['where'];
 }, 20, 2);
@@ -153,14 +179,15 @@ add_action('rest_api_init', function () {
                 $prods[] = ['n' => $p->get_name(), 'u' => get_permalink($id), 'p' => number_format((float) $p->get_price(), 2, ',', ' '), 'i' => $img ?: '', 's' => $p->get_stock_status() === 'instock' ? 1 : 0, 'c' => preg_replace('/^TEK-/', '', (string) $p->get_sku())];
             }
             $cats = [];
-            list($q, $toks) = tek_search_parse($raw);
+            $craw = !empty($s['alt']) ? $s['alt'] : $raw;
+            list($q, $toks) = tek_search_parse($craw);
             if ($toks) {
                 $cw = [];
                 foreach ($toks as $tk) $cw[] = $wpdb->prepare('LOWER(t.name) LIKE %s', '%' . $wpdb->esc_like($tk['t']) . '%');
-                $rows = $wpdb->get_results("SELECT t.term_id, t.name, tt.count FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id WHERE tt.taxonomy = 'product_cat' AND tt.count > 0 AND " . implode(' AND ', $cw) . " ORDER BY tt.count DESC LIMIT 3");
-                foreach ($rows as $r) { $l = get_term_link((int) $r->term_id, 'product_cat'); if (!is_wp_error($l)) $cats[] = ['n' => $r->name, 'u' => $l, 'c' => (int) $r->count]; }
+                $rows = $wpdb->get_results("SELECT t.term_id, t.name, tt.count FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id WHERE tt.taxonomy = 'product_cat' AND tt.count > 0 AND " . implode(' AND ', $cw) . " ORDER BY (LOWER(t.name) = " . $wpdb->prepare('%s', mb_strtolower($craw)) . ") DESC, (LOWER(t.name) LIKE " . $wpdb->prepare('%s', $wpdb->esc_like(mb_strtolower($craw)) . '%') . ") DESC, tt.count DESC LIMIT 5");
+                foreach ($rows as $r) { $l = get_term_link((int) $r->term_id, 'product_cat'); if (!is_wp_error($l)) $anc = get_ancestors((int) $r->term_id, 'product_cat'); $par = $anc ? get_term($anc[0], 'product_cat') : null; $cats[] = ['n' => $r->name, 'u' => $l, 'c' => (int) $r->count, 'p' => ($par && !is_wp_error($par)) ? $par->name : '']; }
             }
-            return ['products' => $prods, 'cats' => $cats, 'total' => $total, 'q' => $raw, 'relaxed' => $lvl];
+            return ['products' => $prods, 'cats' => $cats, 'total' => $total, 'q' => $raw, 'alt' => isset($s['alt']) ? $s['alt'] : '', 'relaxed' => $lvl];
         },
     ]);
 });

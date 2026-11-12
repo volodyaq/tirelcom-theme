@@ -85,6 +85,7 @@ foreach ($sel as $tax => $vals) foreach ($vals as $v) {
 }
 ?><a class="tek-chip tek-chip-x" href="<?php echo esc_url($reset_url); ?>">Сбросить всё</a></div>
 <?php endif; ?>
+<?php if ($is_search && $wp_query->get('tek_alt')) : ?><div style="background:#FFF4E6;border:1px solid #F3D3A5;border-radius:12px;padding:12px 16px;font-size:15px;color:#5B3300">Показаны результаты для «<?php echo esc_html($wp_query->get('tek_alt')); ?>»: мы исправили раскладку клавиатуры.</div><?php endif; ?>
 <?php if ($is_search && $wp_query->get('tek_relaxed')) : ?><div style="background:#FFF1DE;border:1px solid #F3D3A5;border-radius:12px;padding:12px 16px;font-size:15px;line-height:1.5;color:#5B3300">Точного совпадения по всем параметрам нет. Показаны товары по названию без размеров и единиц. Проверьте номинал в карточке или позвоните: <a href="tel:+37353351338" style="font-weight:700;color:#1D4ED8">+373 533 51338</a>.</div><?php endif; ?>
 <?php
 $facets = tek_facets($term, $is_search ? get_search_query() : '');

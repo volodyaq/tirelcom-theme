@@ -77,6 +77,18 @@ $ribbon_item = function ($p, $hidden = false) {
 </div>
 </section>
 
+<?php $pop = tek_popular_cats(12); if ($pop) : ?>
+<section style="max-width:1200px;margin:0 auto;padding:40px 24px 0">
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:20px">
+<h2 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em">Популярные разделы</h2>
+<span style="font-size:15px;color:#44506A">Где больше всего товаров в наличии</span>
+</div>
+<div class="tek-tiles">
+<?php foreach ($pop as $pc) : ?><a class="tek-tile" href="<?php echo esc_url($pc['u']); ?>"><span class="tek-tile-n"><?php echo esc_html($pc['n']); ?></span><span class="tek-tile-c"><?php echo (int) $pc['c']; ?> в наличии</span></a><?php endforeach; ?>
+</div>
+</section>
+<?php endif; ?>
+
 <?php if ($prods) : ?>
 <section style="max-width:1200px;margin:0 auto;padding:56px 24px 16px">
 <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:24px">
