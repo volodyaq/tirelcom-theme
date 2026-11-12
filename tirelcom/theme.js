@@ -181,14 +181,15 @@
   document.addEventListener('click', function (e) { if (!form.contains(e.target)) hide(); });
 })();
 
-/* Фильтры: автоприменение, «показать ещё», на телефоне свёрнуты */
+/* Фильтры: панель над товарами, автоприменение, «показать ещё» */
 (function () {
-  var box = document.querySelector('.tek-fbox:not(.tek-catbox)');
+  var box = document.getElementById('tek-fpanel');
   var cb = document.querySelector('.tek-catbox');
-  if (window.innerWidth <= 700) {
-    if (cb) cb.removeAttribute('open');
-    if (box && !/(\?|&)(f%5B|f\[|stock=|min_price=|max_price=)/.test(location.search)) box.removeAttribute('open');
-  }
+  var tg = document.getElementById('tek-ftoggle');
+  if (window.innerWidth <= 700 && cb) cb.removeAttribute('open');
+  if (tg && box) tg.addEventListener('click', function () {
+    var open = box.hidden; box.hidden = !open; tg.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
   if (!box) return;
   var form = document.getElementById('tek-ff'), t;
   if (form) form.addEventListener('change', function (e) {
