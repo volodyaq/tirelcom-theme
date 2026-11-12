@@ -231,3 +231,15 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 /* Сброс фильтров вверху блока */
 .tek-freset{display:flex;align-items:center;justify-content:center;height:40px;border:1px solid #F3C9A0;border-radius:10px;background:#FFF4E6;color:#B45309;font-size:14px;font-weight:700;text-decoration:none}
 .tek-freset:hover{background:#FFE8CC}
+
+/* Выпадающее меню разделов: привязка к строке меню, без выезда за край экрана */
+.tek-navrow{position:relative}
+.tek-ni{position:static}
+.tek-ni .tek-mega,.tek-ni-r .tek-mega{left:24px;right:auto}
+@media (min-width:1180px){
+ .tek-navrow{flex-wrap:nowrap!important;gap:0 2px!important}
+ .tek-ni{position:relative}
+ .tek-ni-a{padding:14px 9px!important;font-size:14.5px!important;white-space:nowrap}
+ .tek-ni .tek-mega{left:0;right:auto}
+ .tek-ni-r .tek-mega{left:auto;right:0}
+}

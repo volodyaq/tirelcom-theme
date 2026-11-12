@@ -17,6 +17,13 @@ function tek_selected_filters() {
     return $out;
 }
 
+/* Пустые min_price/max_price из формы фильтров ломают запрос WooCommerce (он читает их как 0 и скрывает все товары). Убираем пустые и нулевые. */
+add_action('init', function () {
+    foreach (['min_price', 'max_price'] as $k) {
+        if (isset($_GET[$k]) && (!is_scalar($_GET[$k]) || (float) $_GET[$k] <= 0)) { unset($_GET[$k], $_REQUEST[$k]); }
+    }
+}, 1);
+
 function tek_only_stock() { return !empty($_GET['stock']); }
 
 /* Применяем выбранные параметры к основному запросу */
