@@ -260,3 +260,6 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-fact button,.tek-fact a{height:44px;padding:0 24px;border-radius:12px;font-size:15px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
 .tek-fact button{border:0;background:#1D4ED8;color:#fff}
 .tek-fact a{border:1px solid #C5D1E6;background:#fff;color:#0F1B33;font-weight:600}
+.tek-fgrid .tek-fct{background:#F7F9FD;border:1px solid #E6ECF6;border-radius:12px;padding:12px 14px}
+.tek-fgrid .tek-fct[open]{background:#fff}
+.tek-fgrid .tek-fl{max-height:300px;overflow-y:auto}

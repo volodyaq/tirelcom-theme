@@ -120,7 +120,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 <?php if ($nsel) : ?><a class="tek-freset" href="<?php echo esc_url($reset_url); ?>">✕ Сбросить все фильтры (<?php echo (int) $nsel; ?>)</a><?php endif; ?>
 <label class="tek-fi tek-fstock"><input type="checkbox" name="stock" value="1" <?php checked(tek_only_stock()); ?>> <span>Только в наличии</span></label>
 <?php $fi = 0; foreach ($facets as $tax => $f) : $fi++; $chosen = isset($sel[$tax]) ? $sel[$tax] : []; $cnt = count($f['terms']); ?>
-<details class="tek-fct"<?php echo ($chosen || $fi <= 4) ? ' open' : ''; ?>>
+<details class="tek-fct"<?php echo ($chosen) ? ' open' : ''; ?>>
 <summary><?php echo esc_html($f['label']); ?><?php if ($chosen) : ?> <span class="tek-fbadge"><?php echo count($chosen); ?></span><?php endif; ?></summary>
 <div class="tek-fl">
 <?php foreach ($f['terms'] as $k => $tm) : $on = in_array($tm[0], $chosen, true); ?>
