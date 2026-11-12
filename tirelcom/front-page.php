@@ -16,6 +16,31 @@ $ribbon_item = function ($p, $hidden = false) {
 </a>
 <?php return ob_get_clean(); };
 ?>
+<?php
+$card = function ($p) { $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single'); ob_start(); ?>
+<article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
+<a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="display:block;height:170px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php endif; ?></a>
+<div style="padding:18px;display:flex;flex-direction:column;gap:10px;flex:1">
+<span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($p)); ?></span>
+<h3 style="margin:0;font-size:16px;font-weight:600;line-height:1.4;flex:1"><a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>
+<div style="display:flex;align-items:baseline;gap:6px">
+<span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>
+<span data-unit style="font-size:14px;color:#44506A">руб. ПМР</span>
+</div>
+<div style="display:flex;gap:8px"><a class="hv-orange" href="<?php echo esc_url($p->add_to_cart_url()); ?>" data-product_id="<?php echo (int) $p->get_id(); ?>" rel="nofollow" style="flex:1;display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:600;text-decoration:none">В корзину</a><?php echo tek_cmp_btn($p->get_id()); ?></div>
+</div>
+</article>
+<?php return ob_get_clean(); };
+$tl = function ($label, $q, $catname = null) {
+    $u = '';
+    if ($catname) { $t = get_term_by('name', $catname, 'product_cat'); if ($t && !is_wp_error($t)) $u = get_term_link($t); }
+    if (!$u) $u = add_query_arg(['s' => $q, 'post_type' => 'product'], home_url('/'));
+    return '<a class="tek-mchip" href="' . esc_url($u) . '">' . esc_html($label) . '</a>';
+};
+$tree = function_exists('tek_nav_tree') ? tek_nav_tree() : [];
+$newp = tek_new_products(4);
+$instock = tek_home_instock(8);
+?>
 <main id="top">
 
 <section style="background:#FFFFFF;border-bottom:1px solid #D5DEEE;background-image:radial-gradient(#DCE4F2 1px, transparent 1px);background-size:20px 20px">
@@ -61,60 +86,60 @@ $ribbon_item = function ($p, $hidden = false) {
 </div>
 </section>
 
+<section style="max-width:1200px;margin:0 auto;padding:56px 24px 8px">
+<div style="margin-bottom:20px"><h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">С чем к нам приходят</h2>
+<p style="margin:8px 0 0;font-size:16px;color:#44506A">Выберите задачу, а мы покажем нужные детали.</p></div>
+<div class="tek-tasks">
+<div class="tek-task"><span class="tek-task-t">Ремонт электроники</span><span class="tek-task-d">Нашли поломку, нужна деталь на замену.</span><div class="tek-task-l"><?php echo $tl('Конденсаторы', 'конденсатор') . $tl('Микросхемы', 'микросхема') . $tl('Транзисторы', 'транзистор') . $tl('Диоды', 'диод') . $tl('Резисторы', 'резистор') . $tl('Предохранители', 'предохранитель'); ?></div></div>
+<div class="tek-task"><span class="tek-task-t">Arduino и самоделки</span><span class="tek-task-d">Для первого проекта и для готового изделия.</span><div class="tek-task-l"><?php echo $tl('Arduino', 'Arduino') . $tl('Датчики', 'датчик') . $tl('Модули', 'модуль') . $tl('Дисплеи', 'дисплей') . $tl('Макетные платы', 'макетная плата') . $tl('Двигатели', 'двигатель'); ?></div></div>
+<div class="tek-task"><span class="tek-task-t">Пайка и инструмент</span><span class="tek-task-d">Всё для мастерской и стола ремонтника.</span><div class="tek-task-l"><?php echo $tl('Паяльники', 'паяльник') . $tl('Паяльные станции', 'паяльная станция') . $tl('Припой', 'припой') . $tl('Флюс', 'флюс') . $tl('Мультиметры', 'мультиметр') . $tl('Термоусадка', 'термоусадка'); ?></div></div>
+<div class="tek-task"><span class="tek-task-t">Пульты ДУ</span><span class="tek-task-d">Совместимые пульты, батарейки в комплекте.</span><div class="tek-task-l"><?php echo $tl('Для телевизора', 'пульт tv', 'Пульты для TV LCD') . $tl('Для кондиционера', 'пульт кондиционер', 'Пульты для кондиционеров и трансиверов') . $tl('Для DVD', 'пульт dvd', 'Пульты для DVD') . $tl('Универсальные', 'пульт универсальный', 'Пульты универсальные') . $tl('Для автомагнитолы', 'пульт автомагнитола', 'Пульты для автомагнитол'); ?></div></div>
+<div class="tek-task"><span class="tek-task-t">Питание и зарядка</span><span class="tek-task-d">Блоки питания, преобразователи, аккумуляторы.</span><div class="tek-task-l"><?php echo $tl('Блоки питания', 'блок питания') . $tl('DC/DC модули', 'DC-DC') . $tl('Аккумуляторы', 'аккумулятор') . $tl('Зарядные устройства', 'зарядное') . $tl('Адаптеры', 'адаптер'); ?></div></div>
+<div class="tek-task"><span class="tek-task-t">Для авто</span><span class="tek-task-d">Ключи, лампочки, автоэлектроника.</span><div class="tek-task-l"><?php echo $tl('Ремкомплект ключа', 'ремкомплект ключ автомобиля', 'Ремкомплект, ключ автомобиля и дисплеи') . $tl('Лампочки для авто', 'лампочка авто', 'Лампочки и колпачки для авто') . $tl('Авторегистраторы', 'авторегистратор', 'Авторегистраторы') . $tl('Шлейфы для автомагнитол', 'шлейф автомагнитол', 'Шлейфы для автомагнитол'); ?></div></div>
+</div>
+</section>
+
 <section id="catalog" style="max-width:1200px;margin:0 auto;padding:56px 24px 16px">
-<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:24px">
-<h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">Выберите раздел</h2>
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:20px">
+<h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">Каталог по разделам</h2>
 <a class="hv-link" href="<?php echo esc_url($shop); ?>" style="font-weight:600;font-size:16px">Весь каталог →</a>
 </div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
-<?php foreach ($cats as $i => $c) : ?>
-<a class="hv-card" href="<?php echo esc_url(get_term_link($c)); ?>" style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:24px;color:#0F1B33;text-decoration:none;min-height:176px">
-<span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:#C2410C"><?php echo sprintf('%02d', $i + 1); ?></span>
-<span style="font-size:22px;font-weight:600;line-height:1.25"><?php echo esc_html($c->name); ?></span>
-<span style="font-size:15px;line-height:1.5;color:#44506A"><?php echo esc_html(tek_cat_text($c->name)); ?></span>
-</a>
+<div class="tek-tabs" id="tek-tabs">
+<div class="tek-tabbar" role="tablist">
+<?php foreach ($tree as $i => $top) : ?><button type="button" role="tab" class="tek-tabbtn<?php echo $i === 0 ? ' on' : ''; ?>" data-tab="<?php echo (int) $i; ?>" aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>"><?php echo esc_html($top['n']); ?></button><?php endforeach; ?>
+</div>
+<?php foreach ($tree as $i => $top) : ?>
+<div class="tek-tabpanel" role="tabpanel" data-panel="<?php echo (int) $i; ?>"<?php echo $i === 0 ? '' : ' hidden'; ?>>
+<p class="tek-tabdesc"><?php echo esc_html(tek_cat_text($top['n'])); ?></p>
+<div class="tek-tabchips">
+<?php foreach ($top['k'] as $k) : ?><a class="tek-tile" href="<?php echo esc_url($k['u']); ?>"><span class="tek-tile-n"><?php echo esc_html($k['n']); ?></span><?php if (!empty($k['c'])) : ?><span class="tek-tile-c"><?php echo (int) $k['c']; ?> шт.</span><?php endif; ?></a><?php endforeach; ?>
+</div>
+<a class="hv-link" href="<?php echo esc_url($top['u']); ?>" style="display:inline-block;margin-top:16px;font-weight:700;font-size:16px">Все товары раздела «<?php echo esc_html($top['n']); ?>» →</a>
+</div>
 <?php endforeach; ?>
 </div>
 </section>
 
-<?php $pop = tek_popular_cats(12); if ($pop) : ?>
-<section style="max-width:1200px;margin:0 auto;padding:40px 24px 0">
+<?php if ($newp) : ?>
+<section style="max-width:1200px;margin:0 auto;padding:56px 24px 8px">
 <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:20px">
-<h2 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.02em">Популярные разделы</h2>
-<span style="font-size:15px;color:#44506A">Где больше всего товаров в наличии</span>
+<h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">Новые поступления</h2>
+<a class="hv-link" href="<?php echo esc_url($shop); ?>" style="font-weight:600;font-size:16px">Весь каталог →</a>
 </div>
-<div class="tek-tiles">
-<?php foreach ($pop as $pc) : ?><a class="tek-tile" href="<?php echo esc_url($pc['u']); ?>"><span class="tek-tile-n"><?php echo esc_html($pc['n']); ?></span><span class="tek-tile-c"><?php echo (int) $pc['c']; ?> в наличии</span></a><?php endforeach; ?>
+<div class="pgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px">
+<?php foreach ($newp as $p) echo $card($p); ?>
 </div>
 </section>
 <?php endif; ?>
 
-<?php if ($prods) : ?>
+<?php if ($instock) : ?>
 <section style="max-width:1200px;margin:0 auto;padding:56px 24px 16px">
-<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:24px">
-<h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">Из нашего ассортимента</h2>
-<a class="hv-link" href="<?php echo esc_url($shop); ?>" style="font-weight:600;font-size:16px">Все товары →</a>
+<div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:20px">
+<h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">Сегодня в наличии</h2>
+<a class="hv-link" href="<?php echo esc_url(add_query_arg(['stock' => 1], $shop)); ?>" style="font-weight:600;font-size:16px">Всё, что есть в наличии →</a>
 </div>
 <div class="pgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px">
-<?php foreach ($prods as $p) : $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single'); ?>
-<article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
-<a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="display:block;height:170px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php endif; ?></a>
-<div style="padding:18px;display:flex;flex-direction:column;gap:10px;flex:1">
-<span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8"><?php echo esc_html(tek_product_tag($p)); ?></span>
-<h3 style="margin:0;font-size:16px;font-weight:600;line-height:1.4;flex:1"><a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>
-<div style="display:flex;align-items:baseline;gap:6px">
-<span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>
-<span data-unit style="font-size:14px;color:#44506A">руб. ПМР</span>
-</div>
-<div style="display:flex;gap:8px"><a class="hv-orange" href="<?php echo esc_url($p->add_to_cart_url()); ?>" data-product_id="<?php echo (int) $p->get_id(); ?>" rel="nofollow" style="flex:1;display:flex;align-items:center;justify-content:center;height:44px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:15px;font-weight:600;text-decoration:none">В корзину</a><?php echo tek_cmp_btn($p->get_id()); ?></div>
-</div>
-</article>
-<?php endforeach; ?>
-<a href="<?php echo esc_url($shop); ?>" style="display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:10px;background:#E6EEFC;border:1px dashed #1D4ED8;border-radius:16px;padding:24px;min-height:200px;color:#0F2A5C;text-decoration:none">
-<span style="font-size:22px;font-weight:600;line-height:1.25">Весь каталог</span>
-<span style="font-size:15px;line-height:1.5">Тысячи позиций: от резисторов до измерительных приборов.</span>
-<span style="font-weight:600">Перейти →</span>
-</a>
+<?php foreach ($instock as $p) echo $card($p); ?>
 </div>
 </section>
 <?php endif; ?>
@@ -129,6 +154,15 @@ $ribbon_item = function ($p, $hidden = false) {
 <a class="hv-orange" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-weight:600;font-size:17px">Позвонить</a>
 <?php get_template_part('messengers'); ?>
 </div>
+</div>
+</section>
+
+<section style="max-width:1200px;margin:0 auto;padding:56px 24px 8px">
+<h2 style="margin:0 0 20px;font-size:34px;font-weight:800;letter-spacing:-0.02em">Как заказать</h2>
+<div class="tek-steps">
+<div class="tek-step"><span class="tek-step-n">1</span><span class="tek-step-t">Выберите на сайте</span><span class="tek-step-d">Добавьте детали в корзину. Регистрация не нужна, достаточно телефона.</span></div>
+<div class="tek-step"><span class="tek-step-n">2</span><span class="tek-step-t">Мы позвоним</span><span class="tek-step-d">Подтвердим наличие и цену, если нужно, подскажем аналог.</span></div>
+<div class="tek-step"><span class="tek-step-n">3</span><span class="tek-step-t">Заберите в магазине</span><span class="tek-step-d">Оплата при получении. Или закажем доставку по Тирасполю и ПМР.</span></div>
 </div>
 </section>
 

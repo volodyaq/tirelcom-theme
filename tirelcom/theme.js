@@ -217,3 +217,17 @@
   var q = document.getElementById('q');
   if (q && window.innerWidth <= 700) q.placeholder = 'Название, маркировка или код';
 })();
+
+/* Вкладки разделов на главной */
+(function () {
+  var box = document.getElementById('tek-tabs');
+  if (!box) return;
+  var btns = box.querySelectorAll('.tek-tabbtn'), panels = box.querySelectorAll('.tek-tabpanel');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var i = b.getAttribute('data-tab');
+      btns.forEach(function (x) { var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
+      panels.forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== i; });
+    });
+  });
+})();

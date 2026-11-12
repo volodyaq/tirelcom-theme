@@ -313,3 +313,27 @@ function tek_popular_cats($n = 12) {
     set_transient('tek_popular_cats_v1', $out, 6 * HOUR_IN_SECONDS);
     return array_slice($out, 0, $n);
 }
+
+/* Новые поступления: товары с кодом TEK-… (добавлены вручную, не из старого каталога), в наличии, с фото */
+function tek_new_products($n = 4) {
+    $ids = get_transient('tek_new_ids_v1');
+    if (!is_array($ids)) {
+        global $wpdb;
+        $ids = array_map('intval', $wpdb->get_col("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_thumbnail_id' WHERE l.sku LIKE 'TEK-%' AND l.stock_status = 'instock' ORDER BY RAND() LIMIT 24"));
+        set_transient('tek_new_ids_v1', $ids, 6 * HOUR_IN_SECONDS);
+    }
+    if (count($ids) < $n) return [];
+    $pick = array_slice($ids, 0, $n);
+    return array_filter(array_map('wc_get_product', $pick));
+}
+
+/* Товары в наличии с фото для главной */
+function tek_home_instock($n = 8) {
+    $ids = get_transient('tek_home_instock_v1');
+    if (!is_array($ids)) {
+        global $wpdb;
+        $ids = array_map('intval', $wpdb->get_col("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_thumbnail_id' WHERE l.stock_status = 'instock' AND l.min_price > 0 ORDER BY RAND() LIMIT 24"));
+        set_transient('tek_home_instock_v1', $ids, 6 * HOUR_IN_SECONDS);
+    }
+    return array_filter(array_map('wc_get_product', array_slice($ids, 0, $n)));
+}

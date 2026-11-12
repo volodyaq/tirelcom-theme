@@ -278,3 +278,22 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 
 .tek-sg-cat small{color:#6A7894;font-size:12px}
 .tek-sg-alt{padding:8px 14px;background:#FFF4E6;color:#B45309;font-size:13px;font-weight:600}
+
+/* Главная: задачи, вкладки разделов, шаги */
+.tek-tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.tek-task{background:#fff;border:1px solid #D5DEEE;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.tek-task-t{font-size:20px;font-weight:700;line-height:1.25}
+.tek-task-d{font-size:15px;line-height:1.45;color:#44506A}
+.tek-task-l{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tek-tabbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tek-tabbtn{height:44px;padding:0 18px;border:1px solid #C5D1E6;border-radius:12px;background:#fff;color:#0F1B33;font:600 15px/1 inherit;font-family:inherit;cursor:pointer}
+.tek-tabbtn:hover{border-color:#1D4ED8;color:#1D4ED8}
+.tek-tabbtn.on{background:#1D4ED8;border-color:#1D4ED8;color:#fff}
+.tek-tabpanel[hidden]{display:none}
+.tek-tabdesc{margin:0 0 16px;font-size:16px;line-height:1.5;color:#33405A;max-width:760px}
+.tek-tabchips{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.tek-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.tek-step{background:#fff;border:1px solid #D5DEEE;border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.tek-step-n{width:36px;height:36px;border-radius:50%;background:#FF8A1F;color:#0F1B33;font:700 18px/36px 'JetBrains Mono',monospace;text-align:center}
+.tek-step-t{font-size:19px;font-weight:700}
+.tek-step-d{font-size:15px;line-height:1.5;color:#44506A}
