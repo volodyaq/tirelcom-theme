@@ -13,5 +13,22 @@ add_action('init', function () {
         echo "autoload: " . $wpdb->get_var("SELECT ROUND(SUM(LENGTH(option_value))/1048576,1) FROM {$wpdb->options} WHERE autoload IN ('yes','on','auto','auto-on')") . "MB\n";
         echo "transients: " . $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_%' OR option_name LIKE '\\_site\\_transient\\_%'") . "\n";
     }
+    if ($act === 'status') {
+        foreach ($wpdb->get_results("SELECT status s, COUNT(*) c FROM {$wpdb->prefix}actionscheduler_actions GROUP BY status") as $r) echo "$r->s\t$r->c\n";
+        foreach ($wpdb->get_results("SELECT hook h, status s, COUNT(*) c FROM {$wpdb->prefix}actionscheduler_actions GROUP BY hook, status ORDER BY c DESC LIMIT 12") as $r) echo "$r->h\t$r->s\t$r->c\n";
+    }
+    if ($act === 'purge') {
+        $a = $wpdb->prefix . 'actionscheduler_actions'; $l = $wpdb->prefix . 'actionscheduler_logs';
+        $keep = $wpdb->get_var("SELECT COUNT(*) FROM $a WHERE status IN ('pending','in-progress')");
+        echo "pending/in-progress: $keep\n";
+        if ($keep > 5000) { echo "too many pending, abort\n"; exit; }
+        $wpdb->query("DROP TABLE IF EXISTS {$a}_keep");
+        echo 'create keep: ' . var_export($wpdb->query("CREATE TABLE {$a}_keep AS SELECT * FROM $a WHERE status IN ('pending','in-progress')"), true) . ' ' . $wpdb->last_error . "\n";
+        echo 'truncate logs: ' . var_export($wpdb->query("TRUNCATE TABLE $l"), true) . ' ' . $wpdb->last_error . "\n";
+        echo 'truncate actions: ' . var_export($wpdb->query("TRUNCATE TABLE $a"), true) . ' ' . $wpdb->last_error . "\n";
+        echo 'restore: ' . var_export($wpdb->query("INSERT INTO $a SELECT * FROM {$a}_keep"), true) . ' ' . $wpdb->last_error . "\n";
+        $wpdb->query("DROP TABLE {$a}_keep");
+        echo 'now actions: ' . $wpdb->get_var("SELECT COUNT(*) FROM $a") . "\n";
+    }
     exit;
 }, 1);
