@@ -12,7 +12,7 @@
 <h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.02em">Заказ принят</h1>
 <?php if ($order && !$order->has_status('failed')) : ?>
 <span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:#44506A">Заказ № <?php echo esc_html($order->get_order_number()); ?></span>
-<p style="margin:0;font-size:17px;line-height:1.6;color:#33405A;max-width:560px">Мы позвоним по указанному номеру и подтвердим наличие товаров. Самовывоз: ул. Ленина 7, ТК «Монарх», бутик №7. Для доставки согласуем детали по телефону.</p>
+<p style="margin:0;font-size:17px;line-height:1.6;color:#33405A;max-width:560px">Мы позвоним по указанному номеру и подтвердим наличие товаров. Самовывоз: ул. Ленина 7, ТК «Монарх», бутик №5. Для доставки согласуем детали по телефону.</p>
 <?php else : ?>
 <p style="margin:0;font-size:17px;line-height:1.6;color:#33405A;max-width:560px">Не удалось оформить заказ. Позвоните нам, и мы оформим его вместе.</p>
 <?php endif; ?>

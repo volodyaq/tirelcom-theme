@@ -47,7 +47,7 @@ $ribbon_item = function ($p, $hidden = false) {
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
 <div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px">
 <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#1D4ED8;letter-spacing:0.06em">САМОВЫВОЗ</span>
-<span style="font-size:16px;line-height:1.45">ТК «Монарх», бутик №7, ул. Ленина 7</span>
+<span style="font-size:16px;line-height:1.45">ТК «Монарх», бутик №5, ул. Ленина 7</span>
 </div>
 <a class="hv-card" href="<?php echo esc_url(home_url('/dostavka-i-oplata/')); ?>" style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px;color:#0F1B33;text-decoration:none"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#1D4ED8;letter-spacing:0.06em">ДОСТАВКА</span><span style="font-size:16px;line-height:1.45">По Тирасполю, ПМР, Молдове и Украине. Подробнее →</span></a>
 <div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px">
@@ -124,7 +124,7 @@ $ribbon_item = function ($p, $hidden = false) {
 <h2 style="margin:0 0 24px;font-size:34px;font-weight:800;letter-spacing:-0.02em">Магазин в Тирасполе</h2>
 <div style="display:flex;flex-wrap:wrap;gap:24px">
 <div style="flex:1 1 360px;min-width:0;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:18px">
-<div><div style="font-size:14px;color:#44506A">Адрес</div><div style="font-size:18px;font-weight:600">ул. Ленина 7, ТК «Монарх», бутик №7</div></div>
+<div><div style="font-size:14px;color:#44506A">Адрес</div><div style="font-size:18px;font-weight:600">ул. Ленина 7, ТК «Монарх», бутик №5</div></div>
 <div><div style="font-size:14px;color:#44506A">Часы работы</div><div style="font-size:18px;font-weight:600;line-height:1.5">Пн–сб: 10:00–19:00<br>Вс: 10:00–14:00</div></div>
 <div><div style="font-size:14px;color:#44506A">Телефон</div><a href="tel:+37353351338" style="font-size:18px;font-weight:600;color:#0F1B33">+373 533 51338</a></div>
 <div style="font-size:15px;line-height:1.5;color:#33405A">Заказ, оформленный на сайте, будет собран к вашему приходу.</div>

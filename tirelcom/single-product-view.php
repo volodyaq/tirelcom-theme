@@ -117,7 +117,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 <div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px">
 <div style="display:flex;flex-direction:column;gap:2px">
 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8">САМОВЫВОЗ</span>
-<span style="font-size:15px;line-height:1.45">ул. Ленина 7, ТК «Монарх», бутик №7. Пн–сб 10:00–19:00, вс 10:00–14:00.</span>
+<span style="font-size:15px;line-height:1.45">ул. Ленина 7, ТК «Монарх», бутик №5. Пн–сб 10:00–19:00, вс 10:00–14:00.</span>
 </div>
 <div style="display:flex;flex-direction:column;gap:2px">
 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8">ОПЛАТА</span>

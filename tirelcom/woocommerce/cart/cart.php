@@ -57,7 +57,7 @@ $count = WC()->cart->get_cart_contents_count();
 <a class="hv-orange" href="<?php echo esc_url(wc_get_checkout_url()); ?>" style="display:flex;align-items:center;justify-content:center;height:56px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:17px;font-weight:800;text-decoration:none">Оформить заказ</a>
 <div style="font-size:14px;line-height:1.5;color:#44506A">Регистрация не нужна. <a class="hv-link" href="<?php echo esc_url(home_url('/dostavka-i-oplata/')); ?>" style="font-weight:700">Условия доставки</a>. После заказа мы позвоним и подтвердим наличие.</div>
 <div style="display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid #E6ECF6;font-size:14px;line-height:1.45">
-<span><strong style="font-weight:700">Самовывоз:</strong> ул. Ленина 7, ТК «Монарх», бутик №7</span>
+<span><strong style="font-weight:700">Самовывоз:</strong> ул. Ленина 7, ТК «Монарх», бутик №5</span>
 <span><strong style="font-weight:700">Вопросы:</strong> <a class="hv-link" href="tel:+37353351338" style="font-weight:700">+373 533 51338</a></span>
 </div>
 </aside>
