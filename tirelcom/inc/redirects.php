@@ -47,7 +47,7 @@ add_action('init', function () {
         'product/special' => $shop,
     ];
     $go(isset($static[$route]) ? $static[$route] : home_url('/'), isset($static[$route]) ? 301 : 302);
-}, 1);
+}, 20);
 
 function tek_old_cat_url($path) {
     static $map = null;

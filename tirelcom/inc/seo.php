@@ -58,7 +58,7 @@ function tek_seo_ctx() {
         $t = get_queried_object();
         if ($t && !is_wp_error($t)) {
             $c['title'] = $t->name . ' — купить в Тирасполе' . $suffix . ' | ' . TEK_BRAND;
-            $c['desc'] = $t->description ? tek_seo_trim($t->description, 155) : tek_seo_trim($t->name . ': ' . (int) $t->count . ' товаров, цены и наличие. Самовывоз в Тирасполе, ул. Ленина 7, ТК «Монарх». Подберём аналог.', 160);
+            $c['desc'] = $t->description ? tek_seo_trim($t->description, 155) : tek_seo_trim($t->name . ': цены и наличие, товаров в разделе: ' . (int) $t->count . '. Самовывоз в Тирасполе, ул. Ленина 7, ТК «Монарх». Подберём аналог.', 160);
             $link = get_term_link($t); $c['canon'] = is_wp_error($link) ? '' : ($paged > 1 ? trailingslashit($link) . 'page/' . $paged . '/' : $link);
         }
     } elseif (function_exists('is_shop') && is_shop()) {
