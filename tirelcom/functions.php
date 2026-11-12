@@ -37,7 +37,7 @@ function tek_product_tag($product) {
 
 /* Товары для главной: с фото, случайные, кэш на 6 часов */
 function tek_home_products($n = 7) {
-    $ids = get_transient('tek_home_ids');
+    $ids = get_transient('tek_home_ids10');
     if (!is_array($ids) || count($ids) < $n) {
         $q = new WP_Query([
             'post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => $n,
@@ -45,7 +45,7 @@ function tek_home_products($n = 7) {
             'meta_query' => [['key' => '_thumbnail_id', 'compare' => 'EXISTS']],
         ]);
         $ids = $q->posts;
-        if ($ids) set_transient('tek_home_ids', $ids, 6 * HOUR_IN_SECONDS);
+        if ($ids) set_transient('tek_home_ids10', $ids, 6 * HOUR_IN_SECONDS);
     }
     return array_filter(array_map('wc_get_product', $ids));
 }

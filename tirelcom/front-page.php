@@ -1,12 +1,12 @@
 <?php if (!defined('ABSPATH')) exit; get_header();
 $cats = tek_top_cats();
-$prods = tek_home_products(7);
+$prods = tek_home_products(10);
 $shop = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/');
 $chip = function ($label, $q) { return '<a class="hv-chip" href="' . esc_url(add_query_arg(['s' => $q, 'post_type' => 'product'], home_url('/'))) . '" style="padding:6px 12px;border:1px solid #C5D1E6;border-radius:999px;background:#FFFFFF;color:#0F1B33;font-size:14px">' . esc_html($label) . '</a>'; };
 $ribbon_item = function ($p, $hidden = false) {
     $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_thumbnail');
     ob_start(); ?>
-<a class="hv-card" href="<?php echo esc_url(get_permalink($p->get_id())); ?>"<?php echo $hidden ? ' tabindex="-1" aria-hidden="true"' : ''; ?> style="display:flex;gap:14px;align-items:center;margin-bottom:12px;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:12px;color:#0F1B33;text-decoration:none">
+<a class="hv-card" href="<?php echo esc_url(get_permalink($p->get_id())); ?>"<?php echo $hidden ? ' tabindex="-1" aria-hidden="true"' : ''; ?> class="hv-card ribbon-item" style="display:flex;gap:14px;align-items:center;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:12px;color:#0F1B33;text-decoration:none">
 <span style="flex:none;width:72px;height:72px;border-radius:10px;background:#E9EFF8;overflow:hidden;display:block"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="" loading="lazy"><?php endif; ?></span>
 <span style="min-width:0;display:flex;flex-direction:column;gap:4px">
 <span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
@@ -47,7 +47,7 @@ $instock = tek_home_instock(8);
 <div class="hero-pad" style="max-width:1200px;margin:0 auto;padding:64px 24px;display:flex;flex-wrap:wrap;gap:40px;align-items:center">
 <div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:24px">
 <span style="align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.08em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:6px 10px">МАГАЗИН + ИНТЕРНЕТ-ЗАКАЗ</span>
-<h1 class="hero-h1" style="margin:0;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент: заказывайте онлайн, забирайте в магазине</h1>
+<h1 class="hero-h1" style="max-width:860px;margin:0;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент: заказывайте онлайн, забирайте в магазине</h1>
 <p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:560px">Более 25 лет работаем в Тирасполе. Микросхемы, транзисторы, Arduino, паяльное оборудование и всё для ремонта электроники. Не нашли нужную деталь — пришлите маркировку, подберём аналог.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px">
 <a class="hv-blue" href="<?php echo esc_url($shop); ?>" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;background:#1D4ED8;color:#FFFFFF;font-weight:600;font-size:17px">Открыть каталог</a>
@@ -58,8 +58,10 @@ $instock = tek_home_instock(8);
 <?php echo $chip('Arduino', 'Arduino') . $chip('ATmega', 'ATmega') . $chip('DC/DC модули', 'DC-DC') . $chip('Припой и флюс', 'припой') . $chip('Паяльники', 'паяльник'); ?>
 </div>
 </div>
+</div>
+<div style="max-width:1200px;margin:0 auto;padding:0 24px 56px">
 <?php if ($prods) : ?>
-<div class="ribbon" aria-label="Лента товаров" style="flex:1 1 340px;min-width:0;height:460px;position:relative;overflow:hidden;border-radius:18px;background:#E6EEFC;border:1px solid #D5DEEE;padding:14px;-webkit-mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(transparent,#000 8%,#000 92%,transparent)">
+<div class="ribbon" aria-label="Лента товаров" >
 <div class="ribbon-track">
 <?php foreach ($prods as $p) echo $ribbon_item($p); foreach ($prods as $p) echo $ribbon_item($p, true); ?>
 </div>

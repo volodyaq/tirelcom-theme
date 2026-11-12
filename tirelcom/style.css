@@ -46,11 +46,13 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #FF8A
 @keyframes msgr-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.22,1.55);opacity:0}}
 @media (prefers-reduced-motion:reduce){.msgr-btn::after{animation:none}}
 
-.ribbon-track{animation:ribbon-up 42s linear infinite}
 .ribbon:hover .ribbon-track{animation-play-state:paused}
-@keyframes ribbon-up{to{transform:translateY(-50%)}}
-@media (prefers-reduced-motion:reduce){.ribbon{overflow-y:auto !important}.ribbon-track{animation:none}}
-@media (max-width:700px){.ribbon{height:360px !important}}
+.ribbon{position:relative;overflow:hidden;border-radius:18px;background:#E6EEFC;border:1px solid #D5DEEE;padding:14px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.ribbon-track{display:flex;width:max-content;animation:ribbon-left 60s linear infinite}
+.ribbon-item{flex:none;width:300px;margin-right:12px}
+@keyframes ribbon-left{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ribbon{overflow-x:auto}.ribbon-track{animation:none}}
+@media (max-width:700px){.ribbon-item{width:260px}}
 
 /* --- базовые правила темы --- */
 body{font-family:'Manrope',system-ui,sans-serif;color:#0F1B33;background:#F4F7FB}
