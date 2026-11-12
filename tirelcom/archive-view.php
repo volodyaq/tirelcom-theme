@@ -128,6 +128,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 <?php endforeach; ?>
 <?php if ($cnt > 8) : ?><button type="button" class="tek-fmore" data-more="Показать ещё <?php echo (int) ($cnt - 8); ?>" data-less="Свернуть">Показать ещё <?php echo (int) ($cnt - 8); ?></button><?php endif; ?>
 </div>
+</details>
 <?php endforeach; ?>
 <fieldset style="margin:0;padding:0;border:0;display:flex;flex-direction:column;gap:10px">
 <legend style="padding:0;margin-bottom:10px;font-size:14px;font-weight:700">Цена, руб. ПМР</legend>
