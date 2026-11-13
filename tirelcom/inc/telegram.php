@@ -22,23 +22,34 @@ function tek_tg_send($text) {
     return tek_tg_api('sendMessage', ['chat_id' => $chat, 'text' => $text, 'parse_mode' => 'HTML', 'disable_web_page_preview' => 'true']);
 }
 
+function tek_tg_money($v) {
+    return number_format((float) $v, 2, ',', ' ') . ' руб. ПМР';
+}
+
 function tek_tg_order_text($order) {
     $e = function ($s) { return esc_html((string) $s); };
     $t = '🛒 <b>Новый заказ № ' . $e($order->get_order_number()) . '</b>' . "\n";
+    $t .= '━━━━━━━━━━━━━━' . "\n";
     $name = trim($order->get_billing_first_name() . ' ' . $order->get_billing_last_name());
-    $t .= '👤 ' . $e($name ?: 'Клиент') . "\n";
-    $t .= '📞 ' . $e($order->get_billing_phone()) . "\n";
-    $t .= '📦 ' . $e($order->get_meta('tek_delivery')) . "\n";
-    if ($order->get_meta('tek_address')) $t .= '📍 ' . $e($order->get_meta('tek_address')) . "\n";
-    if ($order->get_customer_note()) $t .= '💬 ' . $e($order->get_customer_note()) . "\n";
-    $t .= "\n";
+    $t .= '<b>Клиент:</b> ' . $e($name ?: 'не указано') . "\n";
+    $t .= '<b>Телефон:</b> ' . $e($order->get_billing_phone()) . "\n";
+    $t .= '<b>Получение:</b> ' . $e($order->get_meta('tek_delivery')) . "\n";
+    if ($order->get_meta('tek_address')) $t .= '<b>Адрес:</b> ' . $e($order->get_meta('tek_address')) . "\n";
+    $t .= '<b>Оплата:</b> при получении' . "\n";
+    if ($order->get_customer_note()) $t .= '<b>Комментарий:</b> ' . $e($order->get_customer_note()) . "\n";
+    $t .= "\n<b>Состав заказа</b>\n";
+    $n = 0;
     foreach ($order->get_items() as $it) {
+        $n++;
         $p = $it->get_product();
         $sku = $p ? $p->get_sku() : '';
-        $status = ($p && $p->get_stock_status() === 'onbackorder') ? ' (предзаказ)' : '';
-        $t .= '• ' . $e($it->get_name()) . ($sku ? ' [код ' . $e($sku) . ']' : '') . $status . ' × ' . (int) $it->get_quantity() . ' = ' . $e(wp_strip_all_tags(wc_price($it->get_total()))) . "\n";
+        $status = ($p && $p->get_stock_status() === 'onbackorder') ? ' ⚠️ предзаказ' : '';
+        $qty = (int) $it->get_quantity();
+        $t .= $n . '. ' . $e($it->get_name()) . ($sku ? ' (код ' . $e($sku) . ')' : '') . $status . "\n";
+        $t .= '    ' . $qty . ' шт. × ' . $e(tek_tg_money($qty ? $it->get_total() / $qty : 0)) . ' = ' . $e(tek_tg_money($it->get_total())) . "\n";
     }
-    $t .= "\n<b>Итого: " . $e(html_entity_decode(wp_strip_all_tags(wc_price($order->get_total())))) . '</b>' . "\n";
+    $t .= '━━━━━━━━━━━━━━' . "\n";
+    $t .= '<b>Итого: ' . $e(tek_tg_money($order->get_total())) . '</b>' . "\n\n";
     $t .= '<a href="' . esc_url($order->get_edit_order_url()) . '">Открыть заказ в админке</a>';
     return $t;
 }
