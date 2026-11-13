@@ -356,3 +356,4 @@ function tek_home_instock($n = 8) {
 function tek_nophoto($label = 'Фото скоро появится') {
     return '<span class="tek-nophoto"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="13" y="13" width="22" height="22" rx="3"/><path d="M19 13V7M24 13V7M29 13V7M19 41v-6M24 41v-6M29 41v-6M13 19H7M13 24H7M13 29H7M41 19h-6M41 24h-6M41 29h-6"/><circle cx="19.5" cy="19.5" r="1.5"/></svg><span>' . esc_html($label) . '</span></span>';
 }
+require_once get_template_directory() . '/inc/tmp-nodesc.php';
