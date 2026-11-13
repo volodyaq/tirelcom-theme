@@ -15,6 +15,7 @@
 <span style="font-size:18px;font-weight:800;letter-spacing:-0.01em">Нужны детали? <span style="color:#FF8A1F">Вам к нам!</span></span>
 <a class="tek-promo-sub" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="font-size:15px;color:#DCE6FA;text-decoration:underline;text-underline-offset:3px">Подберём, найдём аналог, подскажем по схеме: оставить заявку →</a>
 </div>
+<span class="tek-topl" style="display:flex;gap:18px;font-size:15px;font-weight:700"><a href="<?php echo esc_url(home_url('/podbor/')); ?>" style="color:#FF8A1F">Подбор детали</a><a href="<?php echo esc_url(home_url('/poleznoe/')); ?>" style="color:#FFFFFF">Полезное</a></span>
 <?php if ((float) get_option('tirelcom_mdl_rate', 0) > 0) : ?>
 <span style="display:flex;gap:6px">
 <button type="button" class="tek-cur-btn" data-cur="PRB" aria-pressed="true" style="border-radius:6px;padding:5px 12px;font-size:14px">руб. ПМР</button>
@@ -70,8 +71,6 @@
 <?php endif; ?>
 </div>
 <?php endforeach; ?>
-<div class="tek-ni tek-ni-x"><a class="tek-ni-a tek-ni-pod" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="display:block;padding:14px 12px;color:#C2410C;font-weight:700;font-size:15px">Подбор детали</a></div>
-<div class="tek-ni tek-ni-x"><a class="tek-ni-a" href="<?php echo esc_url(home_url('/poleznoe/')); ?>" style="display:block;padding:14px 12px;color:#0F1B33;font-weight:500;font-size:15px">Полезное</a></div>
 </div>
 <div class="tek-drawer" id="tek-drawer" hidden>
 <?php foreach ($tree as $top) : ?>
