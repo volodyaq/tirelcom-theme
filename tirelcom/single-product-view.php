@@ -121,7 +121,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 </div>
 <div style="display:flex;flex-direction:column;gap:2px">
 <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#1D4ED8">ОПЛАТА</span>
-<span style="font-size:15px;line-height:1.45">Наличными или безналичным расчётом.</span>
+<span style="font-size:15px;line-height:1.45">При получении: наличными, картой или переводом на карту.</span>
 </div>
 </div>
 

@@ -79,7 +79,7 @@ $instock = tek_home_instock(8);
 <a class="hv-card" href="<?php echo esc_url(home_url('/dostavka-i-oplata/')); ?>" style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px;color:#0F1B33;text-decoration:none"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#1D4ED8;letter-spacing:0.06em">ДОСТАВКА</span><span style="font-size:16px;line-height:1.45">По Тирасполю, ПМР, Молдове и Украине. Подробнее →</span></a>
 <div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px">
 <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#1D4ED8;letter-spacing:0.06em">ОПЛАТА</span>
-<span style="font-size:16px;line-height:1.45">Наличный и безналичный расчёт</span>
+<span style="font-size:16px;line-height:1.45">При получении: наличные, терминал или перевод на карту</span>
 </div>
 <div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px">
 <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#1D4ED8;letter-spacing:0.06em">ПОДБОР</span>
