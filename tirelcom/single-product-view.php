@@ -35,7 +35,7 @@ if (!$similar && $deep) {
 <section class="tek-psec" style="max-width:1200px;margin:0 auto;padding:20px 24px 24px;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
 <div class="tek-pl" style="flex:1 1 460px;min-width:0;display:flex;flex-direction:column;gap:12px">
 <div class="ph-big" style="height:460px;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:16px;display:flex;align-items:center;justify-content:center">
-<?php if ($main) : ?><img id="tek-main-img" class="tek-pimg" src="<?php echo esc_url($main); ?>" alt="<?php echo esc_attr($p->get_name()); ?>"><?php else : ?><span style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:0.08em;color:#8091B5">ФОТО СКОРО ПОЯВИТСЯ</span><?php endif; ?>
+<?php if ($main) : ?><img id="tek-main-img" class="tek-pimg" src="<?php echo esc_url($main); ?>" alt="<?php echo esc_attr($p->get_name()); ?>"><?php else : ?><?php echo tek_nophoto(); ?><?php endif; ?>
 </div>
 <?php if (count($img_ids) > 1) : ?>
 <div class="tek-gthumbs" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
