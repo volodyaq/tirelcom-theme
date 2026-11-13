@@ -151,7 +151,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 </div>
 </div>
 
-<?php if (have_posts()) : ?>
+<?php if (have_posts() && !($is_search && trim(get_search_query()) === '')) : ?>
 <div class="pgrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px">
 <?php while (have_posts()) : the_post(); $p = wc_get_product(get_the_ID()); if (!$p) continue; $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single'); ?>
 <article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
