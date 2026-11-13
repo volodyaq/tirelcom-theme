@@ -328,11 +328,11 @@ add_action('woocommerce_new_product', function ($id) {
 });
 
 function tek_new_products($n = 4) {
-    $ids = get_transient('tek_new_ids_v2');
+    $ids = get_transient('tek_new_ids_v3');
     if (!is_array($ids)) {
         global $wpdb;
-        $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' JOIN {$wpdb->postmeta} t ON t.post_id = p.ID AND t.meta_key = '_thumbnail_id' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_tek_new_until' AND CAST(m.meta_value AS UNSIGNED) > %d WHERE l.stock_status = 'instock' ORDER BY RAND() LIMIT 24", time())));
-        set_transient('tek_new_ids_v2', $ids, HOUR_IN_SECONDS);
+        $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' LEFT JOIN {$wpdb->postmeta} t ON t.post_id = p.ID AND t.meta_key = '_thumbnail_id' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_tek_new_until' AND CAST(m.meta_value AS UNSIGNED) > %d WHERE l.stock_status = 'instock' ORDER BY (t.meta_id IS NULL), RAND() LIMIT 24", time())));
+        set_transient('tek_new_ids_v3', $ids, HOUR_IN_SECONDS);
     }
     if (count($ids) < $n) return [];
     $pick = array_slice($ids, 0, $n);
