@@ -320,3 +320,9 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-ni-x{margin-left:0}
 .tek-ni-pod:hover{text-decoration:underline}
 .tek-dr-x{display:block;padding:14px 16px;font-weight:700;color:#C2410C;border-top:1px solid #E6ECF6}
+
+.tek-fab{display:none}
+@media (max-width:768px){
+.tek-fab{display:flex;align-items:center;position:fixed;right:14px;bottom:16px;z-index:9990;min-height:48px;padding:0 20px;border-radius:999px;background:#FF8A1F;color:#0F1B33;font-weight:800;font-size:15px;box-shadow:0 6px 18px rgba(15,42,92,.35)}
+.tek-cmp-bar:not([hidden])~.tek-fab{bottom:76px}
+}
