@@ -26,6 +26,9 @@
 <section style="display:flex;flex-direction:column;gap:12px"><h2 style="margin:0;font-size:24px;font-weight:800">Продаём всем: в розницу и оптом</h2>
 <p style="margin:0;font-size:17px;line-height:1.6;color:#33405A;max-width:760px">Нашими покупателями бывают и радиолюбители, и мастерские, и предприятия. Если вам нужна крупная партия, спросите про оптовые скидки по телефону: условия зависят от товара и количества.</p>
 <p style="margin:0;font-size:17px;line-height:1.6;color:#33405A;max-width:760px">За годы работы мы нашли надёжных партнёров в Китае, Европе, Канаде и США. Это позволяет находить не только ходовые, но и редкие компоненты, а заказы доставлять в Молдову и Украину.</p></section>
+<section style="display:flex;flex-direction:column;gap:12px"><h2 style="margin:0;font-size:24px;font-weight:800">Оптовый запрос</h2>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#33405A;max-width:760px">Напишите, что нужно и в каком количестве, и мы пришлём цену и сроки. Оптовые условия обсуждаем по телефону.</p>
+<div style="max-width:760px"><?php echo tek_req_form('opt'); ?></div></section>
 <section style="background:#E6EEFC;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:10px"><h2 style="margin:0;font-size:24px;font-weight:800;color:#0F2A5C">Не знаете, что нужно? Это нормально</h2>
 <p style="margin:0;font-size:17px;line-height:1.6;color:#33405A;max-width:760px">Радиодетали с годами получают новые названия и корпуса, а нужная деталь часто лежит под другой маркировкой. Пришлите нам маркировку с платы, фото или просто опишите, что сломалось. Опыт подскажет, чем заменить, и мы проверим наличие на прилавке, пока вы ещё в дороге.</p></section>
 <section style="display:flex;flex-direction:column;gap:14px"><h2 style="margin:0;font-size:24px;font-weight:800">Как нас найти</h2>
