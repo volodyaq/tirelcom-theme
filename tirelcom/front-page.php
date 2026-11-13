@@ -19,7 +19,7 @@ $ribbon_item = function ($p, $hidden = false) {
 <?php
 $card = function ($p) { $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single'); ob_start(); ?>
 <article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
-<a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="display:block;height:170px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php endif; ?></a>
+<a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="position:relative;display:block;height:170px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php echo tek_new_badge($p); ?><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php endif; ?></a>
 <div style="padding:18px;display:flex;flex-direction:column;gap:10px;flex:1">
 <span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h3 style="margin:0;font-size:16px;font-weight:600;line-height:1.4;flex:1"><a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>

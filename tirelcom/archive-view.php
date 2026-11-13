@@ -154,7 +154,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 <div class="pgrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px">
 <?php while (have_posts()) : the_post(); $p = wc_get_product(get_the_ID()); if (!$p) continue; $img = get_the_post_thumbnail_url($p->get_id(), 'woocommerce_single'); ?>
 <article style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden">
-<a href="<?php the_permalink(); ?>" style="display:block;height:160px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php else : ?><?php echo tek_nophoto(); ?><?php endif; ?></a>
+<a href="<?php the_permalink(); ?>" style="position:relative;display:block;height:160px;background:#FFFFFF;border-bottom:1px solid #E6ECF6;padding:10px"><?php echo tek_new_badge($p); ?><?php if ($img) : ?><img class="tek-pimg" src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr($p->get_name()); ?>" loading="lazy"><?php else : ?><?php echo tek_nophoto(); ?><?php endif; ?></a>
 <div style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1">
 <span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h3 style="margin:0;font-size:15px;font-weight:600;line-height:1.4;flex:1"><a href="<?php the_permalink(); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>

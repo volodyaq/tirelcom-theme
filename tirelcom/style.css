@@ -302,3 +302,5 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 
 .tek-ptag{font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;line-height:1.3;color:#1D4ED8;letter-spacing:0}
 .tek-nophoto{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:100%;color:#9AA9C7;font-size:13px;font-weight:600;text-align:center}
+.tek-new{position:absolute;top:10px;left:10px;z-index:2;background:#FF8A1F;color:#0F1B33;font-size:12px;font-weight:800;line-height:1;padding:5px 9px;border-radius:999px}
+.tek-newl{display:inline-block;background:#FF8A1F;color:#0F1B33;font-size:13px;font-weight:800;padding:5px 10px;border-radius:999px}

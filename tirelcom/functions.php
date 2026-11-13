@@ -315,12 +315,24 @@ function tek_popular_cats($n = 12) {
 }
 
 /* Новые поступления: товары с кодом TEK-… (добавлены вручную, не из старого каталога), в наличии, с фото */
+/* «Новое»: товар считается новым, пока не прошла дата _tek_new_until (по умолчанию 30 дней с создания) */
+function tek_is_new($p) {
+    $id = is_object($p) ? $p->get_id() : (int) $p;
+    return (int) get_post_meta($id, '_tek_new_until', true) > time();
+}
+function tek_new_badge($p) {
+    return tek_is_new($p) ? '<span class="tek-new">Новое</span>' : '';
+}
+add_action('woocommerce_new_product', function ($id) {
+    if (!get_post_meta($id, '_tek_new_until', true)) update_post_meta($id, '_tek_new_until', time() + 30 * DAY_IN_SECONDS);
+});
+
 function tek_new_products($n = 4) {
-    $ids = get_transient('tek_new_ids_v1');
+    $ids = get_transient('tek_new_ids_v2');
     if (!is_array($ids)) {
         global $wpdb;
-        $ids = array_map('intval', $wpdb->get_col("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_thumbnail_id' WHERE l.sku LIKE 'TEK-%' AND l.stock_status = 'instock' ORDER BY RAND() LIMIT 24"));
-        set_transient('tek_new_ids_v1', $ids, 6 * HOUR_IN_SECONDS);
+        $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' JOIN {$wpdb->postmeta} t ON t.post_id = p.ID AND t.meta_key = '_thumbnail_id' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_tek_new_until' AND CAST(m.meta_value AS UNSIGNED) > %d WHERE l.stock_status = 'instock' ORDER BY RAND() LIMIT 24", time())));
+        set_transient('tek_new_ids_v2', $ids, HOUR_IN_SECONDS);
     }
     if (count($ids) < $n) return [];
     $pick = array_slice($ids, 0, $n);
