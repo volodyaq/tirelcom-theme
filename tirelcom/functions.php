@@ -352,7 +352,45 @@ function tek_home_instock($n = 8) {
 }
 
 
-/* Заглушка для товаров без фото */
-function tek_nophoto($label = 'Фото скоро появится') {
-    return '<span class="tek-nophoto"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="13" y="13" width="22" height="22" rx="3"/><path d="M19 13V7M24 13V7M29 13V7M19 41v-6M24 41v-6M29 41v-6M13 19H7M13 24H7M13 29H7M41 19h-6M41 24h-6M41 29h-6"/><circle cx="19.5" cy="19.5" r="1.5"/></svg><span>' . esc_html($label) . '</span></span>';
+/* Заглушка для товаров без фото: рисунок по типу детали */
+function tek_icon_key($p) {
+    $names = '';
+    $terms = $p ? get_the_terms($p->get_id(), 'product_cat') : [];
+    if ($terms && !is_wp_error($terms)) {
+        foreach ($terms as $t) {
+            $names .= ' ' . $t->name;
+            foreach (get_ancestors($t->term_id, 'product_cat') as $aid) { $a = get_term($aid, 'product_cat'); if ($a && !is_wp_error($a)) $names .= ' ' . $a->name; }
+        }
+    }
+    $n = mb_strtolower($names);
+    $map = [
+        'chip' => ['микросхем'], 'transistor' => ['транзистор'],
+        'diode' => ['диод', 'стабилитрон', 'супрессор', 'тиристор', 'симистор', 'варикап', 'оптопар'],
+        'resistor' => ['резистор', 'терморезистор', 'потенциометр'],
+        'cap' => ['конденсатор', 'ионистор'], 'battery' => ['аккумулятор', 'батаре', 'батарей'],
+        'relay' => ['реле'], 'led' => ['светодиод'], 'fuse' => ['предохранител'],
+        'remote' => ['пульт'], 'connector' => ['разъем', 'разъём', 'штекер', 'гнезд', 'клемм', 'колодк', 'переключател', 'кнопк'],
+        'cable' => ['шнур', 'кабел', 'провод', 'шлейф'], 'iron' => ['паяльн', 'инструмент', 'припой', 'флюс'],
+    ];
+    foreach ($map as $k => $words) foreach ($words as $w) if ($w !== '' && mb_strpos($n, $w) !== false) return $k;
+    return 'chip';
+}
+function tek_nophoto($p = null, $label = 'Фото скоро появится') {
+    $ic = [
+        'chip' => '<rect x="13" y="13" width="22" height="22" rx="3"/><path d="M19 13V7M24 13V7M29 13V7M19 41v-6M24 41v-6M29 41v-6M13 19H7M13 24H7M13 29H7M41 19h-6M41 24h-6M41 29h-6"/><circle cx="19.5" cy="19.5" r="1.5"/>',
+        'transistor' => '<path d="M15 30V22a9 9 0 0 1 18 0v8z"/><path d="M19 30v12M24 30v12M29 30v12"/>',
+        'diode' => '<path d="M5 24h11M32 24h11"/><rect x="16" y="17" width="16" height="14" rx="3"/><path d="M27 17v14"/>',
+        'resistor' => '<path d="M5 24h9M34 24h9"/><rect x="14" y="18" width="20" height="12" rx="6"/><path d="M20 18v12M24 18v12M28 18v12"/>',
+        'cap' => '<rect x="14" y="8" width="20" height="26" rx="3"/><path d="M14 14h20M20 34v9M28 34v9"/>',
+        'battery' => '<rect x="5" y="15" width="33" height="18" rx="3"/><path d="M38 21h4v6h-4M13 24h8M17 20v8"/>',
+        'relay' => '<rect x="8" y="10" width="32" height="24" rx="3"/><path d="M14 34v8M22 34v8M30 34v8M14 22h4l2-5 4 10 2-5h8"/>',
+        'led' => '<path d="M16 28V19a8 8 0 0 1 16 0v9z"/><path d="M13 28h22M20 28v14M28 28v10M37 9l4-3M40 17h4"/>',
+        'fuse' => '<path d="M4 24h8M36 24h8"/><rect x="12" y="17" width="24" height="14" rx="3"/><path d="M16 24h4l2-3 3 6 2-3h4"/>',
+        'remote' => '<rect x="16" y="5" width="16" height="38" rx="4"/><circle cx="24" cy="13" r="2"/><path d="M20 22h8M20 28h8M20 34h8"/>',
+        'connector' => '<rect x="5" y="16" width="38" height="16" rx="2"/><path d="M12 22v4M18 22v4M24 22v4M30 22v4M36 22v4"/>',
+        'cable' => '<rect x="4" y="28" width="7" height="9" rx="1"/><rect x="37" y="11" width="7" height="9" rx="1"/><path d="M11 32c8-2 10-14 18-14s6 4 8 2"/>',
+        'iron' => '<path d="M9 40l15-15"/><path d="M24 25l9-9 6 6-9 9z"/><path d="M7 42l3-3"/>',
+    ];
+    $k = tek_icon_key($p);
+    return '<span class="tek-nophoto"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $ic[$k] . '</svg><span>' . esc_html($label) . '</span></span>';
 }
