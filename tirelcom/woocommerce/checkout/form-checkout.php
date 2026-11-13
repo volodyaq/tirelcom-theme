@@ -58,7 +58,7 @@ $cur = isset($_POST['tek_delivery']) ? sanitize_text_field($_POST['tek_delivery'
 
 <section style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:24px 28px;display:flex;flex-direction:column;gap:10px">
 <h2 style="margin:0;font-size:20px;font-weight:800">3. Оплата</h2>
-<div style="font-size:16px;line-height:1.5">Оплата при получении: наличными, картой через терминал или переводом на карту. Онлайн-оплаты на сайте нет.</div>
+<div style="font-size:16px;line-height:1.5">Самовывоз и курьер в Тирасполе: оплата при получении наличными, картой через терминал или переводом на карту. Для почты и других городов предоплата 50%, способ согласуем по телефону. Онлайн-оплаты на сайте нет.</div>
 </section>
 
 <div style="display:flex;flex-direction:column;gap:12px">
