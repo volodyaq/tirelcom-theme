@@ -10,6 +10,7 @@
 <a class="hv-foot" href="<?php echo esc_url(home_url('/dostavka-i-oplata/')); ?>" style="color:#C9D6F2">Доставка и оплата</a>
 <a class="hv-foot" href="<?php echo esc_url(home_url('/o-magazine/')); ?>" style="color:#C9D6F2">О магазине и контакты</a>
 <a class="hv-foot" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="color:#C9D6F2">Подбор детали</a>
+<a class="hv-foot" href="<?php echo esc_url(home_url('/poleznoe/')); ?>" style="color:#C9D6F2">Полезное</a>
 <a class="hv-foot" href="<?php echo esc_url(home_url('/otzyvy/')); ?>" style="color:#C9D6F2">Отзывы</a>
 </div>
 <div style="display:flex;flex-direction:column;gap:8px;font-size:15px">

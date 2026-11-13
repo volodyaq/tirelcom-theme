@@ -308,3 +308,11 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-rate label{font-size:32px;line-height:1;color:#C9D6F2;cursor:pointer}
 .tek-rate input:checked+label,.tek-rate input:checked~label,.tek-rate label:hover,.tek-rate label:hover~label{color:#FF8A1F}
 .tek-rate input:focus-visible+label{outline:2px solid #1D4ED8;border-radius:4px}
+
+/* Статьи */
+.tek-article{font-size:17px;line-height:1.7;color:#33405A}
+.tek-article h2{margin:28px 0 10px;font-size:24px;line-height:1.25;font-weight:800;color:#0F1B33}
+.tek-article p{margin:0 0 14px}
+.tek-article ul{margin:0 0 16px;padding-left:22px}
+.tek-article li{margin-bottom:8px}
+.tek-article a{color:#1D4ED8;font-weight:600;text-decoration:underline}
