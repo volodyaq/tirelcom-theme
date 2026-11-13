@@ -316,3 +316,7 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-article ul{margin:0 0 16px;padding-left:22px}
 .tek-article li{margin-bottom:8px}
 .tek-article a{color:#1D4ED8;font-weight:600;text-decoration:underline}
+
+.tek-ni-x{margin-left:0}
+.tek-ni-pod:hover{text-decoration:underline}
+.tek-dr-x{display:block;padding:14px 16px;font-weight:700;color:#C2410C;border-top:1px solid #E6ECF6}

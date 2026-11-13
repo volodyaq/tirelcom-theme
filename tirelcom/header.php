@@ -13,7 +13,7 @@
 <div style="max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;align-items:center">
 <div style="flex:1 1 auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 16px;color:#FFFFFF">
 <span style="font-size:18px;font-weight:800;letter-spacing:-0.01em">Нужны детали? <span style="color:#FF8A1F">Вам к нам!</span></span>
-<span class="tek-promo-sub" style="font-size:15px;color:#DCE6FA">Подберём, найдём аналог, подскажем по схеме</span>
+<a class="tek-promo-sub" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="font-size:15px;color:#DCE6FA;text-decoration:underline;text-underline-offset:3px">Подберём, найдём аналог, подскажем по схеме: оставить заявку →</a>
 </div>
 <?php if ((float) get_option('tirelcom_mdl_rate', 0) > 0) : ?>
 <span style="display:flex;gap:6px">
@@ -70,6 +70,8 @@
 <?php endif; ?>
 </div>
 <?php endforeach; ?>
+<div class="tek-ni tek-ni-x"><a class="tek-ni-a tek-ni-pod" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="display:block;padding:14px 12px;color:#C2410C;font-weight:700;font-size:15px">Подбор детали</a></div>
+<div class="tek-ni tek-ni-x"><a class="tek-ni-a" href="<?php echo esc_url(home_url('/poleznoe/')); ?>" style="display:block;padding:14px 12px;color:#0F1B33;font-weight:500;font-size:15px">Полезное</a></div>
 </div>
 <div class="tek-drawer" id="tek-drawer" hidden>
 <?php foreach ($tree as $top) : ?>
@@ -78,6 +80,8 @@
 <?php foreach ($top['k'] as $k) : ?><a href="<?php echo esc_url($k['u']); ?>"><?php echo esc_html($k['n']); ?> <em><?php echo (int) $k['c']; ?></em></a><?php endforeach; ?>
 </details>
 <?php endforeach; ?>
+<a class="tek-dr-x" href="<?php echo esc_url(home_url('/podbor/')); ?>">Подбор детали: оставить заявку</a>
+<a class="tek-dr-x" href="<?php echo esc_url(home_url('/poleznoe/')); ?>">Полезное: статьи</a>
 </div>
 </nav>
 </header>
