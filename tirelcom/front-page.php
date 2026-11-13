@@ -89,7 +89,7 @@ $instock = tek_home_instock(8);
 </section>
 
 <section style="max-width:1200px;margin:0 auto;padding:56px 24px 8px">
-<div style="margin-bottom:20px"><h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">С чем к нам приходят</h2>
+<div style="margin-bottom:20px;text-align:center"><h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em">С чем к нам приходят</h2>
 <p style="margin:8px 0 0;font-size:16px;color:#44506A">Выберите задачу, а мы покажем нужные детали.</p></div>
 <div class="tek-tasks">
 <div class="tek-task"><span class="tek-task-t">Ремонт электроники</span><span class="tek-task-d">Нашли поломку, нужна деталь на замену.</span><div class="tek-task-l"><?php echo $tl('Конденсаторы', 'конденсатор') . $tl('Микросхемы', 'микросхема') . $tl('Транзисторы', 'транзистор') . $tl('Диоды', 'диод') . $tl('Резисторы', 'резистор') . $tl('Предохранители', 'предохранитель'); ?></div></div>
