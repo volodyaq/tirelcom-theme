@@ -65,6 +65,7 @@ $cur = isset($_POST['tek_delivery']) ? sanitize_text_field($_POST['tek_delivery'
 <input type="hidden" name="payment_method" value="cod">
 <?php wp_nonce_field('woocommerce-process_checkout', 'woocommerce-process-checkout-nonce'); ?>
 <button class="hv-orange" type="submit" id="place_order" name="woocommerce_checkout_place_order" value="Подтвердить заказ" style="height:60px;border:0;border-radius:14px;background:#FF8A1F;color:#0F1B33;font-size:18px;font-weight:800">Подтвердить заказ</button>
+<span style="font-size:13px;line-height:1.45;color:#6A7894;text-align:center">Нажимая «Подтвердить заказ», вы соглашаетесь с <a href="<?php echo esc_url(home_url('/politika-konfidencialnosti/')); ?>" style="text-decoration:underline">политикой конфиденциальности</a>.</span>
 <div style="font-size:13px;line-height:1.5;color:#44506A">Нажимая кнопку, вы соглашаетесь с обработкой данных для выполнения заказа.</div>
 </div>
 </div>
