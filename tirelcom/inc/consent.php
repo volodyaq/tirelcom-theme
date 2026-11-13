@@ -37,3 +37,16 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 </script>
 <?php
 }, 50);
+
+/* Значок сайта и картинка для ссылок (og:image) */
+add_action('wp_head', function () {
+    $u = get_template_directory_uri() . '/assets/';
+    echo '<link rel="icon" href="' . esc_url($u . 'favicon-32.png') . '" sizes="32x32" type="image/png">' . "\n";
+    echo '<link rel="icon" href="' . esc_url($u . 'icon-512.png') . '" sizes="512x512" type="image/png">' . "\n";
+    echo '<link rel="apple-touch-icon" href="' . esc_url($u . 'icon-180.png') . '">' . "\n";
+    $has_img = is_singular('product') && has_post_thumbnail();
+    if (!$has_img) {
+        echo '<meta property="og:image" content="' . esc_url($u . 'og-image.jpg') . '">' . "\n" . '<meta property="og:image:width" content="1200">' . "\n" . '<meta property="og:image:height" content="630">' . "\n" . '<meta name="twitter:card" content="summary_large_image">' . "\n";
+    }
+}, 99);
+add_filter('get_site_icon_url', function ($u) { return $u ?: get_template_directory_uri() . '/assets/icon-512.png'; });
