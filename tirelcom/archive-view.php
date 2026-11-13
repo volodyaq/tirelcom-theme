@@ -176,7 +176,7 @@ if ($links) : ?>
 </nav>
 <?php endif; ?>
 <?php else : ?>
-<div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:32px;font-size:16px;line-height:1.6;color:#33405A">По вашему запросу ничего не найдено. Попробуйте другое название или позвоните нам: <a class="hv-link" href="tel:+37353351338" style="font-weight:700">+373 533 51338</a>. Подскажем аналог.</div>
+<div style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:16px;padding:32px;font-size:16px;line-height:1.6;color:#33405A">По вашему запросу ничего не найдено. Попробуйте другое название или позвоните нам: <a class="hv-link" href="tel:+37353351338" style="font-weight:700">+373 533 51338</a>. Подскажем аналог.<br><a class="hv-orange" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="display:inline-flex;align-items:center;margin-top:14px;min-height:48px;padding:0 24px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-weight:700">Оставить заявку на подбор</a></div>
 <?php endif; ?>
 </div>
 </section>
