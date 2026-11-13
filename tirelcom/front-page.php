@@ -153,7 +153,8 @@ $instock = tek_home_instock(8);
 <p style="margin:0;font-size:17px;line-height:1.55;color:#C9D6F2;max-width:560px">Пришлите маркировку или фото платы. Проверим наличие, предложим аналог или привезём под заказ.</p>
 </div>
 <div style="display:flex;flex-wrap:wrap;gap:12px">
-<a class="hv-orange" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-weight:600;font-size:17px">Позвонить</a>
+<a class="hv-orange" href="<?php echo esc_url(home_url('/podbor/')); ?>" style="display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-weight:700;font-size:17px">Оставить заявку</a>
+<a class="hv-outline" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:12px;border:2px solid #FFFFFF;color:#FFFFFF;font-weight:600;font-size:17px">Позвонить</a>
 <?php get_template_part('messengers'); ?>
 </div>
 </div>

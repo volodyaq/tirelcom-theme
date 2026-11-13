@@ -68,6 +68,7 @@ if ($tiles && !$nsel_early) : ?>
 <span style="font-size:16px;font-weight:700;line-height:1.35">Не нашли нужную деталь?</span>
 <span style="font-size:14px;line-height:1.5;color:#C9D6F2">Позвоните или напишите маркировку. Подскажем аналог.</span>
 <a href="tel:+37353351338" style="color:#FF8A1F;font-weight:700;font-size:16px">+373 533 51338</a>
+<a href="<?php echo esc_url(home_url('/podbor/')); ?>" style="color:#FFFFFF;font-weight:600;font-size:14px;text-decoration:underline">Оставить заявку на подбор</a>
 </div>
 </aside>
 

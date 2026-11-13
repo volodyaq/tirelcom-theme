@@ -293,6 +293,7 @@ require_once __DIR__ . '/inc/search.php';
 require_once __DIR__ . '/inc/filters.php';
 require_once __DIR__ . '/inc/telegram.php';
 require_once __DIR__ . '/inc/reviews.php';
+require_once __DIR__ . '/inc/requests.php';
 require_once __DIR__ . '/inc/redirects.php';
 require_once __DIR__ . '/inc/seo.php';
 require_once get_template_directory() . '/inc/as-guard.php';
