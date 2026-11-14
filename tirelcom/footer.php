@@ -30,7 +30,7 @@
 </div>
 <div style="border-top:1px solid #2D4A85">
 <div style="max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;font-size:13px">
-<span>© <?php echo date('Y'); ?> ТирЭлКом</span>
+<span>© <?php echo date('Y'); ?> ТирЭлКом<?php $ft = trim((string) get_option('tek_seller_footer')); if ($ft) echo ' · ' . esc_html($ft); ?></span>
 <span style="display:flex;gap:18px;flex-wrap:wrap"><a class="hv-foot" href="<?php echo esc_url(home_url('/politika-konfidencialnosti/')); ?>" style="color:#C9D6F2">Политика конфиденциальности</a><a class="hv-foot" href="#" data-ck-open style="color:#C9D6F2">Настройки cookie</a></span>
 </div>
 </div>

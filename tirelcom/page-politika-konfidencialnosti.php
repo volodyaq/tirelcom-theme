@@ -11,7 +11,7 @@ $p = 'margin:0 0 10px;font-size:16px;line-height:1.65;color:#33405A';
 <p style="<?php echo $p; ?>">Здесь описано, какие данные мы получаем на сайте tirelcom.com, зачем и как с ними обращаемся.</p>
 
 <h2 style="<?php echo $h; ?>">Кто мы</h2>
-<p style="<?php echo $p; ?>">Магазин «ТирЭлКом»<?php if ($seller) echo ', ' . esc_html($seller); ?>. Адрес магазина: Тирасполь, ул. Ленина 7, ТК «Монарх», бутик №5.<?php if ($addr) echo ' Юридический адрес: ' . esc_html($addr) . '.'; if ($tax) echo ' Налоговый номер: ' . esc_html($tax) . '.'; ?></p>
+<p style="<?php echo $p; ?>">Магазин «ТирЭлКом»<?php if ($seller) echo ', ' . esc_html($seller); ?>. Адрес магазина: Тирасполь, ул. Ленина 7, ТК «Монарх», бутик №5.<?php if ($addr) echo ' Адрес: ' . esc_html($addr) . '.'; if ($tax) echo ' Налоговые номера: ' . esc_html($tax) . '.'; ?></p>
 
 <h2 style="<?php echo $h; ?>">Какие данные мы получаем</h2>
 <p style="<?php echo $p; ?>"><strong>При оформлении заказа:</strong> имя, телефон, адрес (если нужна доставка), комментарий к заказу.</p>

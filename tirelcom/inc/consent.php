@@ -50,3 +50,19 @@ add_action('wp_head', function () {
     }
 }, 99);
 add_filter('get_site_icon_url', function ($u) { return $u ?: get_template_directory_uri() . '/assets/icon-512.png'; });
+
+/* Реквизиты продавца хранятся в базе (Настройки → Общие), не в коде */
+add_action('admin_init', function () {
+    $f = [
+        'tek_seller_name' => 'Продавец (для политики конфиденциальности)',
+        'tek_seller_addr' => 'Адрес продавца для политики (по желанию)',
+        'tek_seller_tax' => 'Налоговые номера (для политики)',
+        'tek_seller_footer' => 'Строка реквизитов в подвале',
+    ];
+    foreach ($f as $k => $label) {
+        register_setting('general', $k, ['type' => 'string', 'sanitize_callback' => 'sanitize_text_field']);
+        add_settings_field($k, $label, function () use ($k) {
+            echo '<input type="text" class="regular-text" name="' . esc_attr($k) . '" value="' . esc_attr(get_option($k)) . '">';
+        }, 'general');
+    }
+});
