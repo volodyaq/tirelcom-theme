@@ -100,6 +100,15 @@ add_filter('pre_get_document_title', function ($t) {
     return $c['title'] ?: $t;
 }, 20);
 
+add_filter('pre_get_document_title', function ($t) {
+    if (!function_exists('is_cart')) return $t;
+    if (function_exists('is_order_received_page') && is_order_received_page()) return 'Заказ принят | ' . TEK_BRAND;
+    if (is_cart()) return 'Корзина | ' . TEK_BRAND;
+    if (is_checkout()) return 'Оформление заказа | ' . TEK_BRAND;
+    if (is_account_page()) return 'Личный кабинет | ' . TEK_BRAND;
+    return $t;
+}, 30);
+
 add_filter('wp_robots', function ($r) {
     if (tek_seo_noindex()) { unset($r['index']); $r['noindex'] = true; $r['follow'] = true; }
     return $r;

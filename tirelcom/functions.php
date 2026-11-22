@@ -460,3 +460,14 @@ function tek_nophoto($p = null, $label = 'Фото скоро появится')
     $k = tek_icon_key($p);
     return '<span class="tek-nophoto"><svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $ic[$k] . '</svg><span>' . esc_html($label) . '</span></span>';
 }
+
+
+/* Сообщение после добавления в корзину: по-русски и без «отложили» */
+add_filter('wc_add_to_cart_message_html', function ($message, $products, $show_qty) {
+    $names = [];
+    foreach ((array) $products as $id => $qty) {
+        $t = get_the_title($id);
+        $names[] = ($show_qty && $qty > 1 ? (int) $qty . ' × ' : '') . '«' . esc_html($t) . '»';
+    }
+    return 'Добавлено в корзину: ' . implode(', ', $names) . '. <a href="' . esc_url(wc_get_cart_url()) . '">Открыть корзину</a>';
+}, 10, 3);

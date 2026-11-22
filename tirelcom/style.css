@@ -377,3 +377,11 @@ html{scroll-behavior:smooth}
 .tek-toast a{color:#FF8A1F;font-weight:800;white-space:nowrap}
 .tek-toast.err{background:#8A1F1F}
 @media (max-width:700px){.tek-toast{bottom:80px}}
+
+/* Уведомления магазина */
+.woocommerce-message,.woocommerce-info,.woocommerce-error{box-sizing:border-box;width:calc(100% - 48px);max-width:1152px;margin:18px auto 0 !important;padding:14px 18px !important;list-style:none;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;border-radius:12px;font-size:15px;line-height:1.45;border:1px solid #BFE5CC !important;background:#E3F6EA;color:#0B5A2E;outline:0}
+.woocommerce-info{background:#E6EEFC;border-color:#C5D6F5 !important;color:#16306B}
+.woocommerce-error{background:#FDECEC;border-color:#F3C1C1 !important;color:#8A1F1F}
+.woocommerce-message a,.woocommerce-info a,.woocommerce-error a{color:#1D4ED8;font-weight:700}
+.woocommerce-message::before,.woocommerce-info::before,.woocommerce-error::before{content:none !important}
+.woocommerce-error li{margin:0}
