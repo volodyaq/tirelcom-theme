@@ -45,10 +45,11 @@ function tek_seo_ctx() {
         $p = wc_get_product(get_queried_object_id());
         if ($p) {
             $name = $p->get_name(); $sku = $p->get_sku();
-            $c['title'] = tek_seo_trim($name, 52) . ' — купить в Тирасполе' . ($sku ? ', код ' . $sku : '') . ' | ' . TEK_BRAND;
+            $c['title'] = tek_seo_trim($name, 42) . ' — купить в Тирасполе';
+            if (mb_strlen($c['title']) <= 52) $c['title'] .= ' | ' . TEK_BRAND;
             $first = tek_seo_trim($p->get_short_description() ?: $name, 120);
             $price = (float) $p->get_price();
-            $tail = ($price > 0 ? ' Цена: ' . number_format($price, 2, ',', ' ') . ' руб. ПМР.' : '') . ($p->get_stock_status() === 'onbackorder' ? ' Под заказ, подберём аналог.' : ' В наличии, самовывоз в Тирасполе.');
+            $tail = ($sku ? ' Код товара ' . $sku . '.' : '') . ($price > 0 ? ' Цена: ' . number_format($price, 2, ',', ' ') . ' руб. ПМР.' : '') . ($p->get_stock_status() === 'onbackorder' ? ' Под заказ, подберём аналог.' : ' В наличии, самовывоз в Тирасполе.');
             $c['desc'] = trim($first . $tail);
             $c['canon'] = get_permalink($p->get_id());
             $iid = $p->get_image_id(); if ($iid) $c['img'] = wp_get_attachment_image_url($iid, 'large');
@@ -78,6 +79,18 @@ function tek_seo_ctx() {
     } elseif (is_singular()) {
         $c['title'] = get_the_title() . ' | ' . TEK_BRAND;
         $c['canon'] = get_permalink();
+        $pd = [
+            'podbor' => 'Не нашли нужную деталь? Введите маркировку: покажем наличие на сайте, а если нет, подберём аналог или привезём под заказ. Тирасполь, ТК «Монарх».',
+            'otzyvy' => 'Отзывы покупателей магазина радиодеталей ТирЭлКом в Тирасполе. Оставьте отзыв о покупке и обслуживании.',
+            'poleznoe' => 'Справочные статьи: как подобрать аналог микросхемы, прочитать маркировку резистора, выбрать блок питания, конденсатор, паяльник и пульт.',
+            'politika-konfidencialnosti' => 'Политика конфиденциальности магазина ТирЭлКом: какие данные мы получаем, зачем и как их храним.',
+        ];
+        $slug = (string) get_post_field('post_name', get_queried_object_id());
+        if (is_page() && isset($pd[$slug])) $c['desc'] = $pd[$slug];
+        elseif (is_singular('post')) {
+            $c['desc'] = tek_seo_trim(get_the_excerpt(), 160);
+            $c['type'] = 'article';
+        }
     }
     return $c;
 }
@@ -103,7 +116,7 @@ add_action('wp_head', function () {
     $c = tek_seo_ctx();
     if ($c['desc']) echo '<meta name="description" content="' . esc_attr($c['desc']) . '">' . "\n";
     if (!$c['title']) return;
-    $img = $c['img'] ?: get_site_icon_url(512);
+    $img = $c['img'] ?: get_template_directory_uri() . '/assets/og-image.jpg';
     echo '<meta property="og:locale" content="ru_RU">' . "\n";
     echo '<meta property="og:site_name" content="' . esc_attr(TEK_BRAND) . '">' . "\n";
     echo '<meta property="og:type" content="' . esc_attr($c['type']) . '">' . "\n";
@@ -177,6 +190,16 @@ add_action('wp_head', function () {
             $items = array_merge([['Главная', home_url('/')]], tek_term_crumbs($cats[0]), [[$p->get_name(), $c['canon']]]);
             tek_crumbs_ld($items);
         }
+    } elseif (is_singular('post')) {
+        $c = tek_seo_ctx();
+        tek_ld([
+            '@context' => 'https://schema.org', '@type' => 'Article',
+            'headline' => get_the_title(), 'description' => $c['desc'], 'mainEntityOfPage' => $c['canon'],
+            'datePublished' => get_the_date('c'), 'dateModified' => get_the_modified_date('c'),
+            'author' => ['@type' => 'Organization', 'name' => TEK_BRAND],
+            'publisher' => ['@type' => 'Organization', 'name' => TEK_BRAND, 'logo' => ['@type' => 'ImageObject', 'url' => get_template_directory_uri() . '/assets/icon-512.png']],
+            'image' => get_template_directory_uri() . '/assets/og-image.jpg',
+        ]);
     } elseif (function_exists('is_product_category') && is_product_category()) {
         $t = get_queried_object();
         if ($t && !is_wp_error($t)) tek_crumbs_ld(array_merge([['Главная', home_url('/')]], tek_term_crumbs($t)));
