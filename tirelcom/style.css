@@ -341,3 +341,39 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-herosearch button{height:56px;padding:0 26px;border:0;border-radius:14px;background:#1D4ED8;color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer}
 .tek-herosearch button:hover{background:#1A43BD}
 @media (max-width:600px){.tek-herosearch{flex-direction:column}.tek-herosearch button{width:100%}}
+
+/* ===== Анимации и приятные мелочи (22.11) ===== */
+@media (prefers-reduced-motion:no-preference){
+html{scroll-behavior:smooth}
+.tek-anim .tek-rv{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.tek-anim .tek-rv.in{opacity:1;transform:none}
+.tek-anim .tek-pimg{opacity:0;transition:opacity .45s ease,transform .5s cubic-bezier(.2,.7,.2,1)}
+.tek-anim .tek-pimg.ld{opacity:1}
+.pgrid>article{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,border-color .25s}
+.pgrid>article:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(15,42,92,.14);border-color:#B9C9E8 !important}
+.pgrid>article:hover .tek-pimg.ld{transform:scale(1.06)}
+.hv-orange,.hv-blue{transition:transform .15s,box-shadow .2s,background-color .15s}
+.hv-orange:hover{box-shadow:0 6px 16px rgba(255,138,31,.38);transform:translateY(-1px)}
+.hv-blue:hover{box-shadow:0 6px 16px rgba(29,78,216,.32);transform:translateY(-1px)}
+.hv-orange:active,.hv-blue:active,.hv-outline:active,.tek-herosearch button:active{transform:scale(.97) !important;box-shadow:none}
+.tek-herosearch input{transition:box-shadow .2s,border-color .2s}
+.tek-herosearch input:focus{outline:0;box-shadow:0 0 0 5px rgba(29,78,216,.16)}
+.tek-stock-in::before{animation:tek-pulse 2.6s ease-in-out infinite}
+@keyframes tek-pulse{0%,100%{box-shadow:0 0 0 0 rgba(14,122,62,.45)}60%{box-shadow:0 0 0 6px rgba(14,122,62,0)}}
+.tek-acc[open]>.tek-acc-body{animation:tek-open .35s cubic-bezier(.2,.7,.2,1)}
+@keyframes tek-open{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.tek-acc>summary::after{transition:transform .25s,background-color .2s}
+.tek-acc>summary:hover::after{background:#D3E1FB}
+.hero-h1,.hero-pad p,.tek-herosearch{animation:tek-rise .7s cubic-bezier(.2,.7,.2,1) backwards}
+.hero-pad p{animation-delay:.08s}.tek-herosearch{animation-delay:.16s}
+@keyframes tek-rise{from{transform:translateY(14px)}to{transform:none}}
+.tek-cart-count.tek-bump{display:inline-block;animation:tek-bump .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tek-bump{0%{transform:scale(1)}40%{transform:scale(1.7)}100%{transform:scale(1)}}
+.tek-toast{transition:opacity .3s,transform .35s cubic-bezier(.2,.9,.3,1.2)}
+}
+.tek-added{background:#1FA855 !important;color:#fff !important}
+.tek-toast{position:fixed;left:50%;bottom:24px;z-index:9995;transform:translate(-50%,20px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:14px;max-width:calc(100% - 28px);background:#0F2A5C;color:#fff;border-radius:14px;padding:12px 16px;font-size:15px;font-weight:600;box-shadow:0 12px 30px rgba(15,42,92,.35)}
+.tek-toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.tek-toast a{color:#FF8A1F;font-weight:800;white-space:nowrap}
+.tek-toast.err{background:#8A1F1F}
+@media (max-width:700px){.tek-toast{bottom:80px}}

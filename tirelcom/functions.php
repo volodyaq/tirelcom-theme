@@ -14,6 +14,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('tirelcom-js', get_template_directory_uri() . '/theme.js', [], filemtime(get_stylesheet_directory() . '/theme.js'), true);
     wp_localize_script('tirelcom-js', 'TEK', [
         'mdlRate' => (float) get_option('tirelcom_mdl_rate', 0),
+        'cartUrl' => function_exists('wc_get_cart_url') ? wc_get_cart_url() : '/cart/',
         'cmpUrl' => home_url('/sravnenie/'),
         'suggest' => esc_url_raw(rest_url('tek/v1/suggest')),
         'searchUrl' => home_url('/'),
