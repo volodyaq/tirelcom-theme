@@ -54,13 +54,25 @@ function tek_tg_order_text($order) {
     return $t;
 }
 
-add_action('woocommerce_checkout_order_processed', function ($order_id) {
+/* Отправка заказа в Telegram: после ответа покупателю (не задерживает оформление), при ошибке повтор через 2 мин, до 5 попыток */
+function tek_tg_deliver_order($order_id, $try = 1) {
     if (!get_option('tek_tg_token') || !get_option('tek_tg_chat')) return;
     $order = wc_get_order($order_id);
     if (!$order || $order->get_meta('_tek_tg_sent')) return;
     $r = tek_tg_send(tek_tg_order_text($order));
-    if (!is_wp_error($r)) { $order->update_meta_data('_tek_tg_sent', '1'); $order->save_meta_data(); }
-    else $order->add_order_note('Telegram: не отправлено (' . $r->get_error_message() . ')');
+    if (!is_wp_error($r)) { $order->update_meta_data('_tek_tg_sent', '1'); $order->save_meta_data(); return; }
+    $order->add_order_note('Telegram: не отправлено, попытка ' . $try . ' (' . $r->get_error_message() . ')');
+    if ($try < 5) wp_schedule_single_event(time() + 120, 'tek_tg_retry_order', [(int) $order_id, $try + 1]);
+}
+add_action('tek_tg_retry_order', 'tek_tg_deliver_order', 10, 2);
+
+add_action('woocommerce_checkout_order_processed', function ($order_id) {
+    if (!get_option('tek_tg_token') || !get_option('tek_tg_chat')) return;
+    add_action('shutdown', function () use ($order_id) {
+        if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+        elseif (function_exists('litespeed_finish_request')) litespeed_finish_request();
+        tek_tg_deliver_order($order_id, 1);
+    }, 1);
 }, 30);
 
 add_action('admin_menu', function () {
