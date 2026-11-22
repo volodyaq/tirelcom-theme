@@ -96,6 +96,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 </div>
 
 <form method="post" action="<?php echo esc_url(get_permalink()); ?>" style="background:#FFFFFF;border:1px solid #D5DEEE;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:18px">
+<?php if ($p->get_stock_status() === 'instock') echo '<span class="tek-stock tek-stock-in">В наличии в Тирасполе</span>'; ?>
 <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:600;letter-spacing:-0.02em"><?php echo esc_html(tek_price($p)); ?></span>
 <span data-unit style="font-size:16px;color:#44506A">руб. ПМР</span>
@@ -110,8 +111,7 @@ if ($key) : ?><ul style="margin:6px 0 0;padding:0;list-style:none;display:flex;f
 </div>
 <button class="hv-orange" type="submit" name="add-to-cart" value="<?php echo (int) $p->get_id(); ?>" style="flex:1 1 200px;display:flex;align-items:center;justify-content:center;height:52px;border:0;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-size:17px;font-weight:800">В корзину</button>
 </div>
-<a class="hv-outline" href="<?php echo esc_url(add_query_arg('add-to-cart', $p->get_id(), wc_get_checkout_url())); ?>" rel="nofollow" style="display:flex;align-items:center;justify-content:center;height:52px;border:2px solid #1D4ED8;border-radius:12px;background:#FFFFFF;color:#1D4ED8;font-size:16px;font-weight:700">Купить в 1 клик</a>
-<div style="font-size:14px;line-height:1.5;color:#44506A">В 1 клик: сразу к оформлению, нужны только имя и телефон.</div>
+<a class="tek-oneclick" href="<?php echo esc_url(add_query_arg('add-to-cart', $p->get_id(), wc_get_checkout_url())); ?>" rel="nofollow">Купить в 1 клик <span>— сразу к оформлению, нужны только имя и телефон</span></a>
 <?php echo tek_cmp_btn($p->get_id(), true); ?>
 </form>
 

@@ -7,7 +7,7 @@
       var v = parseFloat(el.getAttribute('data-prc'));
       if (isNaN(v)) return;
       if (cur === 'MDL') v = v / rate;
-      el.textContent = v.toFixed(2).replace('.', ',');
+      el.textContent = (Math.abs(v - Math.round(v)) < 0.005 ? String(Math.round(v)) : v.toFixed(2)).replace('.', ',');
       var u = el.parentNode.querySelector('[data-unit]');
       if (u) u.textContent = cur === 'MDL' ? 'MDL' : 'руб. ПМР';
     });

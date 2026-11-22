@@ -23,7 +23,15 @@ add_action('wp_enqueue_scripts', function () {
 /* Цена в формате «75,01» */
 function tek_price($product) {
     $p = (float) $product->get_price();
-    return number_format($p, 2, ',', ' ');
+    return number_format($p, abs($p - round($p)) < 0.005 ? 0 : 2, ',', ' ');
+}
+
+/* Метка наличия для карточек и страницы товара */
+function tek_stock_badge($p) {
+    $s = $p->get_stock_status();
+    if ($s === 'instock') return '<span class="tek-stock tek-stock-in">В наличии</span>';
+    if ($s === 'onbackorder') return '<span class="tek-stock tek-stock-pre">Предзаказ</span>';
+    return '';
 }
 
 /* Первая (верхняя) категория товара */
@@ -333,11 +341,11 @@ add_action('woocommerce_new_product', function ($id) {
 });
 
 function tek_new_products($n = 4) {
-    $ids = get_transient('tek_new_ids_v3');
+    $ids = get_transient('tek_new_ids_v4');
     if (!is_array($ids)) {
         global $wpdb;
-        $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' LEFT JOIN {$wpdb->postmeta} t ON t.post_id = p.ID AND t.meta_key = '_thumbnail_id' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_tek_new_until' AND CAST(m.meta_value AS UNSIGNED) > %d WHERE l.stock_status = 'instock' ORDER BY (t.meta_id IS NULL), RAND() LIMIT 24", time())));
-        set_transient('tek_new_ids_v3', $ids, HOUR_IN_SECONDS);
+        $ids = array_map('intval', $wpdb->get_col($wpdb->prepare("SELECT l.product_id FROM {$wpdb->prefix}wc_product_meta_lookup l JOIN {$wpdb->posts} p ON p.ID = l.product_id AND p.post_status = 'publish' JOIN {$wpdb->postmeta} t ON t.post_id = p.ID AND t.meta_key = '_thumbnail_id' JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = '_tek_new_until' AND CAST(m.meta_value AS UNSIGNED) > %d WHERE l.stock_status = 'instock' ORDER BY RAND() LIMIT 24", time())));
+        set_transient('tek_new_ids_v4', $ids, HOUR_IN_SECONDS);
     }
     if (count($ids) < $n) return [];
     $pick = array_slice($ids, 0, $n);

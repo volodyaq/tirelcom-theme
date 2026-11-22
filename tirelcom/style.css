@@ -40,7 +40,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #FF8A
 
 .msgr{display:flex;flex-wrap:wrap;gap:10px}
 .msgr-btn{position:relative;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px 0 12px;border-radius:999px;background:var(--c);color:#FFFFFF !important;font-weight:700;font-size:14px;text-decoration:none !important;transition:transform .15s}
-.msgr-btn::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--c);animation:msgr-ping 2.4s ease-out infinite;pointer-events:none}
+.msgr-btn::after{content:none}
 .msgr-btn:nth-child(2)::after{animation-delay:.8s}
 .msgr-btn:nth-child(3)::after{animation-delay:1.6s}
 @keyframes msgr-ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.22,1.55);opacity:0}}
@@ -326,3 +326,18 @@ main h1{font-size:28px !important;overflow-wrap:anywhere}
 .tek-fab{display:flex;align-items:center;position:fixed;right:14px;bottom:16px;z-index:9990;min-height:48px;padding:0 20px;border-radius:999px;background:#FF8A1F;color:#0F1B33;font-weight:800;font-size:15px;box-shadow:0 6px 18px rgba(15,42,92,.35)}
 .tek-cmp-bar:not([hidden])~.tek-fab{bottom:76px}
 }
+
+/* Дизайн-правки 22.11 */
+.tek-stock{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:700;line-height:1;padding:5px 9px 5px 8px;border-radius:999px}
+.tek-stock::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.tek-stock-in{color:#0E7A3E;background:#E3F6EA}
+.tek-stock-pre{color:#8A4B00;background:#FFF1DE}
+[data-unit]{color:#5B6785 !important}
+.tek-oneclick{display:block;text-align:center;font-weight:700;font-size:15px;color:#1D4ED8;padding:4px 0}
+.tek-oneclick span{display:block;font-weight:400;font-size:13px;color:#5B6785;margin-top:2px}
+.tek-oneclick:hover{text-decoration:underline}
+.tek-herosearch{display:flex;gap:8px;width:100%;max-width:640px}
+.tek-herosearch input{flex:1;min-width:0;height:56px;border:2px solid #1D4ED8;border-radius:14px;padding:0 18px;font-family:inherit;font-size:17px;background:#fff;color:#0F1B33}
+.tek-herosearch button{height:56px;padding:0 26px;border:0;border-radius:14px;background:#1D4ED8;color:#fff;font-family:inherit;font-size:17px;font-weight:700;cursor:pointer}
+.tek-herosearch button:hover{background:#1A43BD}
+@media (max-width:600px){.tek-herosearch{flex-direction:column}.tek-herosearch button{width:100%}}

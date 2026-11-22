@@ -45,7 +45,7 @@ $base_url = $term ? get_term_link($term) : ($is_search ? home_url('/') : $shop);
 $tiles = [];
 if ($term) { foreach (get_terms(['taxonomy' => 'product_cat', 'parent' => $term->term_id, 'hide_empty' => true, 'orderby' => 'name']) as $tc) $tiles[] = $tc; }
 elseif (!$is_search) { $tiles = array_filter(tek_top_cats(), function ($x) { return $x->count > 0 || get_terms(['taxonomy' => 'product_cat', 'parent' => $x->term_id, 'hide_empty' => true, 'fields' => 'ids']); }); }
-if ($tiles && !$nsel_early) : ?>
+if ($tiles && !$nsel_early && !$term) : ?>
 <section class="tek-tiles" aria-label="Подразделы">
 <?php foreach ($tiles as $tc) : ?><a class="tek-tile" href="<?php echo esc_url(get_term_link($tc)); ?>"><span class="tek-tile-n"><?php echo esc_html($tc->name); ?></span><span class="tek-tile-c"><?php echo (int) $tc->count; ?> шт.</span></a><?php endforeach; ?>
 </section>
@@ -159,6 +159,7 @@ $reset_url = $is_search ? add_query_arg(['s' => get_search_query(), 'post_type' 
 <div style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1">
 <span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h3 style="margin:0;font-size:15px;font-weight:600;line-height:1.4;flex:1"><a href="<?php the_permalink(); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>
+<?php echo tek_stock_badge($p); ?>
 <div style="display:flex;align-items:baseline;gap:6px">
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>
 <span data-unit style="font-size:13px;color:#44506A">руб. ПМР</span>

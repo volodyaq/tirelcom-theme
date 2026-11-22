@@ -23,6 +23,7 @@ $card = function ($p) { $img = get_the_post_thumbnail_url($p->get_id(), 'woocomm
 <div style="padding:18px;display:flex;flex-direction:column;gap:10px;flex:1">
 <span class="tek-ptag"><?php echo esc_html(tek_product_tag($p)); ?></span>
 <h3 style="margin:0;font-size:16px;font-weight:600;line-height:1.4;flex:1"><a href="<?php echo esc_url(get_permalink($p->get_id())); ?>" style="color:inherit;text-decoration:none"><?php echo esc_html($p->get_name()); ?></a></h3>
+<?php echo tek_stock_badge($p); ?>
 <div style="display:flex;align-items:baseline;gap:6px">
 <span data-prc="<?php echo esc_attr($p->get_price()); ?>" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600"><?php echo esc_html(tek_price($p)); ?></span>
 <span data-unit style="font-size:14px;color:#44506A">руб. ПМР</span>
@@ -47,8 +48,9 @@ $instock = tek_home_instock(8);
 <div class="hero-pad" style="max-width:1200px;margin:0 auto;padding:56px 24px 40px;display:flex;flex-wrap:wrap;gap:40px;align-items:center">
 <div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px">
 <span style="align-self:center;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.08em;color:#1D4ED8;background:#E6EEFC;border-radius:6px;padding:6px 10px">МАГАЗИН + ИНТЕРНЕТ-ЗАКАЗ</span>
-<h1 class="hero-h1" style="max-width:900px;margin:0 auto;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент: заказывайте онлайн, забирайте в магазине</h1>
-<p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:640px;margin:0 auto">Более 25 лет работаем в Тирасполе. Микросхемы, транзисторы, Arduino, паяльное оборудование и всё для ремонта электроники. Не нашли нужную деталь — пришлите маркировку, подберём аналог.</p>
+<h1 class="hero-h1" style="max-width:900px;margin:0 auto;font-size:48px;line-height:1.1;font-weight:800;letter-spacing:-0.02em">Радиодетали и инструмент в Тирасполе</h1>
+<p style="margin:0;font-size:18px;line-height:1.55;color:#33405A;max-width:640px;margin:0 auto">Заказывайте онлайн, забирайте в магазине. Более 25 лет работаем в Тирасполе.</p>
+<form class="tek-herosearch" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>"><input type="hidden" name="post_type" value="product"><input type="search" name="s" placeholder="Название или маркировка: LM317, ATmega328, A4988…" aria-label="Поиск по каталогу" autocomplete="off"><button type="submit">Найти</button></form>
 <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
 <a class="hv-blue" href="<?php echo esc_url($shop); ?>" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;background:#1D4ED8;color:#FFFFFF;font-weight:600;font-size:17px">Открыть каталог</a>
 <a class="hv-outline" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 28px;border-radius:12px;border:2px solid #1D4ED8;color:#1D4ED8;font-weight:600;font-size:17px">Позвонить: +373 533 51338</a>
@@ -60,13 +62,6 @@ $instock = tek_home_instock(8);
 </div>
 </div>
 <div style="max-width:1200px;margin:0 auto;padding:0 24px 56px">
-<?php if ($prods) : ?>
-<div class="ribbon" aria-label="Лента товаров" >
-<div class="ribbon-track">
-<?php foreach ($prods as $p) echo $ribbon_item($p); foreach ($prods as $p) echo $ribbon_item($p, true); ?>
-</div>
-</div>
-<?php endif; ?>
 </div>
 </section>
 
