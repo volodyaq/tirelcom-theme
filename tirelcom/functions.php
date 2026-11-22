@@ -297,7 +297,6 @@ require_once __DIR__ . '/inc/requests.php';
 require_once __DIR__ . '/inc/consent.php';
 require_once __DIR__ . '/inc/redirects.php';
 require_once __DIR__ . '/inc/seo.php';
-require_once __DIR__ . '/inc/diag.php';
 require_once get_template_directory() . '/inc/as-guard.php';
 
 /* Популярные подразделы для главной: где больше всего товаров в наличии (прямое назначение товара разделу) */
