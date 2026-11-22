@@ -193,6 +193,7 @@ function tek_tip_key() {
 
 function tek_useful_body($body) {
     $body = preg_replace('/\s*Товар продаётся поштучно\.?\s*/u', ' ', $body);
+    $body = preg_replace('/\s*Батарейки в комплекте[^.<]*\.?\s*/u', ' ', $body);
     $body = preg_replace('~<p>\s*</p>~u', '', $body);
     if (mb_strlen(trim(wp_strip_all_tags($body))) >= 70) return $body;
     static $tips = [
