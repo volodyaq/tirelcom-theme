@@ -166,6 +166,16 @@ add_action('rest_api_init', function () {
             global $wpdb;
             $raw = trim((string) $req->get_param('q'));
             if (mb_strlen($raw) < 2) return ['products' => [], 'cats' => [], 'total' => 0];
+            if (mb_strlen($raw) > 60) $raw = mb_substr($raw, 0, 60);
+            /* ограничение частоты: не больше 60 подсказок в минуту с одного адреса */
+            $rk = 'tek_sg_' . md5(($_SERVER['REMOTE_ADDR'] ?? '') . floor(time() / 60));
+            $cnt = (int) get_transient($rk);
+            if ($cnt >= 60) return new WP_REST_Response(['products' => [], 'cats' => [], 'total' => 0, 'limited' => 1], 429);
+            set_transient($rk, $cnt + 1, 90);
+            /* короткий кэш готовых ответов только для коротких запросов */
+            $ck = 'tek_sgc_' . md5(mb_strtolower($raw));
+            $hit = mb_strlen($raw) <= 24 ? get_transient($ck) : false;
+            if (is_array($hit)) return $hit;
             list($s, $lvl) = tek_search_run($raw);
             $lk = $wpdb->prefix . 'wc_product_meta_lookup';
             $base = "FROM {$wpdb->posts} LEFT JOIN $lk tek_l ON tek_l.product_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish' " . $s['where'];
@@ -187,7 +197,9 @@ add_action('rest_api_init', function () {
                 $rows = $wpdb->get_results("SELECT t.term_id, t.name, tt.count FROM {$wpdb->terms} t JOIN {$wpdb->term_taxonomy} tt ON tt.term_id = t.term_id WHERE tt.taxonomy = 'product_cat' AND (tt.count > 0 OR EXISTS (SELECT 1 FROM {$wpdb->term_taxonomy} ch WHERE ch.parent = tt.term_id AND ch.taxonomy = 'product_cat' AND ch.count > 0)) AND " . implode(' AND ', $cw) . " ORDER BY (LOWER(t.name) = " . $wpdb->prepare('%s', mb_strtolower($craw)) . ") DESC, (LOWER(t.name) LIKE " . $wpdb->prepare('%s', $wpdb->esc_like(mb_strtolower($craw)) . '%') . ") DESC, tt.count DESC LIMIT 5");
                 foreach ($rows as $r) { $l = get_term_link((int) $r->term_id, 'product_cat'); if (!is_wp_error($l)) $anc = get_ancestors((int) $r->term_id, 'product_cat'); $par = $anc ? get_term($anc[0], 'product_cat') : null; $cats[] = ['n' => $r->name, 'u' => $l, 'c' => (int) ($r->count ?: get_term_meta((int) $r->term_id, 'product_count_product_cat', true)), 'p' => ($par && !is_wp_error($par)) ? $par->name : '']; }
             }
-            return ['products' => $prods, 'cats' => $cats, 'total' => $total, 'q' => $raw, 'alt' => isset($s['alt']) ? $s['alt'] : '', 'relaxed' => $lvl];
+            $resp = ['products' => $prods, 'cats' => $cats, 'total' => $total, 'q' => $raw, 'alt' => isset($s['alt']) ? $s['alt'] : '', 'relaxed' => $lvl];
+            if (mb_strlen($raw) <= 24 && $total > 0) set_transient($ck, $resp, 10 * MINUTE_IN_SECONDS);
+            return $resp;
         },
     ]);
 });

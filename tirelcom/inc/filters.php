@@ -64,7 +64,8 @@ function tek_facets($cat, $raw = '') {
     $minp = isset($_GET['min_price']) ? (float) $_GET['min_price'] : 0;
     $maxp = isset($_GET['max_price']) ? (float) $_GET['max_price'] : 0;
     $key = 'tek_fct_' . md5(wp_json_encode([$cat ? $cat->term_id : 0, $raw, $sel, $stock, $minp, $maxp]));
-    $hit = get_transient($key);
+    /* поисковые запросы кэшируем только в памяти запроса (в базу не пишем: иначе боты раздувают таблицу настроек) */
+    $hit = $raw === '' ? get_transient($key) : wp_cache_get($key, 'tek_fct');
     if (is_array($hit)) return $hit;
     $lk = $wpdb->prefix . 'wc_product_meta_lookup';
     $base = "SELECT {$wpdb->posts}.ID FROM {$wpdb->posts} LEFT JOIN $lk tek_l ON tek_l.product_id = {$wpdb->posts}.ID WHERE {$wpdb->posts}.post_type = 'product' AND {$wpdb->posts}.post_status = 'publish'";
@@ -109,7 +110,7 @@ function tek_facets($cat, $raw = '') {
     }
     uasort($out, function ($a, $b) { return $b['cov'] <=> $a['cov']; });
     $out = array_slice($out, 0, 7, true);
-    set_transient($key, $out, 15 * MINUTE_IN_SECONDS);
+    if ($raw === '') set_transient($key, $out, 15 * MINUTE_IN_SECONDS); else wp_cache_set($key, $out, 'tek_fct', 15 * MINUTE_IN_SECONDS);
     return $out;
 }
 
