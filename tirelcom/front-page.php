@@ -160,6 +160,8 @@ $instock = tek_home_instock(8);
 <iframe title="Карта: Тирасполь, ул. Ленина 7" src="https://www.google.com/maps?q=%D0%A2%D0%B8%D1%80%D0%B0%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%2C+%D1%83%D0%BB.+%D0%9B%D0%B5%D0%BD%D0%B8%D0%BD%D0%B0+7&output=embed" width="100%" height="100%" style="border:0;min-height:300px;display:block" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
 </div>
 </div>
+<h3 style="margin:32px 0 16px;font-size:22px;font-weight:800">Как пройти в магазин</h3>
+<?php echo tek_shop_gallery(); ?>
 </section>
 
 </main>

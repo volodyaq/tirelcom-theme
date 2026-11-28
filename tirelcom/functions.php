@@ -471,3 +471,19 @@ add_filter('wc_add_to_cart_message_html', function ($message, $products, $show_q
     }
     return 'Добавлено в корзину: ' . implode(', ', $names) . '. <a href="' . esc_url(wc_get_cart_url()) . '">Открыть корзину</a>';
 }, 10, 3);
+
+
+/* Как пройти в магазин: три фото со шагами */
+function tek_shop_gallery() {
+    $u = get_template_directory_uri() . '/assets/shop/';
+    $steps = [
+        ['vhod-monarh.jpg', 'Вход в торговый комплекс «Монарх» с улицы', '1. Главный вход', 'Заходите в ТК «Монарх» под вывеской с короной. Слева от входа висит баннер «Радиодетали».', 1000, 1333],
+        ['koridor-butik-5.jpg', 'Указатель «Радиодетали» и вход в бутик №5', '2. Идите по указателю', 'Внутри ищите красный указатель «РАДИОДЕТАЛИ» и следуйте по стрелке вдоль стеклянных бутиков.', 1000, 1333],
+        ['butik-vnutri.jpg', 'Внутри магазина ТирЭлКом: прилавки и стеллажи с деталями', '3. Бутик №5', 'На стеклянной двери цифра 5. Внутри прилавки с деталями, паяльное оборудование, провода, термоусадка.', 1000, 1333],
+    ];
+    $o = '<div class="tek-gal">';
+    foreach ($steps as $s) {
+        $o .= '<figure><img src="' . esc_url($u . $s[0]) . '" alt="' . esc_attr($s[1]) . '" width="' . (int) $s[4] . '" height="' . (int) $s[5] . '" loading="lazy" decoding="async"><figcaption><strong>' . esc_html($s[2]) . '</strong><span>' . esc_html($s[3]) . '</span></figcaption></figure>';
+    }
+    return $o . '</div>';
+}

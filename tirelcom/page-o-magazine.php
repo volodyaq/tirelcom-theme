@@ -41,6 +41,7 @@
 </div>
 <div style="display:flex;flex-wrap:wrap;gap:12px"><a class="hv-orange" href="tel:+37353351338" style="display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:12px;background:#FF8A1F;color:#0F1B33;font-weight:800;font-size:16px">Позвонить</a><a class="hv-blue" href="https://wa.me/37377785699" style="display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:12px;background:#1D4ED8;color:#FFFFFF;font-weight:700;font-size:16px">Написать в мессенджер</a></div>
 </section>
+<section style="display:flex;flex-direction:column;gap:14px"><h2 style="margin:0;font-size:24px;font-weight:800">Как пройти</h2><?php echo tek_shop_gallery(); ?></section>
 <section style="border-radius:16px;overflow:hidden;border:1px solid #D5DEEE"><iframe title="Карта: ул. Ленина 7, Тирасполь" src="https://www.openstreetmap.org/export/embed.html?bbox=29.6200%2C46.8350%2C29.6400%2C46.8460&amp;layer=mapnik&amp;marker=46.8405%2C29.6300" style="border:0;width:100%;height:360px" loading="lazy"></iframe></section>
 </main>
 <?php get_footer();

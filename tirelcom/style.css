@@ -385,3 +385,10 @@ html{scroll-behavior:smooth}
 .woocommerce-message a,.woocommerce-info a,.woocommerce-error a{color:#1D4ED8;font-weight:700}
 .woocommerce-message::before,.woocommerce-info::before,.woocommerce-error::before{content:none !important}
 .woocommerce-error li{margin:0}
+
+/* Как пройти */
+.tek-gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.tek-gal figure{margin:0;background:#fff;border:1px solid #D5DEEE;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.tek-gal img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;display:block;background:#E9EFF8}
+.tek-gal figcaption{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;font-size:14px;line-height:1.5;color:#33405A}
+.tek-gal figcaption strong{font-size:16px;color:#0F1B33}
